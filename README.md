@@ -9,8 +9,7 @@ De squash club (www.schietsquash.nl) wilt een app voor de leden. Hier moeten wil
 Voor deze app zal een eigen api gemaakt moeten worden. Deze moet get request en put request kunnen hendelen. Hiervoor is tot nu toe (www.myjson.com) gevonden. Maar het zal iedealer zijn als dit via hun eigen server (wordpress) mogelijk is.
 
 Activity’s
--	Begin: introductie, verwijzen naar functies in de app
--	Traingingen activity: laat de beschikbare trainingen zien waar gebruikers mensen kunnen inloggen.
+-	startscherm, Traingingen activity: laat de beschikbare trainingen zien waar gebruikers mensen kunnen inloggen.
 -	Training admin edit: beveiligd met inlog, laat admins trainingen wijzigen
 -	Contact activity: gevens van de club, hoe ze te benaren zijn, mogelijk inschrijf formulier
 -	Extra mogelijkheden: laddar, mega chat
