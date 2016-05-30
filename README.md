@@ -27,5 +27,15 @@ API
 -	Training: Jsonformat waar de trainings gevens staan, moet aanpasbaar zijn (www.myjson.com)
 -	Extra: ladder met stand, megachat
 
+Screenshots:
+
+
+<a href="url">
+<img src="https://github.com/stephankok/progproject/blob/master/doc/start_activity_training.png" align="left" height="300" width="150" >
+<img src="https://github.com/stephankok/progproject/blob/master/doc/login_admin.png" align="left" height="300" width="150" >
+<img src="https://github.com/stephankok/progproject/blob/master/doc/admin_edit_training.png" align="left" height="300" width="150" >
+<img src="https://github.com/stephankok/progproject/blob/master/doc/contact_information.png" align="left" height="300" width="150" >
+</a>
+
 
 Copyright (c) 2016 Stephan Kok
