@@ -23,23 +23,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public boolean onOptionsItemSelected(MenuItem item){
-        try{
-            switch(item.getItemId()){
-                case R.id.reload:
-                    Toast.makeText(MainActivity.this, "Reload", Toast.LENGTH_SHORT).show();
-                    break;
-                case R.id.admin:
-                    Toast.makeText(MainActivity.this, "Admin", Toast.LENGTH_SHORT).show();
-                    break;
-                case R.id.menulogo:
-                    Toast.makeText(MainActivity.this, "Logo", Toast.LENGTH_SHORT).show();
-                    break;
-                case R.id.settings:
-                    Toast.makeText(MainActivity.this, "Settings", Toast.LENGTH_SHORT).show();
-                    break;
-            }
-        } catch(Exception e){
-            Log.i("Sleep Recorder", e.toString());
+        switch(item.getItemId()){
+            case R.id.reload:
+                Toast.makeText(MainActivity.this, "Reload", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.admin:
+                Toast.makeText(MainActivity.this, "Admin", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.menulogo:
+                Toast.makeText(MainActivity.this, "Logo", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.settings:
+                Toast.makeText(MainActivity.this, "Settings", Toast.LENGTH_SHORT).show();
+                break;
         }
         return true;
     }
