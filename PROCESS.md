@@ -8,3 +8,5 @@ Log file
 - wordpress eigen api uitgezocht, moet eerst toegang krijgen tot server (wordpress alleen is niet genoeg).
 
 **31 05 2016**
+- Begin met bouwen van app
+- Design van app
