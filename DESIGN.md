@@ -47,4 +47,4 @@ _ TrainingArrayAdapter
     
 **Schetsen van app**
 
-<img src="https://github.com/stephankok/progproject/blob/master/doc/design_schema.jpg" class="rotate90" align="left" height="300" width="150" >
+<img src="https://github.com/stephankok/progproject/blob/master/doc/design_schema.jpg" align="left" height="300" width="150" >
