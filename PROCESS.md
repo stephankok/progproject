@@ -10,3 +10,12 @@ Log file
 **31 05 2016**
 - Begin met bouwen van app
 - Design van app
+- Api proberen te maken op server
+- Onderzoek naar phpmyadmin
+- api server?
+
+**01 06 2016**
+- App maken
+- Design afmaken
+- Api data ophalen
+- trainingen laten zien, toevoegen
