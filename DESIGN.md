@@ -46,3 +46,5 @@ _ TrainingArrayAdapter
     - Daarin voor elke training de aanwezige informatie.
     
 **Schetsen van app**
+
+<img src="https://github.com/stephankok/progproject/blob/master/doc/design_schema.jpg" class="rotate90" align="left" height="300" width="150" >
