@@ -4,4 +4,8 @@
     <string name="main_training_subscribe">Upcomming trainings. Please register if you will be present.</string>
     <string name="menu_contact">Contact</string>
     <string name="menu_admin">Admin</string>
+    <string name="contact_info">Contact information</string>
+    <string name="admin_info">Admin page</string>
+    <string name="alertdialog_open_admin_user">Inlog</string>
+    <string name="alertdialog_open_admin_password">Password</string>
 </resources>

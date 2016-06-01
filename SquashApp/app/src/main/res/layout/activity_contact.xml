@@ -7,25 +7,21 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.stephan.squashapp.MainActivity"
+    tools:context="com.example.stephan.squashapp.ContactActivity"
     android:orientation="vertical">
 
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/main_welcome"
-        android:textStyle="bold"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/main_training_subscribe"/>
+        android:text="@string/contact_info"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:paddingBottom="20dp"/>
 
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/ListViewTraining">
+        android:id="@+id/listview">
     </ListView>
 
 </LinearLayout>
