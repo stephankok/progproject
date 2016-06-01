@@ -91,7 +91,7 @@ public class Training {
     public void register_player(String firstname, String lastname){
         if(currentPlayers < maxPlayers){
             currentPlayers++;
-            registeredPlayers.add(firstname + lastname);
+            registeredPlayers.add(firstname + " " + lastname);
         }
     }
 }

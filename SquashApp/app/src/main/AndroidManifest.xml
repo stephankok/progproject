@@ -18,8 +18,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ContactActivity"></activity>
-        <activity android:name=".AdminActivity"></activity>
+        <activity android:name=".ContactActivity" />
+        <activity android:name=".AdminActivity" />
     </application>
 
 </manifest>

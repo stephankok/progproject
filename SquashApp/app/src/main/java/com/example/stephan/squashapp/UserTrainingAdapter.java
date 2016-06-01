@@ -110,7 +110,9 @@ public class UserTrainingAdapter extends ArrayAdapter<Training> {
                                                                     " a firstname and lastname",
                                                             Toast.LENGTH_SHORT).show();
                                                 } else {
-                                                    //trainingList.get(position).register_player(fn, ln);
+                                                    trainingList.get(position)
+                                                            .register_player(fn, ln);
+                                                    notifyDataSetChanged();
                                                     String text = "" + fn + " " + ln +
                                                             " you are registerd";
                                                     Toast.makeText(context, text, Toast.LENGTH_SHORT)
@@ -151,14 +153,21 @@ public class UserTrainingAdapter extends ArrayAdapter<Training> {
                 ListView listView =
                         (ListView) layout.findViewById(R.id.cancelListView);
                 CancelRegistrationAdapter adapter =
-                        new CancelRegistrationAdapter(context, item.get_players());
+                        new CancelRegistrationAdapter(context, item.get_players(), item);
                 listView.setAdapter(adapter);
 
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(context)
                     .setView(layout)
                     .setTitle("Cancel Registrion")
                     .setMessage("Long Click on a player to cancel registrion.");
+
                 AlertDialog alert11 = builder1.create();
+                alert11.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        notifyDataSetChanged();
+                    }
+                });
                 alert11.show();
                 return false;
             }

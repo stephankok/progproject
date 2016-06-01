@@ -146,7 +146,5 @@ public class MainActivity extends AppCompatActivity implements HttpRequestHelper
         if (progressDialog != null){
             progressDialog.cancel();
         }
-
-
     }
 }

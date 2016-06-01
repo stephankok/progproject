@@ -122,6 +122,9 @@ public class HttpRequestHelperGET extends AsyncTask<URL, Integer, ArrayList<Trai
                 Integer currentPlayers = object.getInt("current players");
                 ArrayList<String> registered = new ArrayList<>();
 
+                for (int players = 0; players < currentPlayers; players++){
+                    registered.add(object.getString("registered" + players));
+                }
                 Training training = new Training(date, info, start, end, by,
                         maxPlayers, currentPlayers, registered);
 

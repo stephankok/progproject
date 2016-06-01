@@ -8,4 +8,8 @@
     <string name="admin_info">Admin page</string>
     <string name="alertdialog_open_admin_user">Inlog</string>
     <string name="alertdialog_open_admin_password">Password</string>
+    <string name="delete_button_description">DeleteButton</string>
+    <string name="register_fn">Firstname</string>
+    <string name="register_ln">Lastname</string>
+    <string name="title_activity_admin2">AdminActivity2</string>
 </resources>

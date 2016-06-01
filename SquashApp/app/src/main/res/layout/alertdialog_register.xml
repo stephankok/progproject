@@ -6,18 +6,15 @@
     android:gravity="center">
 
     <EditText
-        android:layout_width="150dp"
-        android:layout_height="40dp"
-        android:hint="First name"
-        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/register_fn"
         android:id="@+id/firstname"/>
 
     <EditText
-        android:layout_width="150dp"
-        android:layout_height="40dp"
-        android:hint="Last name"
-        android:id="@+id/lastname"
-        android:gravity="center"
-        android:inputType="textPassword"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/register_ln"
+        android:id="@+id/lastname" />
 
 </LinearLayout>
