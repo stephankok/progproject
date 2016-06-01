@@ -45,6 +45,6 @@ _ TrainingArrayAdapter
   - Geeft json terug met het aantal beschikbare trainingen
     - Daarin voor elke training de aanwezige informatie.
     
-**Schetsen van app**
+**Schets van app**
 
 <img src="https://github.com/stephankok/progproject/blob/master/doc/design_schema.jpg" align="left" >
