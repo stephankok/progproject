@@ -23,7 +23,8 @@ import java.util.ArrayList;
 
 public class HttpRequestHelperGET extends AsyncTask<URL, Integer, ArrayList<Training>> {
 
-    private static final String url1 = "https://api.myjson.com/bins/50g3w";   // url
+    ///private static final String url1 = "https://api.myjson.com/bins/50g3w";   // url
+    private static final String url1 = "http://schietsquash.nl/api";   // url
     public AsyncResponse delegate = null;       // initialize to null;
 
     /**
