@@ -24,6 +24,7 @@ http/asynctask
 
 Adapters
 -	Training view: Weergave en inschrijven van trainingen
+-	Training cancel registratie: laat de inschreven leden zien en geef een optie om te cancelen.
 -	Training edit: Weergave en aanpassen van trainingen.
 -	Extra: ladder, mega chat, inlog
 
