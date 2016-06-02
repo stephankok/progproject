@@ -19,3 +19,7 @@ Log file
 - Design afmaken
 - Api data ophalen
 - trainingen laten zien, toevoegen
+
+**02 06 2016**
+- schietsquash heeft nu zelf json code online staan. Het is alleen nog niet mogelijk om een put request te doen
+- wat layout en design toegevoegd
