@@ -28,3 +28,4 @@ Log file
 **03 06 2016**
 - Kijken hoe ik de api kan maken
 - SQL database op server zetten?
+- Firebase! https://www.firebase.com/
