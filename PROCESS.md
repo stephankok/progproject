@@ -23,3 +23,8 @@ Log file
 **02 06 2016**
 - schietsquash heeft nu zelf json code online staan. Het is alleen nog niet mogelijk om een put request te doen
 - wat layout en design toegevoegd
+- Wordpress api gevonden waar mogelijk een api mee gemaakt kan worden (json api)
+
+**03 06 2016**
+- Kijken hoe ik de api kan maken
+- SQL database op server zetten?
