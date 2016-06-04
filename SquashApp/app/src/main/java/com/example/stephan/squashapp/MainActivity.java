@@ -6,13 +6,24 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 
 
@@ -22,6 +33,10 @@ public class MainActivity extends AppCompatActivity implements HttpRequestHelper
     ProgressDialog progressDialog;              // Wait for data
     UserTrainingAdapter adapter;                // show trainings
 
+    // firebase
+    DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +45,58 @@ public class MainActivity extends AppCompatActivity implements HttpRequestHelper
         ListView listview = (ListView) findViewById(R.id.ListViewTraining);
         adapter = new UserTrainingAdapter(this, new ArrayList<Training>());
         listview.setAdapter(adapter);
+
+    }
+
+    private void updateDatabase(){
+        adapter.clear();
+        rootRef.child("amount").addListenerForSingleValueEvent(
+            new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    // Get available trainings
+                    Integer amount = dataSnapshot.getValue(Integer.class);
+                    for (int i = 1; i <= amount; i++) {
+                        final String child = "training" + i;
+                        rootRef.child(child).addListenerForSingleValueEvent(
+                                new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                String trainer = dataSnapshot.child("by").getValue(String.class);
+                                String date = dataSnapshot.child("date").getValue(String.class);
+                                String info = dataSnapshot.child("info").getValue(String.class);
+                                String start = dataSnapshot.child("start").getValue(String.class);
+                                String end = dataSnapshot.child("end").getValue(String.class);
+                                Integer max = dataSnapshot.child("max").getValue(Integer.class);
+                                Integer current = dataSnapshot.child("current").getValue(Integer.class);
+
+                                ArrayList<String> registered = new ArrayList<>();
+                                for (DataSnapshot childSnapShot : dataSnapshot.child("registered").getChildren()) {
+                                    String player = childSnapShot.getValue(String.class);
+                                    Log.v("player", player);
+                                    registered.add(player);
+                                }
+
+                                Training new_training = new Training(child, date, info, start,
+                                        end, trainer, max, current, registered);
+
+                                adapter.add(new_training);
+                                adapter.notifyDataSetChanged();
+                            }
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                    ;
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.v("getUser:onCancelled", databaseError.toString());
+                }
+            });
     }
 
     /**
@@ -48,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements HttpRequestHelper
     public boolean onOptionsItemSelected(MenuItem item){
         switch(item.getItemId()){
             case R.id.menu_reload:
-                getData();
+                updateDatabase();
                 break;
             case R.id.menu_admin:
                 adminMenu();

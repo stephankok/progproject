@@ -24,7 +24,7 @@ import java.util.ArrayList;
 public class HttpRequestHelperGET extends AsyncTask<URL, Integer, ArrayList<Training>> {
 
     ///private static final String url1 = "https://api.myjson.com/bins/50g3w";   // url
-    private static final String url1 = "http://schietsquash.nl/api";   // url
+    private static final String url1 = "http://schietsquash.nl/api_trainingen/";   // url
     public AsyncResponse delegate = null;       // initialize to null;
 
     /**
@@ -126,10 +126,10 @@ public class HttpRequestHelperGET extends AsyncTask<URL, Integer, ArrayList<Trai
                 for (int players = 0; players < currentPlayers; players++){
                     registered.add(object.getString("registered" + players));
                 }
-                Training training = new Training(date, info, start, end, by,
-                        maxPlayers, currentPlayers, registered);
+                //Training training = new Training(date, info, start, end, by,
+                        //maxPlayers, currentPlayers, registered);
 
-                trainingList.add(training);
+                //trainingList.add(training);
             }
 
         } catch (JSONException e) {

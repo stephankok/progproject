@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by Stephan on 1-6-2016.
@@ -24,6 +32,8 @@ public class UserTrainingAdapter extends ArrayAdapter<Training> {
 
     ArrayList<Training> trainingList;  // the items.
     Context context;
+
+    DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
 
     /**
      * Initialize adapter
@@ -112,6 +122,16 @@ public class UserTrainingAdapter extends ArrayAdapter<Training> {
                                                 } else {
                                                     trainingList.get(position)
                                                             .register_player(fn, ln);
+                                                    rootRef.child(item.get_child()).child("current").setValue(item.get_current());
+                                                    HashMap<String, Object> result = new HashMap<>();
+                                                    for (int i = 0; i < item.get_players().size(); i++){
+                                                        String registeredID = "player"+i;
+                                                        Log.v("test", item.get_players().toString());
+                                                        result.put(registeredID, item.get_players().get(i));
+                                                    }
+                                                    rootRef.child(item.get_child()).child("registered").updateChildren(result);
+
+
                                                     notifyDataSetChanged();
                                                     String text = "" + fn + " " + ln +
                                                             " you are registerd";
@@ -159,8 +179,14 @@ public class UserTrainingAdapter extends ArrayAdapter<Training> {
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(context)
                     .setView(layout)
                     .setTitle("Cancel Registrion")
-                    .setMessage("Long Click on a player to cancel registrion.");
-
+                    .setMessage("Long Click on a player to cancel registrion.")
+                    .setCancelable(true)
+                        .setNeutralButton("done", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
                 AlertDialog alert11 = builder1.create();
                 alert11.setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
@@ -175,5 +201,6 @@ public class UserTrainingAdapter extends ArrayAdapter<Training> {
 
         return view;
     }
+
 }
 

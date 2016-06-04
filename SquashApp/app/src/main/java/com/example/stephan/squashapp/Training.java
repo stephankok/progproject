@@ -7,6 +7,7 @@ import java.util.ArrayList;
  */
 public class Training {
 
+    private String child;
     private String date;
     private String shortInfo;
     private String start;
@@ -17,7 +18,7 @@ public class Training {
     private ArrayList<String> registeredPlayers;
 
 
-    public Training(String dateOfTraining, String infoShort, String Start, String End, String Trainer, Integer maxplayers, Integer CurrentPlayers, ArrayList<String> registered){
+    public Training(String childRef, String dateOfTraining, String infoShort, String Start, String End, String Trainer, Integer maxplayers, Integer CurrentPlayers, ArrayList<String> registered){
         registeredPlayers = registered;
         date = dateOfTraining;
         shortInfo = infoShort;
@@ -26,6 +27,7 @@ public class Training {
         trainer = Trainer;
         maxPlayers = maxplayers;
         currentPlayers = CurrentPlayers;
+        child = childRef;
     }
     public ArrayList<String> get_players(){
         return registeredPlayers;
@@ -34,6 +36,8 @@ public class Training {
     public String get_date(){
         return date;
     }
+
+    public String get_child() { return child; }
 
     public String get_info(){
         return shortInfo;
@@ -82,6 +86,10 @@ public class Training {
     public void delete_player(int position){
         registeredPlayers.remove(position);
         currentPlayers--;
+    }
+
+    public void change_player_name(String player, int pos){
+        registeredPlayers.set(pos, player);
     }
 
     public void change_trainer(String Trainer){
