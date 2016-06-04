@@ -254,7 +254,7 @@ public class AdminActivity extends AppCompatActivity implements HttpRequestHelpe
                             rootRef.child("total").setValue(amountOfTrainingen);
 
                             HashMap<String, Object> result = new HashMap<>();
-                            result.put("child", String.valueOf(amountOfTrainingen));
+                            result.put("child", amountOfTrainingen);
                             result.put("by", editTrainer.getText().toString());
                             result.put("current", 0);
                             result.put("date", editDate.getText().toString());
