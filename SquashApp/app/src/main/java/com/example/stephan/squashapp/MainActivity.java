@@ -13,11 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -45,58 +41,64 @@ public class MainActivity extends AppCompatActivity implements HttpRequestHelper
         ListView listview = (ListView) findViewById(R.id.ListViewTraining);
         adapter = new UserTrainingAdapter(this, new ArrayList<Training>());
         listview.setAdapter(adapter);
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Connecting to server...");
+        progressDialog.show();
+
+        updateDatabase();
     }
 
     private void updateDatabase(){
+        Log.v("update", "updating");
         adapter.clear();
-        rootRef.child("amount").addListenerForSingleValueEvent(
-            new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    // Get available trainings
-                    Integer amount = dataSnapshot.getValue(Integer.class);
-                    for (int i = 1; i <= amount; i++) {
-                        final String child = "training" + i;
-                        rootRef.child(child).addListenerForSingleValueEvent(
-                                new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                String trainer = dataSnapshot.child("by").getValue(String.class);
-                                String date = dataSnapshot.child("date").getValue(String.class);
-                                String info = dataSnapshot.child("info").getValue(String.class);
-                                String start = dataSnapshot.child("start").getValue(String.class);
-                                String end = dataSnapshot.child("end").getValue(String.class);
-                                Integer max = dataSnapshot.child("max").getValue(Integer.class);
-                                Integer current = dataSnapshot.child("current").getValue(Integer.class);
+        rootRef.child("trainingen").addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Log.v("hello", "hoi");
+                        for (DataSnapshot childSnapShot : dataSnapshot.getChildren()) {
+                            Log.v("childclass", "now");
+                            Integer child = childSnapShot.child("child").getValue(Integer.class);
+                            String trainer = childSnapShot.child("by").getValue(String.class);
+                            String date = childSnapShot.child("date").getValue(String.class);
+                            String info = childSnapShot.child("info").getValue(String.class);
+                            String start = childSnapShot.child("start").getValue(String.class);
+                            String end = childSnapShot.child("end").getValue(String.class);
+                            Integer max = childSnapShot.child("max").getValue(Integer.class);
+                            Integer current = childSnapShot.child("current").getValue(Integer.class);
+                            Log.v("childclass", "verder");
 
-                                ArrayList<String> registered = new ArrayList<>();
-                                for (DataSnapshot childSnapShot : dataSnapshot.child("registered").getChildren()) {
-                                    String player = childSnapShot.getValue(String.class);
-                                    Log.v("player", player);
-                                    registered.add(player);
-                                }
-
-                                Training new_training = new Training(child, date, info, start,
-                                        end, trainer, max, current, registered);
-
-                                adapter.add(new_training);
-                                adapter.notifyDataSetChanged();
+                            ArrayList<String> registered = new ArrayList<>();
+                            for (DataSnapshot childRegistered : childSnapShot.child("registered").getChildren()) {
+                                String player = childRegistered.getValue(String.class);
+                                Log.v("player", player);
+                                registered.add(player);
                             }
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
 
-                            }
-                        });
+                            Training new_training = new Training(child, date, info, start,
+                                    end, trainer, max, current, registered);
+
+                            adapter.add(new_training);
+                            adapter.notifyDataSetChanged();
+                            Log.v("childclass", "done");
+                        }
                     }
-                    ;
-                }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    Log.v("getUser:onCancelled", databaseError.toString());
-                }
-            });
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.v("database", "error");
+                        Log.v("getUser:onCancelled", databaseError.toString());
+                    }
+                });
+
+        // cancel dialog
+        progressDialog.cancel();
+
     }
 
     /**

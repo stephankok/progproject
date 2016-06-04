@@ -3,22 +3,16 @@ package com.example.stephan.squashapp;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -87,76 +81,80 @@ public class UserTrainingAdapter extends ArrayAdapter<Training> {
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(item.get_current() < item.get_max()){
+                if(item.get_current() < item.get_max()){
 
-                        // make layout
-                        LayoutInflater li = LayoutInflater.from(context);
-                        final View layout = li.inflate(R.layout.alertdialog_register, null);
+                    // make layout
+                    LayoutInflater li = LayoutInflater.from(context);
+                    final View layout = li.inflate(R.layout.alertdialog_register, null);
 
-                        String message = "Do you want to register for the training of "
-                                + item.get_date() + " by " + item.get_trainer();
-                        // make dialog
-                        AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
-                        builder1.setTitle("Registration")
-                                .setMessage(message)
-                                .setCancelable(true)
-                                .setView(layout)
-                                .setPositiveButton(
-                                        "Yes",
-                                        new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int id) {
-                                                TextView firstname =
-                                                        (TextView) layout.findViewById(R.id.firstname);
-                                                TextView lastname =
-                                                        (TextView) layout.findViewById(R.id.lastname);
+                    String message = "Do you want to register for the training of "
+                            + item.get_date() + " by " + item.get_trainer();
+                    // make dialog
+                    AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
+                    builder1.setTitle("Registration")
+                        .setMessage(message)
+                        .setCancelable(true)
+                        .setView(layout)
+                        .setPositiveButton(
+                            "Yes",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                TextView firstname =
+                                    (TextView) layout.findViewById(R.id.firstname);
+                                TextView lastname =
+                                    (TextView) layout.findViewById(R.id.lastname);
 
-                                                String fn = firstname.getText().toString();
-                                                String ln = lastname.getText().toString();
+                                String fn = firstname.getText().toString();
+                                String ln = lastname.getText().toString();
 
-                                                if (fn.isEmpty() || ln.isEmpty()) {
-                                                    Toast.makeText(
-                                                            context,
-                                                            "FAILED:\nYou must provide" +
-                                                                    " a firstname and lastname",
-                                                            Toast.LENGTH_SHORT).show();
-                                                } else {
-                                                    trainingList.get(position)
-                                                            .register_player(fn, ln);
-                                                    rootRef.child(item.get_child()).child("current").setValue(item.get_current());
-                                                    HashMap<String, Object> result = new HashMap<>();
-                                                    for (int i = 0; i < item.get_players().size(); i++){
-                                                        String registeredID = "player"+i;
-                                                        Log.v("test", item.get_players().toString());
-                                                        result.put(registeredID, item.get_players().get(i));
-                                                    }
-                                                    rootRef.child(item.get_child()).child("registered").updateChildren(result);
-
-
-                                                    notifyDataSetChanged();
-                                                    String text = "" + fn + " " + ln +
-                                                            " you are registerd";
-                                                    Toast.makeText(context, text, Toast.LENGTH_SHORT)
-                                                            .show();
-                                                }
-                                                dialog.cancel();
-                                            }
-                                        });
-
-                        builder1.setNegativeButton(
-                                "No",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        Toast.makeText(context, "Canceled", Toast.LENGTH_SHORT).show();
-                                        dialog.cancel();
+                                if (fn.isEmpty() || ln.isEmpty()) {
+                                    Toast.makeText(
+                                            context,
+                                            "FAILED:\nYou must provide" +
+                                                    " a firstname and lastname",
+                                            Toast.LENGTH_SHORT).show();
+                                } else {
+                                    trainingList.get(position)
+                                            .register_player(fn, ln);
+                                    rootRef.child("trainingen")
+                                            .child(item.get_child())
+                                            .child("current").setValue(item.get_current());
+                                    HashMap<String, Object> result = new HashMap<>();
+                                    for (int i = 0; i < item.get_players().size(); i++){
+                                        String registeredID = "player"+i;
+                                        Log.v("test", item.get_players().toString());
+                                        result.put(registeredID, item.get_players().get(i));
                                     }
-                                });
+                                    rootRef.child("trainingen")
+                                            .child(item.get_child())
+                                            .child("registered").updateChildren(result);
 
-                        AlertDialog alert11 = builder1.create();
-                        alert11.show();
-                    }
-                    else{
-                        Toast.makeText(context, "Full", Toast.LENGTH_SHORT).show();
-                    }
+
+                                    notifyDataSetChanged();
+                                    String text = "" + fn + " " + ln +
+                                            " you are registerd";
+                                    Toast.makeText(context, text, Toast.LENGTH_SHORT)
+                                            .show();
+                                }
+                                dialog.cancel();
+                                }
+                            });
+
+                    builder1.setNegativeButton(
+                        "No",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                            Toast.makeText(context, "Canceled", Toast.LENGTH_SHORT).show();
+                            dialog.cancel();
+                            }
+                        });
+
+                    AlertDialog alert11 = builder1.create();
+                    alert11.show();
+                }
+                else{
+                    Toast.makeText(context, "Full", Toast.LENGTH_SHORT).show();
+                }
                 }
         });
 
@@ -178,8 +176,7 @@ public class UserTrainingAdapter extends ArrayAdapter<Training> {
 
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(context)
                     .setView(layout)
-                    .setTitle("Cancel Registrion")
-                    .setMessage("Long Click on a player to cancel registrion.")
+                    .setTitle("Change Registration")
                     .setCancelable(true)
                         .setNeutralButton("done", new DialogInterface.OnClickListener() {
                             @Override

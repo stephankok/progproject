@@ -7,7 +7,7 @@ import java.util.ArrayList;
  */
 public class Training {
 
-    private String child;
+    private Integer child;
     private String date;
     private String shortInfo;
     private String start;
@@ -18,7 +18,7 @@ public class Training {
     private ArrayList<String> registeredPlayers;
 
 
-    public Training(String childRef, String dateOfTraining, String infoShort, String Start, String End, String Trainer, Integer maxplayers, Integer CurrentPlayers, ArrayList<String> registered){
+    public Training(Integer childRef, String dateOfTraining, String infoShort, String Start, String End, String Trainer, Integer maxplayers, Integer CurrentPlayers, ArrayList<String> registered){
         registeredPlayers = registered;
         date = dateOfTraining;
         shortInfo = infoShort;
@@ -37,7 +37,7 @@ public class Training {
         return date;
     }
 
-    public String get_child() { return child; }
+    public String get_child() { return String.valueOf(child); }
 
     public String get_info(){
         return shortInfo;

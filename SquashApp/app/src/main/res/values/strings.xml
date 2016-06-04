@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">SquashApp</string>
-    <string name="main_welcome">Welcome at the SchietSquash App!</string>
+    <string name="main_welcome">Welcome at the training\'s page!</string>
     <string name="main_training_subscribe">Upcomming trainings. Please register if you will be present.</string>
     <string name="menu_contact">Contact</string>
     <string name="menu_admin">Admin</string>
