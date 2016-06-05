@@ -96,26 +96,22 @@ public class UserTrainingAdapter extends ArrayAdapter<Training> {
                         .setCancelable(true)
                         .setView(layout)
                         .setPositiveButton(
-                            "Yes",
+                            "Register",
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
-                                TextView firstname =
-                                    (TextView) layout.findViewById(R.id.firstname);
-                                TextView lastname =
-                                    (TextView) layout.findViewById(R.id.lastname);
+                                TextView name =
+                                    (TextView) layout.findViewById(R.id.name);
 
-                                String fn = firstname.getText().toString();
-                                String ln = lastname.getText().toString();
+                                String playerName = name.getText().toString();
 
-                                if (fn.isEmpty() || ln.isEmpty()) {
+                                if (playerName.isEmpty()) {
                                     Toast.makeText(
                                             context,
-                                            "FAILED:\nYou must provide" +
-                                                    " a firstname and lastname",
+                                            "FAILED:\nYou must provide a name",
                                             Toast.LENGTH_SHORT).show();
                                 } else {
                                     trainingList.get(position)
-                                            .register_player(fn, ln);
+                                            .register_player(playerName);
                                     rootRef.child("trainingen")
                                             .child(item.get_child())
                                             .child("current").setValue(item.get_current());
@@ -131,7 +127,7 @@ public class UserTrainingAdapter extends ArrayAdapter<Training> {
 
 
                                     notifyDataSetChanged();
-                                    String text = "" + fn + " " + ln +
+                                    String text = "" + playerName +
                                             " you are registerd";
                                     Toast.makeText(context, text, Toast.LENGTH_SHORT)
                                             .show();
@@ -141,7 +137,7 @@ public class UserTrainingAdapter extends ArrayAdapter<Training> {
                             });
 
                     builder1.setNegativeButton(
-                        "No",
+                        "Cancel",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                             Toast.makeText(context, "Canceled", Toast.LENGTH_SHORT).show();

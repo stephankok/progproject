@@ -96,10 +96,10 @@ public class Training {
         trainer = Trainer;
     }
 
-    public void register_player(String firstname, String lastname){
+    public void register_player(String playerName){
         if(currentPlayers < maxPlayers){
             currentPlayers++;
-            registeredPlayers.add(firstname + " " + lastname);
+            registeredPlayers.add(playerName);
         }
     }
 }

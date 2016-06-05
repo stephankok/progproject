@@ -95,7 +95,7 @@ public class EditTrainingAdapter extends ArrayAdapter<Training>{
                 editTrainer.setText(item.get_trainer());
 
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
-                builder1.setTitle("Add Training")
+                builder1.setTitle("Edit Training")
                         .setCancelable(true)
                         .setView(layout)
                         .setPositiveButton(
