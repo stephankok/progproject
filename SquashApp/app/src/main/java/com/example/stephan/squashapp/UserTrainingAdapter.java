@@ -26,6 +26,7 @@ public class UserTrainingAdapter extends ArrayAdapter<Training> {
 
     ArrayList<Training> trainingList;  // the items.
     Context context;
+    SwipeDetectorClass swipeDetector;
 
     DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
 
@@ -76,82 +77,89 @@ public class UserTrainingAdapter extends ArrayAdapter<Training> {
             trainer.setText("");
         }
 
-
+        swipeDetector = new SwipeDetectorClass();
+        view.setOnTouchListener(swipeDetector);
         // When clicked go to register
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                if(item.get_current() < item.get_max()){
 
-                    // make layout
-                    LayoutInflater li = LayoutInflater.from(context);
-                    final View layout = li.inflate(R.layout.alertdialog_register, null);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.v("swipedetector", String.valueOf(swipeDetector.swipeDetected()));
+                if (swipeDetector.swipeDetected()) {
+                    Log.v("SwipeInclass", swipeDetector.getAction().toString());
+                }
+                else {
+                    if (item.get_current() < item.get_max()) {
 
-                    String message = "Do you want to register for the training of "
-                            + item.get_date() + " by " + item.get_trainer();
-                    // make dialog
-                    AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
-                    builder1.setTitle("Registration")
-                        .setMessage(message)
-                        .setCancelable(true)
-                        .setView(layout)
-                        .setPositiveButton(
-                            "Register",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                TextView name =
-                                    (TextView) layout.findViewById(R.id.name);
+                        // make layout
+                        LayoutInflater li = LayoutInflater.from(context);
+                        final View layout = li.inflate(R.layout.alertdialog_register, null);
 
-                                String playerName = name.getText().toString();
+                        String message = "Do you want to register for the training of "
+                                + item.get_date() + " by " + item.get_trainer();
+                        // make dialog
+                        AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
+                        builder1.setTitle("Registration")
+                                .setMessage(message)
+                                .setCancelable(true)
+                                .setView(layout)
+                                .setPositiveButton(
+                                        "Register",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                TextView name =
+                                                        (TextView) layout.findViewById(R.id.name);
 
-                                if (playerName.isEmpty()) {
-                                    Toast.makeText(
-                                            context,
-                                            "FAILED:\nYou must provide a name",
-                                            Toast.LENGTH_SHORT).show();
-                                } else {
-                                    trainingList.get(position)
-                                            .register_player(playerName);
-                                    rootRef.child("trainingen")
-                                            .child(item.get_child())
-                                            .child("current").setValue(item.get_current());
-                                    HashMap<String, Object> result = new HashMap<>();
-                                    for (int i = 0; i < item.get_players().size(); i++){
-                                        String registeredID = "player"+i;
-                                        Log.v("test", item.get_players().toString());
-                                        result.put(registeredID, item.get_players().get(i));
+                                                String playerName = name.getText().toString();
+
+                                                if (playerName.isEmpty()) {
+                                                    Toast.makeText(
+                                                            context,
+                                                            "FAILED:\nYou must provide a name",
+                                                            Toast.LENGTH_SHORT).show();
+                                                } else {
+                                                    trainingList.get(position)
+                                                            .register_player(playerName);
+                                                    rootRef.child("trainingen")
+                                                            .child(item.get_child())
+                                                            .child("current").setValue(item.get_current());
+                                                    HashMap<String, Object> result = new HashMap<>();
+                                                    for (int i = 0; i < item.get_players().size(); i++) {
+                                                        String registeredID = "player" + i;
+                                                        Log.v("test", item.get_players().toString());
+                                                        result.put(registeredID, item.get_players().get(i));
+                                                    }
+                                                    rootRef.child("trainingen")
+                                                            .child(item.get_child())
+                                                            .child("registered").updateChildren(result);
+
+
+                                                    notifyDataSetChanged();
+                                                    String text = "" + playerName +
+                                                            " you are registerd";
+                                                    Toast.makeText(context, text, Toast.LENGTH_SHORT)
+                                                            .show();
+                                                }
+                                                dialog.cancel();
+                                            }
+                                        });
+
+                        builder1.setNegativeButton(
+                                "Cancel",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        Toast.makeText(context, "Canceled", Toast.LENGTH_SHORT).show();
+                                        dialog.cancel();
                                     }
-                                    rootRef.child("trainingen")
-                                            .child(item.get_child())
-                                            .child("registered").updateChildren(result);
+                                });
 
-
-                                    notifyDataSetChanged();
-                                    String text = "" + playerName +
-                                            " you are registerd";
-                                    Toast.makeText(context, text, Toast.LENGTH_SHORT)
-                                            .show();
-                                }
-                                dialog.cancel();
-                                }
-                            });
-
-                    builder1.setNegativeButton(
-                        "Cancel",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                            Toast.makeText(context, "Canceled", Toast.LENGTH_SHORT).show();
-                            dialog.cancel();
-                            }
-                        });
-
-                    AlertDialog alert11 = builder1.create();
-                    alert11.show();
+                        AlertDialog alert11 = builder1.create();
+                        alert11.show();
+                    } else {
+                        Toast.makeText(context, "Full", Toast.LENGTH_SHORT).show();
+                    }
                 }
-                else{
-                    Toast.makeText(context, "Full", Toast.LENGTH_SHORT).show();
-                }
-                }
+            }
         });
 
 

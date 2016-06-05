@@ -10,7 +10,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -41,6 +43,8 @@ public class MainActivity extends AppCompatActivity implements HttpRequestHelper
         ListView listview = (ListView) findViewById(R.id.ListViewTraining);
         adapter = new UserTrainingAdapter(this, new ArrayList<Training>());
         listview.setAdapter(adapter);
+
+
     }
 
     @Override
