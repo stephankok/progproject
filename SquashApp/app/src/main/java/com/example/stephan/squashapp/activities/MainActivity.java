@@ -16,23 +16,19 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.stephan.squashapp.adapters.UserTrainingAdapter;
+import com.example.stephan.squashapp.helpers.FirebaseConnector;
 import com.example.stephan.squashapp.models.Training;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements FirebaseConnector.AsyncResponse {
 
     ProgressDialog progressDialog;              // Wait for data
     UserTrainingAdapter adapter;                // show trainings
-
-    // firebase
-    DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+    FirebaseConnector firebase =
+            new FirebaseConnector(FirebaseDatabase.getInstance().getReference());
 
 
     @Override
@@ -41,11 +37,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Log.d("startuplog", "hoi");
+
         // set listview
         ListView listview = (ListView) findViewById(R.id.ListViewTraining);
         adapter = new UserTrainingAdapter(this, new ArrayList<Training>());
         listview.setAdapter(adapter);
 
+        // make sure it when getting data it will respond to this activity
+        firebase.setResponse(this);
 
     }
 
@@ -55,62 +54,30 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Connecting to server...");
-        progressDialog.show();
-
         updateDatabase();
     }
 
     /**
-     * Get data from firebase
+     * Call class that will call firebase to get data
      */
     private void updateDatabase(){
-        Log.v("update", "updating");
         adapter.clear();
-        rootRef.child("trainingen").addListenerForSingleValueEvent(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        Log.v("hello", "hoi");
-                        for (DataSnapshot childSnapShot : dataSnapshot.getChildren()) {
-                            Log.v("childclass", "now");
-                            Integer child = childSnapShot.child("child").getValue(Integer.class);
-                            String trainer = childSnapShot.child("by").getValue(String.class);
-                            String date = childSnapShot.child("date").getValue(String.class);
-                            String info = childSnapShot.child("info").getValue(String.class);
-                            String start = childSnapShot.child("start").getValue(String.class);
-                            String end = childSnapShot.child("end").getValue(String.class);
-                            Integer max = childSnapShot.child("max").getValue(Integer.class);
-                            Integer current = childSnapShot.child("current").getValue(Integer.class);
-                            Log.v("childclass", "verder");
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Updating...");
+        progressDialog.show();
+        firebase.getTraingen();
+    }
 
-                            ArrayList<String> registered = new ArrayList<>();
-                            for (DataSnapshot childRegistered : childSnapShot.child("registered").getChildren()) {
-                                String player = childRegistered.getValue(String.class);
-                                Log.v("player", player);
-                                registered.add(player);
-                            }
-
-                            Training new_training = new Training(child, date, info, start,
-                                    end, trainer, max, current, registered);
-
-                            adapter.add(new_training);
-                            adapter.notifyDataSetChanged();
-                            Log.v("childclass", "done");
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Log.v("database", "error");
-                        Log.v("getUser:onCancelled", databaseError.toString());
-                    }
-                });
-
-        // cancel dialog
+    /**
+     * When data is loaded, this function will be called.
+     *
+     * Set new trainingslist to adapter
+     */
+    public void processFinish(ArrayList<Training> output){
+        adapter.setTrainingList(output);
+        Log.d("done", "done");
+        adapter.notifyDataSetChanged();
         progressDialog.cancel();
-
     }
 
     /**

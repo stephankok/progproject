@@ -38,6 +38,20 @@ public class EditTrainingAdapter extends ArrayAdapter<Training>{
     }
 
     /**
+     * Overwrite trainingslist
+     */
+    public void setTrainingList(ArrayList<Training> trainingList){
+        this.trainingList.clear();
+        for(int i = 0; i < trainingList.size(); i++){
+            this.trainingList.add(trainingList.get(i));
+        }
+    }
+
+    public Integer getAmountOfTrainingen(){
+        return this.trainingList.size();
+    }
+
+    /**
      * Initialize View.
      */
     public View getView(final int position, View view, ViewGroup parent) {

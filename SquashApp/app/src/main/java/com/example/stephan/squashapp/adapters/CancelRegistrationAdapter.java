@@ -3,7 +3,6 @@ package com.example.stephan.squashapp.adapters;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +11,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.example.stephan.squashapp.activities.R;
+import com.example.stephan.squashapp.helpers.FirebaseConnector;
 import com.example.stephan.squashapp.models.Training;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Created by Stephan on 1-6-2016.
@@ -29,8 +27,8 @@ public class CancelRegistrationAdapter extends ArrayAdapter<String>{
     Training training;
     Context context;
 
-    DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
-
+    FirebaseConnector firebase =
+            new FirebaseConnector(FirebaseDatabase.getInstance().getReference());
     /**
      * Initialize adapter
      */
@@ -89,20 +87,9 @@ public class CancelRegistrationAdapter extends ArrayAdapter<String>{
                                 //Yes button clicked
                                 training.delete_player(position);
 
-                                rootRef.child("trainingen")
-                                        .child(training.get_child())
-                                        .child("current").setValue(training.get_current());
+                                // delete player from database.
+                                firebase.deRegisterPlayer(training);
 
-                                HashMap<String, Object> result = new HashMap<>();
-                                Log.v("size", String.valueOf(training.get_players().size()));
-                                for (int i = 0; i < training.get_players().size(); i++) {
-                                    String registeredID = "player" + i;
-                                    Log.v("test", training.get_players().toString());
-                                    result.put(registeredID, training.get_players().get(i));
-                                }
-                                rootRef.child("trainingen")
-                                        .child(training.get_child())
-                                        .child("registered").setValue(result);
                                 notifyDataSetChanged();
                                 break;
 

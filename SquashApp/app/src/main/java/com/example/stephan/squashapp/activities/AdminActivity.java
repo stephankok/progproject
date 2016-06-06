@@ -1,6 +1,7 @@
 package com.example.stephan.squashapp.activities;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,24 +14,19 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.example.stephan.squashapp.adapters.EditTrainingAdapter;
+import com.example.stephan.squashapp.helpers.FirebaseConnector;
 import com.example.stephan.squashapp.models.Training;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
-public class AdminActivity extends AppCompatActivity {
+public class AdminActivity extends AppCompatActivity implements FirebaseConnector.AsyncResponse{
 
     EditTrainingAdapter adapter;                // show trainings
     Integer amountOfTrainingen;
-
-    // root to firebase
-    DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
-
+    ProgressDialog progressDialog;
+    FirebaseConnector firebase =
+            new FirebaseConnector(FirebaseDatabase.getInstance().getReference());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +52,10 @@ public class AdminActivity extends AppCompatActivity {
         adapter = new EditTrainingAdapter(this, new ArrayList<Training>());
         listview.setAdapter(adapter);
 
+        // make sure it when getting data it will respond to this activity
+        firebase.setResponse(this);
        // getData();
-        getDatabase();
+        updateDatabase();
     }
 
     /**
@@ -78,62 +76,26 @@ public class AdminActivity extends AppCompatActivity {
     }
 
     /**
-     * get data from firebase
-     */
-    private void getDatabase(){
-        Log.v("update", "updating");
-
-        rootRef.child("total").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                amountOfTrainingen = dataSnapshot.getValue(Integer.class);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+    * Call class that will call firebase to get data
+    */
+    private void updateDatabase(){
         adapter.clear();
-        rootRef.child("trainingen").addListenerForSingleValueEvent(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        Log.v("hello",  "hoi");
-                        for (DataSnapshot childSnapShot : dataSnapshot.getChildren()) {
-                            Log.v("childclass", "now");
-                            Integer child = childSnapShot.child("child").getValue(Integer.class);
-                            String trainer = childSnapShot.child("by").getValue(String.class);
-                            String date = childSnapShot.child("date").getValue(String.class);
-                            String info = childSnapShot.child("info").getValue(String.class);
-                            String start = childSnapShot.child("start").getValue(String.class);
-                            String end = childSnapShot.child("end").getValue(String.class);
-                            Integer max = childSnapShot.child("max").getValue(Integer.class);
-                            Integer current = childSnapShot.child("current").getValue(Integer.class);
-                            Log.v("childclass", "verder");
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Updating...");
+        progressDialog.show();
+        firebase.getTraingen();
+    }
 
-                            ArrayList<String> registered = new ArrayList<>();
-                            for (DataSnapshot childRegistered : childSnapShot.child("registered").getChildren()) {
-                                String player = childRegistered.getValue(String.class);
-                                Log.v("player", player);
-                                registered.add(player);
-                            }
-
-                            Training new_training = new Training(child, date, info, start,
-                                    end, trainer, max, current, registered);
-
-                            adapter.add(new_training);
-                            adapter.notifyDataSetChanged();
-                            Log.v("childclass", "done");
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Log.v("database", "error");
-                        Log.v("getUser:onCancelled", databaseError.toString());
-                    }
-                });
+    /**
+     * When data is loaded, this function will be called.
+     *
+     * Set new trainingslist to adapter
+     */
+    public void processFinish(ArrayList<Training> output){
+        adapter.setTrainingList(output);
+        Log.d("done", "done");
+        adapter.notifyDataSetChanged();
+        progressDialog.cancel();
     }
 
     /**
@@ -163,30 +125,24 @@ public class AdminActivity extends AppCompatActivity {
                     "Add",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            amountOfTrainingen++;
-                            Training training =
-                                new Training(amountOfTrainingen,
-                                editDate.getText().toString(), editInfo.getText().toString(),
-                                editStart.getText().toString(), editEnd.getText().toString(),
-                                editTrainer.getText().toString(),
-                                Integer.parseInt(editMax.getText().toString()), 0,
-                                new ArrayList<String>());
+                            // get input
 
+                            String date  = editDate.getText().toString();
+                            String info = editInfo.getText().toString();
+                            String start = editStart.getText().toString();
+                            String end = editEnd.getText().toString();
+                            String trainer = editTrainer.getText().toString();
+                            Integer max = Integer.parseInt(editMax.getText().toString());
 
-                            rootRef.child("total").setValue(amountOfTrainingen);
+                            amountOfTrainingen = adapter.getAmountOfTrainingen() + 1;
 
-                            HashMap<String, Object> result = new HashMap<>();
-                            result.put("child", amountOfTrainingen);
-                            result.put("by", editTrainer.getText().toString());
-                            result.put("current", 0);
-                            result.put("date", editDate.getText().toString());
-                            result.put("start", editStart.getText().toString());
-                            result.put("max", Integer.parseInt(editMax.getText().toString()));
-                            result.put("end", editEnd.getText().toString());
-                            result.put("info", editInfo.getText().toString());
+                            Log.d("before","add");
+                            Training training = new Training(amountOfTrainingen, date, info, start,
+                                    end, trainer, max, 0, new ArrayList<String>());
 
-                            rootRef.child("trainingen").child(String.valueOf(amountOfTrainingen))
-                                    .updateChildren(result);
+                            // add training online
+                            firebase.addTraining(amountOfTrainingen, date, info, start, end,
+                                    trainer, max);
 
 
                             adapter.add(training);
