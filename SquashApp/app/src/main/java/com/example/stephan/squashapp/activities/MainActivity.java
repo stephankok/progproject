@@ -1,21 +1,22 @@
-package com.example.stephan.squashapp;
+package com.example.stephan.squashapp.activities;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.example.stephan.squashapp.adapters.UserTrainingAdapter;
+import com.example.stephan.squashapp.models.Training;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,9 +26,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 
-public class MainActivity extends AppCompatActivity implements HttpRequestHelperGET.AsyncResponse{
+public class MainActivity extends AppCompatActivity {
 
-    HttpRequestHelperGET request;               // Connect to internet
     ProgressDialog progressDialog;              // Wait for data
     UserTrainingAdapter adapter;                // show trainings
 
@@ -40,6 +40,8 @@ public class MainActivity extends AppCompatActivity implements HttpRequestHelper
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Log.d("startuplog", "hoi");
+        // set listview
         ListView listview = (ListView) findViewById(R.id.ListViewTraining);
         adapter = new UserTrainingAdapter(this, new ArrayList<Training>());
         listview.setAdapter(adapter);
@@ -47,6 +49,9 @@ public class MainActivity extends AppCompatActivity implements HttpRequestHelper
 
     }
 
+    /**
+     * When resume get data again from firebase
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -57,6 +62,9 @@ public class MainActivity extends AppCompatActivity implements HttpRequestHelper
         updateDatabase();
     }
 
+    /**
+     * Get data from firebase
+     */
     private void updateDatabase(){
         Log.v("update", "updating");
         adapter.clear();
@@ -144,7 +152,6 @@ public class MainActivity extends AppCompatActivity implements HttpRequestHelper
      * Create login for admin activity
      */
     public void adminMenu(){
-
         // make layout
         LayoutInflater li = LayoutInflater.from(this);
         View layout = li.inflate(R.layout.alertdialog_open_admin, null);
@@ -186,38 +193,9 @@ public class MainActivity extends AppCompatActivity implements HttpRequestHelper
                     })
                 .create().show();
     }
-
-
-
-    /**
-     * Update data.
-     * Connect to internet.
-     */
-    public void getData(){
-        if (progressDialog == null){
-            progressDialog = new ProgressDialog(this);
-            progressDialog.setMessage("Connecting to server...");
-            progressDialog.show();
-        }
-        request = new HttpRequestHelperGET(this);
-        request.execute();
-
-    }
-
-    /**
-     * Callback from asynctask
-     */
-    public void processFinish(ArrayList<Training> trainingsList){
-        // update trainings
-        adapter.clear();
-        for(int i = 0; i < trainingsList.size(); i++){
-            adapter.add(trainingsList.get(i));
-        }
-        adapter.notifyDataSetChanged();
-
-        // cancel dialog
-        if (progressDialog != null){
-            progressDialog.cancel();
-        }
-    }
 }
+
+/**
+ * Firebase in apparte helper class zetten
+ *
+ */

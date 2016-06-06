@@ -1,4 +1,4 @@
-package com.example.stephan.squashapp;
+package com.example.stephan.squashapp.adapters;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -10,8 +10,12 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+
+import com.example.stephan.squashapp.activities.R;
+import com.example.stephan.squashapp.models.Training;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -22,7 +26,7 @@ import java.util.HashMap;
 public class CancelRegistrationAdapter extends ArrayAdapter<String>{
 
     ArrayList<String> playerList;  // the players.
-    Training theTraining;
+    Training training;
     Context context;
 
     DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
@@ -30,12 +34,12 @@ public class CancelRegistrationAdapter extends ArrayAdapter<String>{
     /**
      * Initialize adapter
      */
-    public CancelRegistrationAdapter(Context context_of_screen, ArrayList<String> players, Training training) {
-        super(context_of_screen, R.layout.single_player, players);
+    public CancelRegistrationAdapter(Context context, ArrayList<String> playerList, Training training) {
+        super(context, R.layout.single_player, playerList);
 
-        context = context_of_screen;
-        playerList = players;
-        theTraining = training;
+        this.context = context;
+        this.playerList = playerList;
+        this.training = training;
     }
 
     /**
@@ -58,17 +62,17 @@ public class CancelRegistrationAdapter extends ArrayAdapter<String>{
 //        player.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 //            @Override
 //            public void onFocusChange(View v, boolean hasFocus) {
-//                theTraining.change_player_name(player.getText().toString(), position);
+//                training.change_player_name(player.getText().toString(), position);
 //
 //                HashMap<String, Object> result = new HashMap<>();
-//                Log.v("size", String.valueOf(theTraining.get_players().size()));
-//                for (int i = 0; i < theTraining.get_players().size(); i++){
+//                Log.v("size", String.valueOf(training.get_players().size()));
+//                for (int i = 0; i < training.get_players().size(); i++){
 //                    String registeredID = "player"+i;
-//                    Log.v("test", theTraining.get_players().toString());
-//                    result.put(registeredID, theTraining.get_players().get(i));
+//                    Log.v("test", training.get_players().toString());
+//                    result.put(registeredID, training.get_players().get(i));
 //                }
 //                rootRef.child("trainingen")
-//                        .child(theTraining.get_child())
+//                        .child(training.get_child())
 //                        .child("registered").setValue(result);
 //            }
 //        });
@@ -83,21 +87,21 @@ public class CancelRegistrationAdapter extends ArrayAdapter<String>{
                         switch (which) {
                             case DialogInterface.BUTTON_POSITIVE:
                                 //Yes button clicked
-                                theTraining.delete_player(position);
+                                training.delete_player(position);
 
                                 rootRef.child("trainingen")
-                                        .child(theTraining.get_child())
-                                        .child("current").setValue(theTraining.get_current());
+                                        .child(training.get_child())
+                                        .child("current").setValue(training.get_current());
 
                                 HashMap<String, Object> result = new HashMap<>();
-                                Log.v("size", String.valueOf(theTraining.get_players().size()));
-                                for (int i = 0; i < theTraining.get_players().size(); i++) {
+                                Log.v("size", String.valueOf(training.get_players().size()));
+                                for (int i = 0; i < training.get_players().size(); i++) {
                                     String registeredID = "player" + i;
-                                    Log.v("test", theTraining.get_players().toString());
-                                    result.put(registeredID, theTraining.get_players().get(i));
+                                    Log.v("test", training.get_players().toString());
+                                    result.put(registeredID, training.get_players().get(i));
                                 }
                                 rootRef.child("trainingen")
-                                        .child(theTraining.get_child())
+                                        .child(training.get_child())
                                         .child("registered").setValue(result);
                                 notifyDataSetChanged();
                                 break;

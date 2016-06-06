@@ -1,7 +1,7 @@
-package com.example.stephan.squashapp;
+package com.example.stephan.squashapp.activities;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 public class ContactActivity extends AppCompatActivity {

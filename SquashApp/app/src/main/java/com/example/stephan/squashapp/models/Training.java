@@ -1,4 +1,4 @@
-package com.example.stephan.squashapp;
+package com.example.stephan.squashapp.models;
 
 import java.util.ArrayList;
 
@@ -7,7 +7,7 @@ import java.util.ArrayList;
  */
 public class Training {
 
-    private Integer child;
+    private Integer childRef;
     private String date;
     private String shortInfo;
     private String start;
@@ -18,16 +18,16 @@ public class Training {
     private ArrayList<String> registeredPlayers;
 
 
-    public Training(Integer childRef, String dateOfTraining, String infoShort, String Start, String End, String Trainer, Integer maxplayers, Integer CurrentPlayers, ArrayList<String> registered){
-        registeredPlayers = registered;
-        date = dateOfTraining;
-        shortInfo = infoShort;
-        start = Start;
-        end = End;
-        trainer = Trainer;
-        maxPlayers = maxplayers;
-        currentPlayers = CurrentPlayers;
-        child = childRef;
+    public Training(Integer childRef, String date, String shortInfo, String start, String end, String trainer, Integer maxPlayers, Integer currentPlayers, ArrayList<String> registeredPlayers){
+        this.registeredPlayers = registeredPlayers;
+        this.date = date;
+        this.shortInfo = shortInfo;
+        this.start = start;
+        this.end = end;
+        this.trainer = trainer;
+        this.maxPlayers = maxPlayers;
+        this.currentPlayers = currentPlayers;
+        this.childRef = childRef;
     }
     public ArrayList<String> get_players(){
         return registeredPlayers;
@@ -37,7 +37,7 @@ public class Training {
         return date;
     }
 
-    public String get_child() { return String.valueOf(child); }
+    public String get_child() { return String.valueOf(childRef); }
 
     public String get_info(){
         return shortInfo;
@@ -63,24 +63,24 @@ public class Training {
         return currentPlayers;
     }
 
-    public void change_date(String dateOfTraining){
-        date = dateOfTraining;
+    public void change_date(String date){
+        this.date = date;
     }
 
-    public void change_info_short(String infoShort){
-        shortInfo = infoShort;
+    public void change_info_short(String shortInfo){
+        this.shortInfo = shortInfo;
     }
 
-    public void change_max(Integer max){
-        maxPlayers = max;
+    public void change_max(Integer maxPlayers){
+        this.maxPlayers = maxPlayers;
     }
 
-    public void change_start(String Start){
-        start = Start;
+    public void change_start(String start){
+        this.start = start;
     }
 
-    public void change_end(String End){
-        end = End;
+    public void change_end(String end){
+        this.end = end;
     }
 
     public void delete_player(int position){
@@ -92,8 +92,8 @@ public class Training {
         registeredPlayers.set(pos, player);
     }
 
-    public void change_trainer(String Trainer){
-        trainer = Trainer;
+    public void change_trainer(String trainer){
+        this.trainer = trainer;
     }
 
     public void register_player(String playerName){

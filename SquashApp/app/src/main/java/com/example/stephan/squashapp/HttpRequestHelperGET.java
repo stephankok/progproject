@@ -2,7 +2,8 @@ package com.example.stephan.squashapp;
 
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
+
+import com.example.stephan.squashapp.models.Training;
 
 import org.json.JSONArray;
 import org.json.JSONException;

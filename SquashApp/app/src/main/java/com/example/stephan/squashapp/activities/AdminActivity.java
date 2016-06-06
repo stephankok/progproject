@@ -1,21 +1,19 @@
-package com.example.stephan.squashapp;
+package com.example.stephan.squashapp.activities;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.stephan.squashapp.adapters.EditTrainingAdapter;
+import com.example.stephan.squashapp.models.Training;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,13 +23,12 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class AdminActivity extends AppCompatActivity implements HttpRequestHelperGET.AsyncResponse{
+public class AdminActivity extends AppCompatActivity {
 
-    HttpRequestHelperGET request;               // Connect to internet
-    ProgressDialog progressDialog;              // Wait for data
     EditTrainingAdapter adapter;                // show trainings
     Integer amountOfTrainingen;
 
+    // root to firebase
     DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
 
 
@@ -40,7 +37,7 @@ public class AdminActivity extends AppCompatActivity implements HttpRequestHelpe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin);
 
-
+        // Set action to add button
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,12 +51,12 @@ public class AdminActivity extends AppCompatActivity implements HttpRequestHelpe
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
+        // create listview
         ListView listview = (ListView) findViewById(R.id.ListViewTraining);
         adapter = new EditTrainingAdapter(this, new ArrayList<Training>());
         listview.setAdapter(adapter);
 
        // getData();
-
         getDatabase();
     }
 
@@ -79,6 +76,10 @@ public class AdminActivity extends AppCompatActivity implements HttpRequestHelpe
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    /**
+     * get data from firebase
+     */
     private void getDatabase(){
         Log.v("update", "updating");
 
@@ -135,89 +136,10 @@ public class AdminActivity extends AppCompatActivity implements HttpRequestHelpe
                 });
     }
 
-//
-//    private void updateDatabase(){
-//        rootRef.child("amount").addListenerForSingleValueEvent(
-//                new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(DataSnapshot dataSnapshot) {
-//                        // Get available trainings
-//                        Integer amount = dataSnapshot.getValue(Integer.class);
-//                        for (int i = 1; i <= amount; i++) {
-//                            rootRef.child("training" + i).addListenerForSingleValueEvent(
-//                                    new ValueEventListener() {
-//                                        @Override
-//                                        public void onDataChange(DataSnapshot dataSnapshot) {
-//                                            String trainer = dataSnapshot.child("by").getValue(String.class);
-//                                            String date = dataSnapshot.child("date").getValue(String.class);
-//                                            String info = dataSnapshot.child("info").getValue(String.class);
-//                                            String start = dataSnapshot.child("start").getValue(String.class);
-//                                            String end = dataSnapshot.child("end").getValue(String.class);
-//                                            Integer max = dataSnapshot.child("max").getValue(Integer.class);
-//                                            Integer current = dataSnapshot.child("current").getValue(Integer.class);
-//
-//                                            ArrayList<String> registered = new ArrayList<>();
-//                                            for (DataSnapshot child : dataSnapshot.child("registered").getChildren()) {
-//                                                String player = child.child("name").getValue(String.class);
-//                                                registered.add(player);
-//                                            }
-//
-//                                            Training new_training = new Training(date, info, start,
-//                                                    end, trainer, max, current, registered);
-//
-//                                            adapter.add(new_training);
-//                                            adapter.notifyDataSetChanged();
-//                                        }
-//
-//                                        @Override
-//                                        public void onCancelled(DatabaseError databaseError) {
-//
-//                                        }
-//                                    });
-//                        }
-//                        ;
-//                    }
-//
-//                    @Override
-//                    public void onCancelled(DatabaseError databaseError) {
-//                        Log.v("getUser:onCancelled", databaseError.toString());
-//                    }
-//                });
-//    }
-    /**
-     * Update data.
-     * Connect to internet.
-     */
-    public void getData(){
-        if (progressDialog == null){
-            progressDialog = new ProgressDialog(this);
-            progressDialog.setMessage("Connecting to server...");
-            progressDialog.show();
-        }
-        request = new HttpRequestHelperGET(this);
-        request.execute();
-
-    }
-
-    /**
-     * Callback from asynctask
-     */
-    public void processFinish(ArrayList<Training> trainingsList){
-        // update trainings
-        adapter.clear();
-        for(int i = 0; i < trainingsList.size(); i++){
-            adapter.add(trainingsList.get(i));
-        }
-        adapter.notifyDataSetChanged();
-
-        // cancel dialog
-        if (progressDialog != null){
-            progressDialog.cancel();
-        }
-    }
-
     /**
      * Add training
+     *
+     * Update change to firebase
      */
     public void AddTraining(){
 

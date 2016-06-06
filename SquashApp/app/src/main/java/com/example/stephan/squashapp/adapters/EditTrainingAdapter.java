@@ -1,4 +1,4 @@
-package com.example.stephan.squashapp;
+package com.example.stephan.squashapp.adapters;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -10,6 +10,8 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.stephan.squashapp.activities.R;
+import com.example.stephan.squashapp.models.Training;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -28,11 +30,11 @@ public class EditTrainingAdapter extends ArrayAdapter<Training>{
     /**
      * Initialize adapter
      */
-    public EditTrainingAdapter(Context context_of_screen, ArrayList<Training> trainings) {
-        super(context_of_screen, R.layout.single_training, trainings);
+    public EditTrainingAdapter(Context context, ArrayList<Training> trainingList) {
+        super(context, R.layout.single_training, trainingList);
 
-        context = context_of_screen;
-        trainingList = trainings;
+        this.context = context;
+        this.trainingList = trainingList;
     }
 
     /**
