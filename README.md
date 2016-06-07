@@ -6,7 +6,8 @@ Schiet Squash
 
 De squash club (www.schietsquash.nl) wilt een app voor de leden. Hier willen ze trainingen aanbieden waar leden zich voor kunnen inschrijven. Er moet een duidelijk weergave van de verschillende trainingen komen en wanneer ze zijn. Het is ook belangrijk dat mensen zich uit kunnen schrijven als ze toch niet kunnen komen. Idealiter moeten de beheerders van de app (De voorzitters van de club) de trainingen kunnen aanpassen, updaten en verwijderen via de app.
 
-Voor deze app zal een eigen api gemaakt moeten worden. Deze moet get request en put request kunnen hendelen. Hiervoor is tot nu toe (www.myjson.com) gevonden. Maar het zal iedealer zijn als dit via hun eigen server (wordpress) mogelijk is. Dit zal vrij veel werk zijn en zal ik me eerst in verdiepen.
+Voor het opslaan van de trainingen word firebase gebruikt. Hier is een database in trie structuur met integers en strings.
+*Voor deze app zal een eigen api gemaakt moeten worden. Deze moet get request en put request kunnen hendelen. Hiervoor is tot nu toe (www.myjson.com) gevonden. Maar het zal iedealer zijn als dit via hun eigen server (wordpress) mogelijk is. Dit zal vrij veel werk zijn en zal ik me eerst in verdiepen.*
 
 Dit ga ik maken door een aantal activity's, met arrayadapters te gebruiken en zoals eerder vermeld een eigen api te maken. Zie ook wel onder voor meer details.
 
