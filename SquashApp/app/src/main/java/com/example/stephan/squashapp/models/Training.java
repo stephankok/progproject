@@ -1,105 +1,120 @@
 package com.example.stephan.squashapp.models;
 
+import com.google.firebase.database.Exclude;
+
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Stephan on 1-6-2016.
  */
 public class Training {
 
-    private Integer childRef;
+    private String trainer;
     private String date;
     private String shortInfo;
     private String start;
     private String end;
-    private String trainer;
-    private Integer maxPlayers;
-    private Integer currentPlayers;
-    private ArrayList<String> registeredPlayers;
+    private Long maxPlayers;
+    private Long currentPlayers;
+    private Long childRef;
+    private List<Object> registeredPlayers;
+
+    @Exclude
+    private ArrayList<String> registeredArray;
 
 
-    public Training(Integer childRef, String date, String shortInfo, String start, String end, String trainer, Integer maxPlayers, Integer currentPlayers, ArrayList<String> registeredPlayers){
-        this.registeredPlayers = registeredPlayers;
+    public void Training(){
+        // empty for firebase
+    }
+
+    public void newTraining(String trainer, String date, String shortInfo, String start, String end,
+                         Long maxPlayers, Long childRef){
+        this.trainer = trainer;
         this.date = date;
         this.shortInfo = shortInfo;
         this.start = start;
         this.end = end;
-        this.trainer = trainer;
         this.maxPlayers = maxPlayers;
-        this.currentPlayers = currentPlayers;
         this.childRef = childRef;
-    }
-    public ArrayList<String> get_players(){
-        return registeredPlayers;
-    }
-
-    public String get_date(){
-        return date;
+        this.currentPlayers = 0L;
+        this.registeredPlayers = new ArrayList<>();
     }
 
-    public String get_child() { return String.valueOf(childRef); }
-
-    public String get_info(){
-        return shortInfo;
+    public String getTrainer(){
+        return this.trainer;
     }
 
-    public String get_start(){
-        return start;
+    public String getDate(){
+        return this.date;
     }
 
-    public String get_end(){
-        return end;
+    public String getShortInfo(){
+        return this.shortInfo;
     }
 
-    public String get_trainer(){
-        return trainer;
+    public String getStart(){
+        return this.start;
     }
 
-    public Integer get_max(){
-        return maxPlayers;
+    public String getEnd(){
+        return this.end;
     }
 
-    public Integer get_current(){
-        return currentPlayers;
+    public Long getMaxPlayers(){
+        return this.maxPlayers;
     }
 
-    public void change_date(String date){
+    public Long getCurrentPlayers(){
+        if(registeredPlayers == null){
+            this.registeredPlayers = new ArrayList<>();
+        }
+        return this.currentPlayers;
+    }
+
+    public Long getChildRef(){
+        return this.childRef;
+    }
+
+    public List<Object> getRegisteredPlayers(){
+        return this.registeredPlayers;
+    }
+
+    public void changeDate(String date){
         this.date = date;
     }
 
-    public void change_info_short(String shortInfo){
-        this.shortInfo = shortInfo;
-    }
-
-    public void change_max(Integer maxPlayers){
-        this.maxPlayers = maxPlayers;
-    }
-
-    public void change_start(String start){
+    public void changeStart(String start){
         this.start = start;
     }
 
-    public void change_end(String end){
+    public void changeEnd(String end){
         this.end = end;
     }
 
-    public void delete_player(int position){
-        registeredPlayers.remove(position);
-        currentPlayers--;
+    public void changeShortInfo(String shortInfo){
+        this.shortInfo = shortInfo;
     }
 
-    public void change_player_name(String player, int pos){
-        registeredPlayers.set(pos, player);
-    }
-
-    public void change_trainer(String trainer){
+    public void changeTrainer(String trainer){
         this.trainer = trainer;
     }
 
-    public void register_player(String playerName){
-        if(currentPlayers < maxPlayers){
-            currentPlayers++;
-            registeredPlayers.add(playerName);
-        }
+    public void changeMaxPlayers(Long maxPlayers){
+        this.maxPlayers = maxPlayers;
     }
+
+    public void registerPlayer(String player){
+        if(registeredPlayers == null){
+            this.registeredPlayers = new ArrayList<>();
+        }
+        this.currentPlayers++;
+        this.registeredPlayers.add(player);
+    }
+
+    public void deletePlayer(int pos){
+        this.currentPlayers--;
+        this.registeredPlayers.remove(pos);
+    }
+
 }

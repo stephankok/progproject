@@ -52,8 +52,6 @@ public class AdminActivity extends AppCompatActivity implements FirebaseConnecto
         adapter = new EditTrainingAdapter(this, new ArrayList<Training>());
         listview.setAdapter(adapter);
 
-        // make sure it when getting data it will respond to this activity
-        firebase.setResponse(this);
        // getData();
         updateDatabase();
     }
@@ -83,7 +81,7 @@ public class AdminActivity extends AppCompatActivity implements FirebaseConnecto
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Updating...");
         progressDialog.show();
-        firebase.getTraingen();
+        firebase.getTraingen(this);
     }
 
     /**
@@ -132,17 +130,17 @@ public class AdminActivity extends AppCompatActivity implements FirebaseConnecto
                             String start = editStart.getText().toString();
                             String end = editEnd.getText().toString();
                             String trainer = editTrainer.getText().toString();
-                            Integer max = Integer.parseInt(editMax.getText().toString());
+                            Long max = Long.parseLong(editMax.getText().toString());
 
-                            amountOfTrainingen = adapter.getAmountOfTrainingen() + 1;
+                            Long childRef = adapter.getAmountOfTrainingen() + 1L;
+
 
                             Log.d("before","add");
-                            Training training = new Training(amountOfTrainingen, date, info, start,
-                                    end, trainer, max, 0, new ArrayList<String>());
+                            Training training = new Training();
+                            training.newTraining(trainer, date, info, start, end, max, childRef);
 
                             // add training online
-                            firebase.addTraining(amountOfTrainingen, date, info, start, end,
-                                    trainer, max);
+                            firebase.addTraining(training);
 
 
                             adapter.add(training);

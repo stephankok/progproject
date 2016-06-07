@@ -72,21 +72,13 @@ public class EditTrainingAdapter extends ArrayAdapter<Training>{
 
         final Training item = trainingList.get(position);
 
-        date.setText(item.get_date());
-        info.setText(item.get_info());
-        String timeText = item.get_start() + " until " + item.get_end();
+        date.setText(item.getDate());
+        info.setText(item.getShortInfo());
+        String timeText = item.getStart() + " until " + item.getEnd();
         time.setText(timeText);
-        cp.setText("Registered: " + item.get_current());
-        mp.setText("Max players: " + item.get_max());
-
-        String trainerName = item.get_trainer();
-
-
-        if (!trainerName.isEmpty()) {
-            trainer.setText("By: " + trainerName);
-        } else {
-            trainer.setText("");
-        }
+        cp.setText("Registered: " + item.getCurrentPlayers());
+        mp.setText("Max players: " + item.getMaxPlayers());
+        trainer.setText("By: " + item.getTrainer());
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,12 +95,12 @@ public class EditTrainingAdapter extends ArrayAdapter<Training>{
                 final EditText editInfo = (EditText) layout.findViewById(R.id.info);
                 final EditText editMax = (EditText) layout.findViewById(R.id.maxPlayers);
 
-                editDate.setText(item.get_date());
-                editStart.setText(item.get_start());
-                editEnd.setText(item.get_end());
-                editInfo.setText(item.get_info());
-                editMax.setText(item.get_max().toString());
-                editTrainer.setText(item.get_trainer());
+                editDate.setText(item.getDate());
+                editStart.setText(item.getStart());
+                editEnd.setText(item.getEnd());
+                editInfo.setText(item.getShortInfo());
+                editMax.setText(item.getMaxPlayers().toString());
+                editTrainer.setText(item.getTrainer());
 
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
                 builder1.setTitle("Edit Training")
@@ -118,22 +110,25 @@ public class EditTrainingAdapter extends ArrayAdapter<Training>{
                             "Add",
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
-                                    item.change_date(editDate.getText().toString());
-                                    item.change_start(editStart.getText().toString());
-                                    item.change_end(editEnd.getText().toString());
-                                    item.change_info_short(editInfo.getText().toString());
-                                    item.change_trainer(editTrainer.getText().toString());
-                                    item.change_max(Integer.parseInt(editMax.getText().toString()));
+
+                                    item.changeDate(editDate.getText().toString());
+                                    item.changeStart(editStart.getText().toString());
+                                    item.changeEnd(editEnd.getText().toString());
+                                    item.changeShortInfo(editInfo.getText().toString());
+                                    item.changeTrainer(editTrainer.getText().toString());
+                                    item.changeMaxPlayers(
+                                            Long.parseLong(editMax.getText().toString()));
+
 
                                     HashMap<String, Object> result = new HashMap<>();
-                                    result.put("by", editTrainer.getText().toString());
+                                    result.put("trainer", editTrainer.getText().toString());
                                     result.put("date", editDate.getText().toString());
                                     result.put("start", editStart.getText().toString());
-                                    result.put("max", Integer.parseInt(editMax.getText().toString()));
+                                    result.put("maxPlayers", Integer.parseInt(editMax.getText().toString()));
                                     result.put("end", editEnd.getText().toString());
-                                    result.put("info", editInfo.getText().toString());
+                                    result.put("shortInfo", editInfo.getText().toString());
 
-                                    rootRef.child("trainingen").child(item.get_child())
+                                    rootRef.child("trainingen").child(item.getChildRef().toString())
                                             .updateChildren(result);
 
                                     notifyDataSetChanged();

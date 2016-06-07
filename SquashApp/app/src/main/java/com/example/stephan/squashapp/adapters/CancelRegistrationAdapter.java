@@ -15,15 +15,15 @@ import com.example.stephan.squashapp.helpers.FirebaseConnector;
 import com.example.stephan.squashapp.models.Training;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Stephan on 1-6-2016.
  *
  */
-public class CancelRegistrationAdapter extends ArrayAdapter<String>{
+public class CancelRegistrationAdapter extends ArrayAdapter<Object> {
 
-    ArrayList<String> playerList;  // the players.
+    List<Object> playerList;  // the players.
     Training training;
     Context context;
 
@@ -32,7 +32,7 @@ public class CancelRegistrationAdapter extends ArrayAdapter<String>{
     /**
      * Initialize adapter
      */
-    public CancelRegistrationAdapter(Context context, ArrayList<String> playerList, Training training) {
+    public CancelRegistrationAdapter(Context context, List<Object> playerList, Training training) {
         super(context, R.layout.single_player, playerList);
 
         this.context = context;
@@ -55,8 +55,9 @@ public class CancelRegistrationAdapter extends ArrayAdapter<String>{
         final ImageView delete = (ImageView) view.findViewById(R.id.deletePlayer);
 
         // set text
-        player.setText(playerList.get(position));
-        // cant get keyboard
+        player.setText(playerList.get(position).toString());
+
+//        // cant get keyboard
 //        player.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 //            @Override
 //            public void onFocusChange(View v, boolean hasFocus) {
@@ -85,10 +86,10 @@ public class CancelRegistrationAdapter extends ArrayAdapter<String>{
                         switch (which) {
                             case DialogInterface.BUTTON_POSITIVE:
                                 //Yes button clicked
-                                training.delete_player(position);
+                                training.deletePlayer(position);
 
                                 // delete player from database.
-                                firebase.deRegisterPlayer(training);
+                                firebase.updateRegisteredPlayers(training, position);
 
                                 notifyDataSetChanged();
                                 break;
@@ -109,9 +110,6 @@ public class CancelRegistrationAdapter extends ArrayAdapter<String>{
 
             }
         });
-
-
-
         return view;
     }
 }

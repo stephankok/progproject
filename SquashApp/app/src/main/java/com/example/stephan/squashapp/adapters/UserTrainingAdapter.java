@@ -19,6 +19,7 @@ import com.example.stephan.squashapp.models.Training;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Stephan on 1-6-2016.
@@ -76,14 +77,14 @@ public class UserTrainingAdapter extends ArrayAdapter<Training> {
         final Training item = trainingList.get(position);
 
         // Set text.
-        date.setText(item.get_date());
-        info.setText(item.get_info());
-        String timeText = item.get_start() + " until " + item.get_end();
+        date.setText(item.getDate());
+        info.setText(item.getShortInfo());
+        String timeText = item.getStart() + " until " + item.getEnd();
         time.setText(timeText);
-        cp.setText("Registered: " + item.get_current());
-        mp.setText("Max players: " + item.get_max());
+        cp.setText("Registered: " + item.getCurrentPlayers());
+        mp.setText("Max players: " + item.getMaxPlayers());
 
-        String trainerName = item.get_trainer();
+        String trainerName = item.getTrainer();
         if (!trainerName.isEmpty()) {
             trainer.setText("By: " + trainerName);
         } else {
@@ -103,13 +104,13 @@ public class UserTrainingAdapter extends ArrayAdapter<Training> {
             public void onClick() {
                 super.onClick();
                 Log.d("click", "click");
-                if (item.get_current() < item.get_max()) {
+                if (item.getCurrentPlayers() < item.getMaxPlayers()) {
                     // make layout
                     LayoutInflater li = LayoutInflater.from(context);
                     final View layout = li.inflate(R.layout.alertdialog_register, null);
 
                     String message = "Do you want to register for the training of "
-                            + item.get_date() + " by " + item.get_trainer();
+                            + item.getDate() + " by " + item.getTrainer();
 
                     // make dialog
                     AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
@@ -133,10 +134,10 @@ public class UserTrainingAdapter extends ArrayAdapter<Training> {
                                                         Toast.LENGTH_SHORT).show();
                                             } else {
                                                 trainingList.get(position)
-                                                        .register_player(playerName);
+                                                        .registerPlayer(playerName);
 
                                                 // register online
-                                                firebase.registerPlayer(item);
+                                                firebase.updateRegisteredPlayers(item, position);
 
                                                 notifyDataSetChanged();
                                                 String text = "" + playerName +
@@ -175,7 +176,7 @@ public class UserTrainingAdapter extends ArrayAdapter<Training> {
             public void onLongClick() {
                 super.onLongClick();
                 Log.d("long", "click");
-                ArrayList<String> playerList = trainingList.get(position).get_players();
+                List<Object> playerList = trainingList.get(position).getRegisteredPlayers();
 
                 // make layout
                 LayoutInflater li = LayoutInflater.from(context);
@@ -184,7 +185,7 @@ public class UserTrainingAdapter extends ArrayAdapter<Training> {
                 ListView listView =
                         (ListView) layout.findViewById(R.id.cancelListView);
                 CancelRegistrationAdapter adapter =
-                        new CancelRegistrationAdapter(context, item.get_players(), item);
+                        new CancelRegistrationAdapter(context, item.getRegisteredPlayers(), item);
                 listView.setAdapter(adapter);
 
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(context)
@@ -206,6 +207,11 @@ public class UserTrainingAdapter extends ArrayAdapter<Training> {
                 });
                 alert11.show();
             }
+
+            @Override
+            public void onSwipeLeft(){
+                Toast.makeText(context, "left", Toast.LENGTH_SHORT).show();
+            }
         });
 
         return view;
@@ -213,3 +219,4 @@ public class UserTrainingAdapter extends ArrayAdapter<Training> {
 
 }
 
+// ContextMenu?

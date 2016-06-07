@@ -11,12 +11,12 @@ public class SwipeDetectorClass implements View.OnTouchListener {
     private GestureDetector gestureDetector;
     private Context context;
 
-    public SwipeDetectorClass(Context c) {
-        gestureDetector = new GestureDetector(c, new GestureListener());
-        this.context = c;
+    public SwipeDetectorClass(Context context) {
+        gestureDetector = new GestureDetector(context, new GestureListener());
+        this.context = context;
     }
 
-    public boolean onTouch(final View view, final MotionEvent motionEvent) {
+    public boolean onTouch(View view, MotionEvent motionEvent) {
         return gestureDetector.onTouchEvent(motionEvent);
     }
 
@@ -60,24 +60,27 @@ public class SwipeDetectorClass implements View.OnTouchListener {
                     if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
                         if (diffX > 0) {
                             onSwipeRight();
+                            result = true;
                         } else {
                             onSwipeLeft();
+                            result = true;
                         }
                     }
                 } else {
                     if (Math.abs(diffY) > SWIPE_THRESHOLD && Math.abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
-                        Toast.makeText(context, "Swipe4", Toast.LENGTH_SHORT).show();
                         if (diffY > 0) {
                             onSwipeDown();
+                            result = true;
                         } else {
                             onSwipeUp();
+                            result = true;
                         }
                     }
                 }
             } catch (Exception exception) {
-                Toast.makeText(context, "Swipe error", Toast.LENGTH_SHORT).show();
                 exception.printStackTrace();
             }
+
             return result;
         }
     }

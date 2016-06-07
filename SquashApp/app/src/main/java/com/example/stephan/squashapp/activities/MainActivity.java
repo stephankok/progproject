@@ -42,10 +42,6 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
         ListView listview = (ListView) findViewById(R.id.ListViewTraining);
         adapter = new UserTrainingAdapter(this, new ArrayList<Training>());
         listview.setAdapter(adapter);
-
-        // make sure it when getting data it will respond to this activity
-        firebase.setResponse(this);
-
     }
 
     /**
@@ -65,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Updating...");
         progressDialog.show();
-        firebase.getTraingen();
+        firebase.getTraingen(this);
     }
 
     /**
