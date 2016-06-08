@@ -18,6 +18,8 @@ import android.widget.Toast;
 import com.example.stephan.squashapp.adapters.UserTrainingAdapter;
 import com.example.stephan.squashapp.helpers.FirebaseConnector;
 import com.example.stephan.squashapp.models.Training;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
@@ -29,6 +31,9 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
     UserTrainingAdapter adapter;                // show trainings
     FirebaseConnector firebase =
             new FirebaseConnector(FirebaseDatabase.getInstance().getReference());
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private FirebaseAuth.AuthStateListener mAuthListener;
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
 
     @Override
@@ -42,6 +47,43 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
         ListView listview = (ListView) findViewById(R.id.ListViewTraining);
         adapter = new UserTrainingAdapter(this, new ArrayList<Training>());
         listview.setAdapter(adapter);
+
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(FirebaseAuth firebaseAuth) {
+                if (user != null) {
+                    // User is signed in
+                    Log.d("user", "onAuthStateChanged:signed_in:" + user.getUid());
+                } else {
+                    // User is signed out
+                    Log.d("user", "onAuthStateChanged:signed_out");
+                }
+
+            }
+        };
+
+    }
+
+    public void signIn(){
+        Log.d("signing","in");
+        String email = "stephan_handbal@hotmail.com";
+        String password = "!Mjooj33";
+        mAuth.signInAnonymously();
+//        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+//            @Override
+//            public void onComplete(@NonNull Task<AuthResult> task) {
+//                Log.d("logging", "signInWithEmail:onComplete:" + task.isSuccessful());
+//
+//                // If sign in fails, display a message to the user. If sign in succeeds
+//                // the auth state listener will be notified and logic to handle the
+//                // signed in user can be handled in the listener.
+//                if (!task.isSuccessful()) {
+//                    Log.w("logging2", "signInWithEmail", task.getException());
+//                }
+//
+//                // ...
+//            }
+//        });
     }
 
     /**
@@ -52,6 +94,21 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
         super.onResume();
         updateDatabase();
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mAuth.addAuthStateListener(mAuthListener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mAuthListener != null) {
+            mAuth.removeAuthStateListener(mAuthListener);
+        }
+    }
+
 
     /**
      * Call class that will call firebase to get data
@@ -105,6 +162,9 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
                 Intent newContactWindow = new Intent(this, ContactActivity.class);
                 startActivity(newContactWindow);
                 break;
+            case R.id.sign_in:
+                signIn();
+                break;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -157,8 +217,3 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
                 .create().show();
     }
 }
-
-/**
- * Firebase in apparte helper class zetten
- *
- */

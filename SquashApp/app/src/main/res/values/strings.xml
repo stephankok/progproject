@@ -11,4 +11,5 @@
     <string name="delete_button_description">DeleteButton</string>
     <string name="register">Name</string>
     <string name="title_activity_admin2">AdminActivity2</string>
+    <string name="menuSignIn">Sign in</string>
 </resources>

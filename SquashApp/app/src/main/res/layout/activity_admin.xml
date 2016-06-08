@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.stephan.squashapp.AdminActivity">
+    tools:context="com.example.stephan.squashapp.activities.AdminActivity">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,9 +25,8 @@
         <ListView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/ListViewTraining">
+            android:id="@+id/ListViewAdminTraining"/>
 
-        </ListView>
     </LinearLayout>
 
 

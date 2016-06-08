@@ -1,7 +1,5 @@
 package com.example.stephan.squashapp.models;
 
-import com.google.firebase.database.Exclude;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,26 +15,20 @@ public class Training {
     private String end;
     private Long maxPlayers;
     private Long currentPlayers;
-    private Long childRef;
     private List<Object> registeredPlayers;
-
-    @Exclude
-    private ArrayList<String> registeredArray;
-
 
     public void Training(){
         // empty for firebase
     }
 
     public void newTraining(String trainer, String date, String shortInfo, String start, String end,
-                         Long maxPlayers, Long childRef){
+                         Long maxPlayers){
         this.trainer = trainer;
         this.date = date;
         this.shortInfo = shortInfo;
         this.start = start;
         this.end = end;
         this.maxPlayers = maxPlayers;
-        this.childRef = childRef;
         this.currentPlayers = 0L;
         this.registeredPlayers = new ArrayList<>();
     }
@@ -70,10 +62,6 @@ public class Training {
             this.registeredPlayers = new ArrayList<>();
         }
         return this.currentPlayers;
-    }
-
-    public Long getChildRef(){
-        return this.childRef;
     }
 
     public List<Object> getRegisteredPlayers(){

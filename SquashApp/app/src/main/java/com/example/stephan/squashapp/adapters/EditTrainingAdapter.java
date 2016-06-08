@@ -8,15 +8,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.stephan.squashapp.activities.R;
+import com.example.stephan.squashapp.helpers.FirebaseConnector;
 import com.example.stephan.squashapp.models.Training;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Created by Stephan on 4-6-2016.
@@ -25,8 +25,8 @@ public class EditTrainingAdapter extends ArrayAdapter<Training>{
     ArrayList<Training> trainingList;  // the items.
     Context context;
 
-    DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
-
+    FirebaseConnector firebase =
+            new FirebaseConnector(FirebaseDatabase.getInstance().getReference());
     /**
      * Initialize adapter
      */
@@ -62,6 +62,7 @@ public class EditTrainingAdapter extends ArrayAdapter<Training>{
         }
 
         // find Views.
+        final ImageButton delete = (ImageButton) view.findViewById(R.id.deleteTraining);
         final TextView date = (TextView) view.findViewById(R.id.date);
         final TextView info = (TextView) view.findViewById(R.id.info);
         final TextView time = (TextView) view.findViewById(R.id.time);
@@ -79,6 +80,36 @@ public class EditTrainingAdapter extends ArrayAdapter<Training>{
         cp.setText("Registered: " + item.getCurrentPlayers());
         mp.setText("Max players: " + item.getMaxPlayers());
         trainer.setText("By: " + item.getTrainer());
+
+        delete.setVisibility(View.VISIBLE);
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case DialogInterface.BUTTON_POSITIVE:
+                                //Yes button clicked
+                                trainingList.remove(position);
+                                firebase.updateAllTrainingen(trainingList);
+                                notifyDataSetChanged();
+                                break;
+
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                //No button clicked
+                                break;
+                        }
+                    }
+                };
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setMessage("Do you want to delete the training of " + item.getDate() + "?")
+                        .setPositiveButton("Yes", dialogClickListener)
+                        .setNegativeButton("No", dialogClickListener).show();
+            }
+        });
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,17 +150,7 @@ public class EditTrainingAdapter extends ArrayAdapter<Training>{
                                     item.changeMaxPlayers(
                                             Long.parseLong(editMax.getText().toString()));
 
-
-                                    HashMap<String, Object> result = new HashMap<>();
-                                    result.put("trainer", editTrainer.getText().toString());
-                                    result.put("date", editDate.getText().toString());
-                                    result.put("start", editStart.getText().toString());
-                                    result.put("maxPlayers", Integer.parseInt(editMax.getText().toString()));
-                                    result.put("end", editEnd.getText().toString());
-                                    result.put("shortInfo", editInfo.getText().toString());
-
-                                    rootRef.child("trainingen").child(item.getChildRef().toString())
-                                            .updateChildren(result);
+                                    firebase.updateSingleTraining(item, position);
 
                                     notifyDataSetChanged();
                                     dialog.cancel();

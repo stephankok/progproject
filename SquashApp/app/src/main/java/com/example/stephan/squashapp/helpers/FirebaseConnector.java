@@ -59,23 +59,23 @@ public class FirebaseConnector {
     }
 
     public void updateRegisteredPlayers(Training training, int pos){
-        Log.d("pos", String.valueOf(pos));
-
-        rootRef.child("trainingen").child(String.valueOf(pos + 1)).child("currentPlayers")
+        rootRef.child("trainingen").child(String.valueOf(pos)).child("currentPlayers")
                 .setValue(training.getCurrentPlayers());
 
-        rootRef.child("trainingen").child(String.valueOf(pos + 1)).child("registeredPlayers")
+        rootRef.child("trainingen").child(String.valueOf(pos)).child("registeredPlayers")
                 .setValue(training.getRegisteredPlayers());
 
+    }
+
+    public void updateAllTrainingen(ArrayList<Training> trainingList){
+        rootRef.child("trainingen").setValue(trainingList);
     }
 
     /**
      * Add training to database
      */
-    public void addTraining(Training training){
-        rootRef.child("trainingen").child(training.getChildRef().toString()).setValue(training);
+    public void updateSingleTraining(Training training, int pos){
+        rootRef.child("trainingen").child(String.valueOf(pos)).setValue(training);
     }
 
 }
-
-// firebase maak class aan

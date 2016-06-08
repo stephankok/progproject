@@ -1,6 +1,8 @@
 package com.example.stephan.squashapp.activities;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -10,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -19,14 +22,17 @@ import com.example.stephan.squashapp.models.Training;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class AdminActivity extends AppCompatActivity implements FirebaseConnector.AsyncResponse{
 
-    EditTrainingAdapter adapter;                // show trainings
-    Integer amountOfTrainingen;
+    ListView mListView;
+    EditTrainingAdapter myAdapter;
     ProgressDialog progressDialog;
     FirebaseConnector firebase =
             new FirebaseConnector(FirebaseDatabase.getInstance().getReference());
+    DatePickerDialog.OnDateSetListener myDateListener;
+    Calendar calendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,12 +54,20 @@ public class AdminActivity extends AppCompatActivity implements FirebaseConnecto
         }
 
         // create listview
-        ListView listview = (ListView) findViewById(R.id.ListViewTraining);
-        adapter = new EditTrainingAdapter(this, new ArrayList<Training>());
-        listview.setAdapter(adapter);
-
+        mListView = (ListView) findViewById(R.id.ListViewAdminTraining);
+        myAdapter = new EditTrainingAdapter(this, new ArrayList<Training>());
+        mListView.setAdapter(myAdapter);
        // getData();
         updateDatabase();
+
+        calendar = Calendar.getInstance();
+
+        myDateListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker arg0, int arg1, int arg2, int arg3) {
+                AddTraining2(arg1, arg2, arg3);
+            }
+        };
     }
 
     /**
@@ -77,7 +91,7 @@ public class AdminActivity extends AppCompatActivity implements FirebaseConnecto
     * Call class that will call firebase to get data
     */
     private void updateDatabase(){
-        adapter.clear();
+        myAdapter.clear();
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Updating...");
         progressDialog.show();
@@ -90,25 +104,34 @@ public class AdminActivity extends AppCompatActivity implements FirebaseConnecto
      * Set new trainingslist to adapter
      */
     public void processFinish(ArrayList<Training> output){
-        adapter.setTrainingList(output);
+        myAdapter.setTrainingList(output);
         Log.d("done", "done");
-        adapter.notifyDataSetChanged();
+        myAdapter.notifyDataSetChanged();
         progressDialog.cancel();
     }
 
+
+    protected Dialog onCreateDialog(int year, int month, int day) {
+        return new DatePickerDialog(this, myDateListener, year, month, day);
+
+    }
     /**
      * Add training
      *
      * Update change to firebase
      */
     public void AddTraining(){
+        onCreateDialog(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
+    }
 
+    private void AddTraining2(final int year, final int month, final int day){
         // make layout
         LayoutInflater li = LayoutInflater.from(this);
         final View layout = li.inflate(R.layout.add_training, null);
 
         // get all items
         final EditText editDate = (EditText) layout.findViewById(R.id.date);
+        editDate.setVisibility(View.GONE);
         final EditText editStart = (EditText) layout.findViewById(R.id.startTime);
         final EditText editEnd = (EditText) layout.findViewById(R.id.endTime);
         final EditText editTrainer = (EditText) layout.findViewById(R.id.trainer);
@@ -120,35 +143,33 @@ public class AdminActivity extends AppCompatActivity implements FirebaseConnecto
                 .setCancelable(true)
                 .setView(layout)
                 .setPositiveButton(
-                    "Add",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            // get input
+                        "Add",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // get input
 
-                            String date  = editDate.getText().toString();
-                            String info = editInfo.getText().toString();
-                            String start = editStart.getText().toString();
-                            String end = editEnd.getText().toString();
-                            String trainer = editTrainer.getText().toString();
-                            Long max = Long.parseLong(editMax.getText().toString());
+                                String date  = String.valueOf(year) + " " + String.valueOf(month) +
+                                        " " + String.valueOf(day);
+                                String info = editInfo.getText().toString();
+                                String start = editStart.getText().toString();
+                                String end = editEnd.getText().toString();
+                                String trainer = editTrainer.getText().toString();
+                                Long max = Long.parseLong(editMax.getText().toString());
 
-                            Long childRef = adapter.getAmountOfTrainingen() + 1L;
+                                Log.d("before","add");
+                                Training training = new Training();
+                                training.newTraining(trainer, date, info, start, end, max);
 
-
-                            Log.d("before","add");
-                            Training training = new Training();
-                            training.newTraining(trainer, date, info, start, end, max, childRef);
-
-                            // add training online
-                            firebase.addTraining(training);
+                                // add training online
+                                firebase.updateSingleTraining(training, myAdapter.getAmountOfTrainingen());
 
 
-                            adapter.add(training);
-                            adapter.notifyDataSetChanged();
-                            dialog.cancel();
+                                myAdapter.add(training);
+                                myAdapter.notifyDataSetChanged();
+                                dialog.cancel();
 
-                        }
-                    });
+                            }
+                        });
 
         builder1.setNegativeButton(
                 "Cancel",

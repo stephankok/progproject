@@ -5,11 +5,11 @@
     android:layout_height="match_parent">
 
     <ImageButton
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:src="@android:drawable/ic_menu_delete"
-        android:id="@+id/deleteImage"
-        android:visibility="invisible"/>
+        android:id="@+id/deleteTraining"
+        android:visibility="gone"/>
 
     <LinearLayout
         android:layout_width="match_parent"

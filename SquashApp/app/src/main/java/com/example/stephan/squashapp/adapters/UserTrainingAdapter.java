@@ -83,13 +83,7 @@ public class UserTrainingAdapter extends ArrayAdapter<Training> {
         time.setText(timeText);
         cp.setText("Registered: " + item.getCurrentPlayers());
         mp.setText("Max players: " + item.getMaxPlayers());
-
-        String trainerName = item.getTrainer();
-        if (!trainerName.isEmpty()) {
-            trainer.setText("By: " + trainerName);
-        } else {
-            trainer.setText("");
-        }
+        trainer.setText("By: " + item.getTrainer());
 
         /**
          *  Set onclick & onlongclick

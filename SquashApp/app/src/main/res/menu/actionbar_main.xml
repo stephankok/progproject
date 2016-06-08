@@ -24,4 +24,9 @@
         android:id="@+id/menu_admin"
         android:title="@string/menu_admin"
         android:orderInCategory="4" />
+
+    <item
+        android:id="@+id/sign_in"
+        android:title="@string/menuSignIn"
+        android:orderInCategory="5" />
 </menu>
