@@ -29,3 +29,15 @@ Log file
 - Kijken hoe ik de api kan maken
 - SQL database op server zetten?
 - Firebase! https://firebase.google.com/
+- 
+**06 06 2016**
+- Firebase geimplenteerd
+
+**07 06 2016**
+- Firebase afhandelen in juiste classes / methodes
+- kijken naar mogelijk user database
+
+**08 06 2016**
+- Layout/design aanpassingen
+- kijken naar mogelijke ListSwap (libary werkte niet :( )
+- Calender implenmenteren
