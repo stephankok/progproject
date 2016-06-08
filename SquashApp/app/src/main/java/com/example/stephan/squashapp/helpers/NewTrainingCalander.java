@@ -47,7 +47,7 @@ public class NewTrainingCalander {
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(year,monthOfYear,dayOfMonth);
-                date = new SimpleDateFormat("E, MMM dd MMM, yyyy").format(calendar.getTime());
+                date = new SimpleDateFormat("E, dd MMM yyyy").format(calendar.getTime());
                 initiate2();
             }
         };
