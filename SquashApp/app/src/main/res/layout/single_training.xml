@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         android:src="@android:drawable/ic_menu_delete"
         android:id="@+id/deleteTraining"
+        android:layout_gravity="center"
         android:visibility="gone"/>
 
     <LinearLayout
