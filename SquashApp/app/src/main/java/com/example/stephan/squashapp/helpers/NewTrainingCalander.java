@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.provider.CalendarContract;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
@@ -13,6 +14,7 @@ import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
 
 /**
  * Created by Stephan on 8-6-2016.
@@ -47,7 +49,7 @@ public class NewTrainingCalander {
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(year,monthOfYear,dayOfMonth);
-                date = new SimpleDateFormat("E, dd MMM yyyy").format(calendar.getTime());
+                date = new SimpleDateFormat("EEE, MMM d, ''yy", Locale.US).format(calendar.getTime());
                 initiate2();
             }
         };
@@ -55,7 +57,7 @@ public class NewTrainingCalander {
         startTimeListener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                start = String.valueOf(hourOfDay) + ":" + String.format("%02d", minute);
+                start = String.valueOf(hourOfDay) + ":" + String.format( Locale.US, "%02d", minute);
                 initiate3();
             }
         };
@@ -63,7 +65,7 @@ public class NewTrainingCalander {
         endTimeListener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                end = String.valueOf(hourOfDay) + ":" + String.format("%02d", minute);
+                end = String.valueOf(hourOfDay) + ":" + String.format(Locale.US, "%02d", minute);
                 delegate.newTrainingDateSelected(date, start, end);
             }
         };
