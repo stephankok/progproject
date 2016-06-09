@@ -19,5 +19,4 @@
         android:id="@+id/password"
         android:gravity="center"
         android:inputType="textPassword"/>
-
 </LinearLayout>

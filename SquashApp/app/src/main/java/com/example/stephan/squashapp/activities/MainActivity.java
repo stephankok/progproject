@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.example.stephan.squashapp.adapters.UserTrainingAdapter;
 import com.example.stephan.squashapp.helpers.FirebaseConnector;
 import com.example.stephan.squashapp.models.Training;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
     UserTrainingAdapter adapter;                // show trainings
     FirebaseConnector firebase =
             new FirebaseConnector(FirebaseDatabase.getInstance().getReference());
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
 
     @Override
@@ -43,10 +45,13 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
         ListView listview = (ListView) findViewById(R.id.ListViewTraining);
         adapter = new UserTrainingAdapter(this, new ArrayList<Training>());
         listview.setAdapter(adapter);
+
     }
 
     public void signIn(){
         Log.d("signing","NOT WORKING YET");
+        Intent signin = new Intent(this, EmailPasswordActivity.class);
+        startActivity(signin);
     }
 
     /**
@@ -55,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
     @Override
     protected void onResume() {
         super.onResume();
+        user = FirebaseAuth.getInstance().getCurrentUser();
         updateDatabase();
     }
 
