@@ -9,7 +9,22 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.stephan.squashapp.activities.MainActivity"
     android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="test"
+            android:text="signinstatus"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="NotCalled"
+            android:id="@+id/signinstatus"/>
 
+    </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"

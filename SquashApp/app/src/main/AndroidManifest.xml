@@ -12,7 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar">
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".MainActivity"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,9 +22,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".ContactActivity" />
-        <activity android:name=".AdminActivity"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".EmailPasswordActivity"/>
+        <activity
+            android:name=".AdminActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".EmailPasswordActivity" />
+        <activity android:name=".RegisterNewUser"></activity>
     </application>
 
 </manifest>

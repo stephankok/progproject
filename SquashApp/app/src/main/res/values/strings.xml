@@ -13,4 +13,8 @@
     <string name="title_activity_admin2">AdminActivity2</string>
     <string name="menuSignIn">Sign in</string>
     <string name="registerButton">Register</string>
+    <string name="email_adress">Email adress</string>
+    <string name="registrationName">Name</string>
+    <string name="password">Password</string>
+    <string name="registerNewUser">Register</string>
 </resources>

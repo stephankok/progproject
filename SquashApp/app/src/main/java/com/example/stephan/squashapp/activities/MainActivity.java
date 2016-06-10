@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.stephan.squashapp.adapters.UserTrainingAdapter;
@@ -31,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
     UserTrainingAdapter adapter;                // show trainings
     FirebaseConnector firebase =
             new FirebaseConnector(FirebaseDatabase.getInstance().getReference());
-    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+   // FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
 
     @Override
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
     @Override
     protected void onResume() {
         super.onResume();
-        user = FirebaseAuth.getInstance().getCurrentUser();
+  //      user = FirebaseAuth.getInstance().getCurrentUser();
         updateDatabase();
     }
 
@@ -87,6 +88,18 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
         progressDialog.cancel();
     }
 
+    public void test(View v){
+        TextView status = (TextView) findViewById(R.id.signinstatus);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user != null){
+            status.setText(user.getDisplayName());
+        }
+        else{
+            Toast.makeText(MainActivity.this, "Not signed in", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
     /**
      * create menu.
      */
@@ -94,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu
         getMenuInflater().inflate(R.menu.actionbar_main, menu);
+
         return true;
     }
 

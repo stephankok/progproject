@@ -1,19 +1,13 @@
 package com.example.stephan.squashapp.activities;
 
-/**
- * Created by Stephan on 9-6-2016.
- *
- */
-
 import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -24,44 +18,43 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
-public class EmailPasswordActivity extends MainActivity implements
-        View.OnClickListener {
+public class RegisterNewUser extends AppCompatActivity {
 
-    private static final String TAG = "EmailPassword";
+    // views
+    private EditText emailEdit;
+    private EditText usernameEdit;
+    private EditText passwordEdit;
+    private EditText controlPasswordEdit;
 
-    private EditText mEmailField;
-    private Dialog dialog;
-    private EditText mPasswordField;
-    private Button signOut;
-    private Button signIn;
-    private Button register;
+    // check if minimum requirements are done
     private Integer resultCode;
+    private Dialog dialog;
 
+    // connect to firebase
     private FirebaseAuth mAuth;
+    private FirebaseUser user;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_emailpassword);
+        setContentView(R.layout.activity_register_new_user);
 
         // Views
-        mEmailField = (EditText) findViewById(R.id.field_email);
-        mPasswordField = (EditText) findViewById(R.id.field_password);
+        emailEdit = (EditText) findViewById(R.id.emailEditText);
+        usernameEdit = (EditText) findViewById(R.id.usernameEditText);
+        passwordEdit = (EditText) findViewById(R.id.passwordEditText);
+        controlPasswordEdit = (EditText) findViewById(R.id.controlPasswordEditText);
 
-        // Buttons
-        signOut = (Button) findViewById(R.id.sign_out_button);
-        signIn = (Button) findViewById(R.id.email_sign_in_button);
-        register = (Button) findViewById(R.id.email_create_account_button);
-
-        signOut.setOnClickListener(this);
-        signIn.setOnClickListener(this);
-        register.setOnClickListener(this);
-
-        // [START initialize_auth]
+        // get current state
         mAuth = FirebaseAuth.getInstance();
-        // [END initialize_auth]
+        if(mAuth.getCurrentUser() != null){
+            Toast.makeText(RegisterNewUser.this, "Already logged in", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+
 
         // add back button
         if (getSupportActionBar() != null) {
@@ -75,24 +68,12 @@ public class EmailPasswordActivity extends MainActivity implements
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // User is signed in
-                    Toast.makeText(EmailPasswordActivity.this, "singed in", Toast.LENGTH_SHORT).show();
-
-                    signIn.setVisibility(View.GONE);
-                    signOut.setVisibility(View.VISIBLE);
-                    register.setVisibility(View.GONE);
-                    mEmailField.setVisibility(View.GONE);
-                    mPasswordField.setVisibility(View.GONE);
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    Toast.makeText(RegisterNewUser.this, "singed in", Toast.LENGTH_SHORT).show();
                 } else {
                     // User is signed out
-                    Toast.makeText(EmailPasswordActivity.this, "singed out", Toast.LENGTH_SHORT).show();
-                    signIn.setVisibility(View.VISIBLE);
-                    signOut.setVisibility(View.GONE);
-                    register.setVisibility(View.VISIBLE);
-                    mEmailField.setVisibility(View.VISIBLE);
-                    mPasswordField.setVisibility(View.VISIBLE);
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
+                    Toast.makeText(RegisterNewUser.this, "singed out", Toast.LENGTH_SHORT).show();
                 }
+                // [START_EXCLUDE]
             }
         };
 
@@ -104,11 +85,11 @@ public class EmailPasswordActivity extends MainActivity implements
     public void onResume(){
         super.onResume();
         if (resultCode == ConnectionResult.SUCCESS) {
-            Toast.makeText(EmailPasswordActivity.this, "Update succesfull" +
+            Toast.makeText(RegisterNewUser.this, "Update succesfull" +
                     " you can login now.", Toast.LENGTH_SHORT).show();
         } else {
             Log.d("result", resultCode.toString());
-            Toast.makeText(EmailPasswordActivity.this, "Failed please update google play service",
+            Toast.makeText(RegisterNewUser.this, "Failed please update google play service",
                     Toast.LENGTH_SHORT).show();
             Dialog dialog = GooglePlayServicesUtil.getErrorDialog(resultCode, this, 0);
             if (dialog != null) {
@@ -136,15 +117,12 @@ public class EmailPasswordActivity extends MainActivity implements
         }
     }
 
-    // [START on_start_add_listener]
     @Override
     public void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
     }
-    // [END on_start_add_listener]
 
-    // [START on_stop_remove_listener]
     @Override
     public void onStop() {
         super.onStop();
@@ -153,23 +131,42 @@ public class EmailPasswordActivity extends MainActivity implements
         }
     }
 
-
-    private void signIn(String email, String password) {
+    public void createAccount(View v){
         // check if correct form
         if (!validateForm()) {
             return;
         }
 
-        // make dialog
+        String email = emailEdit.getText().toString();
+        final String userName = usernameEdit.getText().toString();
+        String password = passwordEdit.getText().toString();
+
+        // make dialog.
         showProgressDialog();
 
-        // sign in
-        mAuth.signInWithEmailAndPassword(email, password)
+        // Create user
+        mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (!task.isSuccessful()) {
-                            Toast.makeText(EmailPasswordActivity.this, "Authentication failed.",
+
+                        if (task.isSuccessful()) {
+                            user = FirebaseAuth.getInstance().getCurrentUser();
+                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest
+                                    .Builder()
+                                    .setDisplayName(userName)
+                                    .build();
+
+                            user.updateProfile(profileUpdates).addOnCompleteListener(RegisterNewUser.this, new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    Toast.makeText(RegisterNewUser.this, "Succesfully created" +
+                                            "user " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                        else{
+                            Toast.makeText(RegisterNewUser.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
 
@@ -179,40 +176,7 @@ public class EmailPasswordActivity extends MainActivity implements
                 });
     }
 
-    private void signOut() {
-        mAuth.signOut();
-    }
 
-    private boolean validateForm() {
-        boolean valid = true;
-
-        String email = mEmailField.getText().toString();
-        if (TextUtils.isEmpty(email)) {
-            mEmailField.setError("Required.");
-            valid = false;
-        } else if(!email.contains("@")) {
-            mEmailField.setError("It must be a valid email adress.");
-            valid = false;
-        }
-        else{
-            mEmailField.setError(null);
-        }
-
-        String password = mPasswordField.getText().toString();
-        if (TextUtils.isEmpty(password)) {
-            mPasswordField.setError("Required.");
-            valid = false;
-        }
-        else if(password.length() < 6){
-            mPasswordField.setError("Minimal 6 characters.");
-            valid = false;
-        }
-        else {
-            mPasswordField.setError(null);
-        }
-
-        return valid;
-    }
 
     /**
      * Show progress.
@@ -230,22 +194,46 @@ public class EmailPasswordActivity extends MainActivity implements
         dialog.cancel();
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.email_create_account_button:
-                Intent register = new Intent(EmailPasswordActivity.this, RegisterNewUser.class);
-                startActivity(register);
-                finish();
-                break;
-            case R.id.email_sign_in_button:
-                signIn(mEmailField.getText().toString(), mPasswordField.getText().toString());
-                break;
-            case R.id.sign_out_button:
-                signOut();
-                break;
-        }
-    }
-}
+    private boolean validateForm() {
+        boolean valid = true;
 
-// confirm password
+        String email = emailEdit.getText().toString();
+        if (TextUtils.isEmpty(email)) {
+            emailEdit.setError("Required.");
+            valid = false;
+        } else if(!email.contains("@")) {
+            emailEdit.setError("It must be a valid email adress.");
+            valid = false;
+        }
+        else{
+            emailEdit.setError(null);
+        }
+
+        String username = usernameEdit.getText().toString();
+        if(TextUtils.isEmpty(username)){
+            usernameEdit.setError("Required.");
+        }
+
+        String password = passwordEdit.getText().toString();
+        if (TextUtils.isEmpty(password)) {
+            passwordEdit.setError("Required.");
+            valid = false;
+        }
+        else if(password.length() < 6){
+            passwordEdit.setError("Minimal 6 characters.");
+            valid = false;
+        }
+        else {
+            passwordEdit.setError(null);
+        }
+
+        String controlPassword = controlPasswordEdit.getText().toString();
+        if(controlPassword.compareTo(password) != 0){
+            controlPasswordEdit.setError("Passwords dont match");
+            valid = false;
+        }
+
+        return valid;
+    }
+
+}
