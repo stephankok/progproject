@@ -16,6 +16,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -33,6 +35,7 @@ public class EmailPasswordActivity extends MainActivity implements
     private Button signOut;
     private Button signIn;
     private Button register;
+    private Integer resultCode;
 
     // [START declare_auth]
     private FirebaseAuth mAuth;
@@ -96,6 +99,23 @@ public class EmailPasswordActivity extends MainActivity implements
             }
         };
         // [END auth_state_listener]
+
+        resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this.getApplicationContext());
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        if (resultCode == ConnectionResult.SUCCESS) {
+            //Do what you want
+        } else {
+            Log.d("result", resultCode.toString());
+            Dialog dialog = GooglePlayServicesUtil.getErrorDialog(resultCode, this, 0);
+            if (dialog != null) {
+                //This dialog will help the user update to the latest GooglePlayServices
+                dialog.show();
+            }
+        }
     }
 
 
@@ -262,3 +282,5 @@ public class EmailPasswordActivity extends MainActivity implements
         }
     }
 }
+
+// confirm password

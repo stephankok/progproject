@@ -19,7 +19,6 @@ import com.example.stephan.squashapp.models.Training;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Stephan on 1-6-2016.
@@ -170,8 +169,6 @@ public class UserTrainingAdapter extends ArrayAdapter<Training> {
             public void onLongClick() {
                 super.onLongClick();
                 Log.d("long", "click");
-                List<Object> playerList = trainingList.get(position).getRegisteredPlayers();
-
                 // make layout
                 LayoutInflater li = LayoutInflater.from(context);
                 final View layout = li.inflate(R.layout.alertdialog_cancel_registration, null);
@@ -179,7 +176,7 @@ public class UserTrainingAdapter extends ArrayAdapter<Training> {
                 ListView listView =
                         (ListView) layout.findViewById(R.id.cancelListView);
                 CancelRegistrationAdapter adapter =
-                        new CancelRegistrationAdapter(context, item.getRegisteredPlayers(), item);
+                        new CancelRegistrationAdapter(context, item, position);
                 listView.setAdapter(adapter);
 
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(context)

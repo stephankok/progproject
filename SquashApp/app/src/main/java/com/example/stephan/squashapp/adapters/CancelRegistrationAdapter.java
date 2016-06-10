@@ -26,18 +26,20 @@ public class CancelRegistrationAdapter extends ArrayAdapter<Object> {
     List<Object> playerList;  // the players.
     Training training;
     Context context;
+    Integer trainingPosition;
 
     FirebaseConnector firebase =
             new FirebaseConnector(FirebaseDatabase.getInstance().getReference());
     /**
      * Initialize adapter
      */
-    public CancelRegistrationAdapter(Context context, List<Object> playerList, Training training) {
-        super(context, R.layout.single_player, playerList);
+    public CancelRegistrationAdapter(Context context, Training training, Integer trainingPosition) {
+        super(context, R.layout.single_player, training.getRegisteredPlayers());
 
         this.context = context;
-        this.playerList = playerList;
+        this.playerList = training.getRegisteredPlayers();
         this.training = training;
+        this.trainingPosition = trainingPosition;
     }
 
     /**
@@ -89,7 +91,7 @@ public class CancelRegistrationAdapter extends ArrayAdapter<Object> {
                                 training.deletePlayer(position);
 
                                 // delete player from database.
-                                firebase.updateRegisteredPlayers(training, position);
+                                firebase.updateRegisteredPlayers(training, trainingPosition);
 
                                 notifyDataSetChanged();
                                 break;
