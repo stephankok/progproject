@@ -34,9 +34,8 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sign out"
-        android:visibility="gone"
-        android:id="@+id/sign_out_button"/>
+        android:text="Forgot password"
+        android:id="@+id/forgotPasswordButton"/>
 
 
 </LinearLayout>

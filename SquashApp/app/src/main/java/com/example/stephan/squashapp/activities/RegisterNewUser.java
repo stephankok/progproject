@@ -15,7 +15,9 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -55,27 +57,10 @@ public class RegisterNewUser extends AppCompatActivity {
             finish();
         }
 
-
         // add back button
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-
-        // [START auth_state_listener]
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // User is signed in
-                    Toast.makeText(RegisterNewUser.this, "singed in", Toast.LENGTH_SHORT).show();
-                } else {
-                    // User is signed out
-                    Toast.makeText(RegisterNewUser.this, "singed out", Toast.LENGTH_SHORT).show();
-                }
-                // [START_EXCLUDE]
-            }
-        };
 
         // make sure users has correct google play service
         resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this.getApplicationContext());
@@ -137,9 +122,9 @@ public class RegisterNewUser extends AppCompatActivity {
             return;
         }
 
-        String email = emailEdit.getText().toString();
+        final String email = emailEdit.getText().toString();
         final String userName = usernameEdit.getText().toString();
-        String password = passwordEdit.getText().toString();
+        final String password = passwordEdit.getText().toString();
 
         // make dialog.
         showProgressDialog();
@@ -160,10 +145,25 @@ public class RegisterNewUser extends AppCompatActivity {
                             user.updateProfile(profileUpdates).addOnCompleteListener(RegisterNewUser.this, new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
-                                    Toast.makeText(RegisterNewUser.this, "Succesfully created" +
+                                    Toast.makeText(RegisterNewUser.this, "Successfully created " +
                                             "user " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
                                 }
                             });
+
+                            AuthCredential credential = EmailAuthProvider
+                                    .getCredential(email, password);
+
+                            user.reauthenticate(credential)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            Toast.makeText(RegisterNewUser.this,
+                                                    "Autentication mail send", Toast.LENGTH_SHORT)
+                                                    .show();
+                                        }
+                                    });
+
+                            finish();
                         }
                         else{
                             Toast.makeText(RegisterNewUser.this, "Authentication failed.",
@@ -182,8 +182,8 @@ public class RegisterNewUser extends AppCompatActivity {
      * Show progress.
      */
     private void showProgressDialog(){
-        dialog = new Dialog(this);
-        dialog.setTitle("Connecting...");
+        dialog = new Dialog(RegisterNewUser.this);
+        dialog.setTitle("Creating new user...");
         dialog.show();
     }
 

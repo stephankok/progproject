@@ -33,8 +33,9 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
     UserTrainingAdapter adapter;                // show trainings
     FirebaseConnector firebase =
             new FirebaseConnector(FirebaseDatabase.getInstance().getReference());
-   // FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     ListView listview;
+    Menu menu;
 
 
     @Override
@@ -48,16 +49,42 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
         listview = (ListView) findViewById(R.id.ListViewTraining);
         adapter = new UserTrainingAdapter(this, new ArrayList<Training>());
         listview.setAdapter(adapter);
+
+        // Register and deregister
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                // reload user
+                updateUser();
+
                 Training training = adapter.getItem(position);
                 if(user != null){
                     if(training.getRegisteredPlayers().containsKey(user.getUid())){
-                        Toast.makeText(MainActivity.this, "Already registered", Toast.LENGTH_SHORT).show();
+                        // already registered
+                        // ask for deregistration
+                        AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this)
+                                .setTitle("Cancel Registration").setMessage("Are you sure you want" +
+                                        " to deregister?")
+                                .setPositiveButton("deregister", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        adapter.getItem(position).deletePlayer(user.getUid());
+                                        firebase.updateRegisteredPlayers(adapter.getItem(position),
+                                                position);
+                                        adapter.notifyDataSetChanged();
+                                    }
+                                })
+                                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.cancel();
+                                    }
+                                });
+                        dialog.create().show();
                     }
                     else {
+                        // not registered
+                        // ask for registration
                         AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this)
                                 .setTitle("Register").setMessage("Do you want to register for " +
                                         adapter.getItem(position).getDate())
@@ -87,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     Intent signIn = new Intent(MainActivity.this,
-                                            EmailPasswordActivity.class);
+                                            UserSignInActivity.class);
                                     startActivity(signIn);
                                 }
                             })
@@ -100,69 +127,13 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
                     dialog.create().show();
                 }
 
-            }
-        });
-
-        listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-                final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                Training training = adapter.getItem(position);
-                if(user != null){
-                    if(training.getRegisteredPlayers().containsKey(user.getUid())){
-                        AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this)
-                                .setTitle("Cancel Registration").setMessage("Are you sure you want" +
-                                        " to deregister?")
-                                .setPositiveButton("deregister", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        adapter.getItem(position).deletePlayer(user.getUid());
-                                        firebase.updateRegisteredPlayers(adapter.getItem(position),
-                                                position);
-                                        adapter.notifyDataSetChanged();
-                                    }
-                                })
-                                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.cancel();
-                                    }
-                                });
-                        dialog.create().show();
-                    }
-                    else {
-                        Toast.makeText(MainActivity.this, "Not registered", Toast.LENGTH_SHORT).show();
-                    }
-                }
-                else{
-                    AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this)
-                            .setTitle("Not signed in").setMessage("Please sign in")
-                            .setPositiveButton("Sign in", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Intent signIn = new Intent(MainActivity.this,
-                                            EmailPasswordActivity.class);
-                                    startActivity(signIn);
-                                }
-                            })
-                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.cancel();
-                                }
-                            });
-                    dialog.create().show();
-                }
-                return false;
             }
         });
 
     }
 
-    public void signIn(){
-        Log.d("signing","NOT WORKING YET");
-        Intent signin = new Intent(this, EmailPasswordActivity.class);
-        startActivity(signin);
+    private void updateUser(){
+        user = FirebaseAuth.getInstance().getCurrentUser();
     }
 
     /**
@@ -171,8 +142,17 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
     @Override
     protected void onResume() {
         super.onResume();
-  //      user = FirebaseAuth.getInstance().getCurrentUser();
+        updateUser();
         updateDatabase();
+
+        if(menu != null) {
+            menu.clear();
+            if (user != null) {
+                getMenuInflater().inflate(R.menu.actionbar_menu_logged_in, menu);
+            } else {
+                getMenuInflater().inflate(R.menu.actionbar_main, menu);
+            }
+        }
     }
 
     /**
@@ -215,9 +195,13 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu
-        getMenuInflater().inflate(R.menu.actionbar_main, menu);
-
+        this.menu = menu;
+        if(user != null){
+            getMenuInflater().inflate(R.menu.actionbar_menu_logged_in, menu);
+        }
+        else{
+            getMenuInflater().inflate(R.menu.actionbar_main, menu);
+        }
         return true;
     }
 
@@ -240,9 +224,17 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
                 Intent newContactWindow = new Intent(this, ContactActivity.class);
                 startActivity(newContactWindow);
                 break;
-            case R.id.sign_in:
-                signIn();
+            case R.id.menu_sign_in:
+                Intent signIn = new Intent(this, UserSignInActivity.class);
+                startActivity(signIn);
                 break;
+            case R.id.menu_user_account:
+                Intent accountActivity = new Intent(MainActivity.this, UserAccountActivity.class);
+                startActivity(accountActivity);
+                break;
+            case R.id.menu_sign_out:
+                FirebaseAuth.getInstance().signOut();
+                Toast.makeText(MainActivity.this, "Signed out", Toast.LENGTH_SHORT).show();
             default:
                 return super.onOptionsItemSelected(item);
         }

@@ -25,8 +25,9 @@
         <activity
             android:name=".AdminActivity"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".EmailPasswordActivity" />
-        <activity android:name=".RegisterNewUser"></activity>
+        <activity android:name=".UserSignInActivity" />
+        <activity android:name=".RegisterNewUser" />
+        <activity android:name=".UserAccountActivity"></activity>
     </application>
 
 </manifest>

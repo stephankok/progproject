@@ -26,7 +26,12 @@
         android:orderInCategory="4" />
 
     <item
-        android:id="@+id/menu_sign_in"
-        android:title="@string/menuSignIn"
+        android:id="@+id/menu_user_account"
+        android:title="@string/menuAccount"
         android:orderInCategory="5" />
+
+    <item
+        android:id="@+id/menu_sign_out"
+        android:title="@string/menuSignOut"
+        android:orderInCategory="6" />
 </menu>

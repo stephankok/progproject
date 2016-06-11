@@ -5,7 +5,9 @@ package com.example.stephan.squashapp.activities;
  *
  */
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -23,12 +25,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
-public class EmailPasswordActivity extends MainActivity implements
+public class UserSignInActivity extends MainActivity implements
         View.OnClickListener {
-
-    private static final String TAG = "EmailPassword";
 
     private EditText mEmailField;
     private Dialog dialog;
@@ -37,64 +36,39 @@ public class EmailPasswordActivity extends MainActivity implements
     private Button signIn;
     private Button register;
     private Integer resultCode;
-
+    private Button forgotPasswordButton;
     private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_emailpassword);
+        setContentView(R.layout.activity_user_sign_in);
 
         // Views
         mEmailField = (EditText) findViewById(R.id.field_email);
         mPasswordField = (EditText) findViewById(R.id.field_password);
 
         // Buttons
-        signOut = (Button) findViewById(R.id.sign_out_button);
         signIn = (Button) findViewById(R.id.email_sign_in_button);
         register = (Button) findViewById(R.id.email_create_account_button);
+        forgotPasswordButton = (Button) findViewById(R.id.forgotPasswordButton);
 
-        signOut.setOnClickListener(this);
+        // Set onClick listener.
         signIn.setOnClickListener(this);
         register.setOnClickListener(this);
+        forgotPasswordButton.setOnClickListener(this);
 
-        // [START initialize_auth]
         mAuth = FirebaseAuth.getInstance();
-        // [END initialize_auth]
+
+        // Check if really logged in
+        if(user != null){
+            finish();
+        }
 
         // add back button
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-
-        // [START auth_state_listener]
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // User is signed in
-                    Toast.makeText(EmailPasswordActivity.this, "singed in", Toast.LENGTH_SHORT).show();
-
-                    signIn.setVisibility(View.GONE);
-                    signOut.setVisibility(View.VISIBLE);
-                    register.setVisibility(View.GONE);
-                    mEmailField.setVisibility(View.GONE);
-                    mPasswordField.setVisibility(View.GONE);
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                } else {
-                    // User is signed out
-                    Toast.makeText(EmailPasswordActivity.this, "singed out", Toast.LENGTH_SHORT).show();
-                    signIn.setVisibility(View.VISIBLE);
-                    signOut.setVisibility(View.GONE);
-                    register.setVisibility(View.VISIBLE);
-                    mEmailField.setVisibility(View.VISIBLE);
-                    mPasswordField.setVisibility(View.VISIBLE);
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
-                }
-            }
-        };
 
         // make sure users has correct google play service
         resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this.getApplicationContext());
@@ -104,11 +78,11 @@ public class EmailPasswordActivity extends MainActivity implements
     public void onResume(){
         super.onResume();
         if (resultCode == ConnectionResult.SUCCESS) {
-            Toast.makeText(EmailPasswordActivity.this, "Update succesfull" +
+            Toast.makeText(UserSignInActivity.this, "Update succesfull" +
                     " you can login now.", Toast.LENGTH_SHORT).show();
         } else {
             Log.d("result", resultCode.toString());
-            Toast.makeText(EmailPasswordActivity.this, "Failed please update google play service",
+            Toast.makeText(UserSignInActivity.this, "Failed please update google play service",
                     Toast.LENGTH_SHORT).show();
             Dialog dialog = GooglePlayServicesUtil.getErrorDialog(resultCode, this, 0);
             if (dialog != null) {
@@ -117,7 +91,6 @@ public class EmailPasswordActivity extends MainActivity implements
             }
         }
     }
-
 
     /**
      * Set back button
@@ -136,24 +109,6 @@ public class EmailPasswordActivity extends MainActivity implements
         }
     }
 
-    // [START on_start_add_listener]
-    @Override
-    public void onStart() {
-        super.onStart();
-        mAuth.addAuthStateListener(mAuthListener);
-    }
-    // [END on_start_add_listener]
-
-    // [START on_stop_remove_listener]
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (mAuthListener != null) {
-            mAuth.removeAuthStateListener(mAuthListener);
-        }
-    }
-
-
     private void signIn(String email, String password) {
         // check if correct form
         if (!validateForm()) {
@@ -169,8 +124,12 @@ public class EmailPasswordActivity extends MainActivity implements
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (!task.isSuccessful()) {
-                            Toast.makeText(EmailPasswordActivity.this, "Authentication failed.",
+                            Toast.makeText(UserSignInActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            Toast.makeText(UserSignInActivity.this, "Signed in."
+                                    , Toast.LENGTH_SHORT).show();
                         }
 
                         // done
@@ -183,6 +142,44 @@ public class EmailPasswordActivity extends MainActivity implements
         mAuth.signOut();
     }
 
+    private void forgotPassword(){
+
+
+        AlertDialog.Builder dialog = new AlertDialog.Builder(UserSignInActivity.this)
+                .setTitle("Forgot password").setMessage("Do you want mail?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String emailAddress = "stephan_handbal@hotmail.com";
+                        mAuth.sendPasswordResetEmail(emailAddress)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Toast.makeText(UserSignInActivity.this, "Email send",
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
+                                        else{
+                                            Toast.makeText(UserSignInActivity.this, "Failed " +
+                                                    "to send email."
+                                                    , Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+        dialog.create().show();
+    }
+
+    /**
+     * Validate given input.
+     */
     private boolean validateForm() {
         boolean valid = true;
 
@@ -210,7 +207,6 @@ public class EmailPasswordActivity extends MainActivity implements
         else {
             mPasswordField.setError(null);
         }
-
         return valid;
     }
 
@@ -234,18 +230,16 @@ public class EmailPasswordActivity extends MainActivity implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.email_create_account_button:
-                Intent register = new Intent(EmailPasswordActivity.this, RegisterNewUser.class);
+                Intent register = new Intent(UserSignInActivity.this, RegisterNewUser.class);
                 startActivity(register);
                 finish();
                 break;
             case R.id.email_sign_in_button:
                 signIn(mEmailField.getText().toString(), mPasswordField.getText().toString());
                 break;
-            case R.id.sign_out_button:
-                signOut();
+            case R.id.forgotPasswordButton:
+                forgotPassword();
                 break;
         }
     }
 }
-
-// confirm password

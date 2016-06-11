@@ -17,4 +17,6 @@
     <string name="registrationName">Name</string>
     <string name="password">Password</string>
     <string name="registerNewUser">Register</string>
+    <string name="menuAccount">Account</string>
+    <string name="menuSignOut">Sign out</string>
 </resources>

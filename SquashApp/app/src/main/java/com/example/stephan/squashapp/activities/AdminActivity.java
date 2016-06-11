@@ -1,23 +1,17 @@
 package com.example.stephan.squashapp.activities;
 
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TimePicker;
 
 import com.example.stephan.squashapp.adapters.EditTrainingAdapter;
 import com.example.stephan.squashapp.helpers.FirebaseConnector;
@@ -26,7 +20,6 @@ import com.example.stephan.squashapp.models.Training;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class AdminActivity extends AppCompatActivity implements FirebaseConnector.AsyncResponse,
         NewTrainingCalander.AsyncResponse{
@@ -110,13 +103,15 @@ public class AdminActivity extends AppCompatActivity implements FirebaseConnecto
         LayoutInflater li = LayoutInflater.from(this);
         final View layout = li.inflate(R.layout.add_training, null);
 
-        // get all items
-        final EditText editDate = (EditText) layout.findViewById(R.id.date);
+        // Items to remove.
+        EditText editDate = (EditText) layout.findViewById(R.id.date);
+        EditText editStart = (EditText) layout.findViewById(R.id.startTime);
+        EditText editEnd = (EditText) layout.findViewById(R.id.endTime);
         editDate.setVisibility(View.GONE);
-        final EditText editStart = (EditText) layout.findViewById(R.id.startTime);
         editStart.setVisibility(View.GONE);
-        final EditText editEnd = (EditText) layout.findViewById(R.id.endTime);
         editEnd.setVisibility(View.GONE);
+
+        // Needed items
         final EditText editTrainer = (EditText) layout.findViewById(R.id.trainer);
         final EditText editInfo = (EditText) layout.findViewById(R.id.info);
         final EditText editMax = (EditText) layout.findViewById(R.id.maxPlayers);
@@ -142,29 +137,26 @@ public class AdminActivity extends AppCompatActivity implements FirebaseConnecto
             public void onClick(View v) {
                 // check for correct input
                 if(editInfo.getText().toString().isEmpty()) {
-                    Log.d("helo", "ola");
-                    editInfo.setError("This field cannot be empty");
+                    editInfo.setError("Required");
                 }
                 else{
                     if(editTrainer.getText().toString().isEmpty()) {
-                        editTrainer.setError("This field cannot be empty");
+                        editTrainer.setError("Required");
                     }
                     else {
                         if (editMax.getText().toString().isEmpty()) {
-                            editMax.setError("This field cannot be empty");
-                        } else {
-
+                            editMax.setError("Required");
+                        }
+                        else {
                             String info = editInfo.getText().toString();
                             String trainer = editTrainer.getText().toString();
                             Long max = Long.parseLong(editMax.getText().toString());
 
-                            Log.d("before", "add");
                             Training training = new Training();
                             training.newTraining(trainer, date, info, start, end, max);
 
                             // add training online
                             firebase.updateSingleTraining(training, myAdapter.getAmountOfTrainingen());
-
 
                             myAdapter.add(training);
                             myAdapter.notifyDataSetChanged();
