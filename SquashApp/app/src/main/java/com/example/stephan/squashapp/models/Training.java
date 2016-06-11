@@ -1,7 +1,6 @@
 package com.example.stephan.squashapp.models;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Stephan on 1-6-2016.
@@ -15,7 +14,7 @@ public class Training {
     private String end;
     private Long maxPlayers;
     private Long currentPlayers;
-    private List<Object> registeredPlayers;
+    private Map<String,Object> registeredPlayers;
 
     public void Training(){
         // empty for firebase
@@ -30,7 +29,7 @@ public class Training {
         this.end = end;
         this.maxPlayers = maxPlayers;
         this.currentPlayers = 0L;
-        this.registeredPlayers = new ArrayList<>();
+        this.registeredPlayers = new android.support.v4.util.ArrayMap<>();
     }
 
     public String getTrainer(){
@@ -59,12 +58,12 @@ public class Training {
 
     public Long getCurrentPlayers(){
         if(registeredPlayers == null){
-            this.registeredPlayers = new ArrayList<>();
+            this.registeredPlayers = new android.support.v4.util.ArrayMap<>();
         }
         return this.currentPlayers;
     }
 
-    public List<Object> getRegisteredPlayers(){
+    public Map<String, Object> getRegisteredPlayers(){
         return this.registeredPlayers;
     }
 
@@ -92,17 +91,17 @@ public class Training {
         this.maxPlayers = maxPlayers;
     }
 
-    public void registerPlayer(String player){
+    public void registerPlayer(String player, String id){
         if(registeredPlayers == null){
-            this.registeredPlayers = new ArrayList<>();
+            this.registeredPlayers = new android.support.v4.util.ArrayMap<>();
         }
         this.currentPlayers++;
-        this.registeredPlayers.add(player);
+        this.registeredPlayers.put(player, id);
     }
 
-    public void deletePlayer(int pos){
+    public void deletePlayer(String id){
         this.currentPlayers--;
-        this.registeredPlayers.remove(pos);
+        this.registeredPlayers.remove(id);
     }
 
 }
