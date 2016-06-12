@@ -3,7 +3,6 @@ package com.example.stephan.squashapp.adapters;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +18,7 @@ import com.example.stephan.squashapp.models.Training;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by Stephan on 4-6-2016.
@@ -116,6 +116,32 @@ public class EditTrainingAdapter extends ArrayAdapter<Training>{
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(context, "Todo: Show players registered", Toast.LENGTH_SHORT).show();
+                Iterator items = item.getRegisteredPlayers().values().iterator();
+                ArrayList<String> players = new ArrayList<String>();
+                while(items.hasNext()){
+                    Object element = items.next();
+                    players.add(element.toString());
+                }
+
+                CharSequence[] cs = players.toArray(new CharSequence[players.size()]);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(context)
+                        .setItems(cs, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            })
+                        .setTitle("Registered players");
+                builder.show();
+            }
+
+        });
+
+        view.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
                 // make layout
                 LayoutInflater li = LayoutInflater.from(context);
                 final View layout = li.inflate(R.layout.add_training, null);
@@ -140,25 +166,25 @@ public class EditTrainingAdapter extends ArrayAdapter<Training>{
                         .setCancelable(true)
                         .setView(layout)
                         .setPositiveButton(
-                            "Add",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
+                                "Add",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
 
-                                    item.changeDate(editDate.getText().toString());
-                                    item.changeStart(editStart.getText().toString());
-                                    item.changeEnd(editEnd.getText().toString());
-                                    item.changeShortInfo(editInfo.getText().toString());
-                                    item.changeTrainer(editTrainer.getText().toString());
-                                    item.changeMaxPlayers(
-                                            Long.parseLong(editMax.getText().toString()));
+                                        item.changeDate(editDate.getText().toString());
+                                        item.changeStart(editStart.getText().toString());
+                                        item.changeEnd(editEnd.getText().toString());
+                                        item.changeShortInfo(editInfo.getText().toString());
+                                        item.changeTrainer(editTrainer.getText().toString());
+                                        item.changeMaxPlayers(
+                                                Long.parseLong(editMax.getText().toString()));
 
-                                    firebase.updateSingleTraining(item, position);
+                                        firebase.updateSingleTraining(item, position);
 
-                                    notifyDataSetChanged();
-                                    dialog.cancel();
+                                        notifyDataSetChanged();
+                                        dialog.cancel();
 
-                                }
-                            });
+                                    }
+                                });
 
                 builder1.setNegativeButton(
                         "Cancel",
@@ -170,8 +196,8 @@ public class EditTrainingAdapter extends ArrayAdapter<Training>{
 
                 AlertDialog alert11 = builder1.create();
                 alert11.show();
+                return false;
             }
-
         });
 
         return view;

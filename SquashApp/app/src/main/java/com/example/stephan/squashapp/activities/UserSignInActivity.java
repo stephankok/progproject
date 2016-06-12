@@ -19,6 +19,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.dd.processbutton.FlatButton;
+import com.dd.processbutton.ProcessButton;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -38,6 +40,7 @@ public class UserSignInActivity extends MainActivity implements
     private Integer resultCode;
     private Button forgotPasswordButton;
     private FirebaseAuth mAuth;
+    private FlatButton signInButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,15 @@ public class UserSignInActivity extends MainActivity implements
         // Views
         mEmailField = (EditText) findViewById(R.id.field_email);
         mPasswordField = (EditText) findViewById(R.id.field_password);
+        signInButton = (FlatButton) findViewById(R.id.signInButton);
+
+        signInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ProcessButton progress = (ProcessButton) signInButton;
+                progress.setProgress(0);
+            }
+        });
 
         // Buttons
         signIn = (Button) findViewById(R.id.email_sign_in_button);
@@ -77,10 +89,7 @@ public class UserSignInActivity extends MainActivity implements
     @Override
     public void onResume(){
         super.onResume();
-        if (resultCode == ConnectionResult.SUCCESS) {
-            Toast.makeText(UserSignInActivity.this, "Update succesfull" +
-                    " you can login now.", Toast.LENGTH_SHORT).show();
-        } else {
+        if (resultCode != ConnectionResult.SUCCESS) {
             Log.d("result", resultCode.toString());
             Toast.makeText(UserSignInActivity.this, "Failed please update google play service",
                     Toast.LENGTH_SHORT).show();
@@ -130,6 +139,7 @@ public class UserSignInActivity extends MainActivity implements
                         else{
                             Toast.makeText(UserSignInActivity.this, "Signed in."
                                     , Toast.LENGTH_SHORT).show();
+                            finish();
                         }
 
                         // done

@@ -234,6 +234,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
                 break;
             case R.id.menu_sign_out:
                 FirebaseAuth.getInstance().signOut();
+                onCreateOptionsMenu(menu);
                 Toast.makeText(MainActivity.this, "Signed out", Toast.LENGTH_SHORT).show();
             default:
                 return super.onOptionsItemSelected(item);
