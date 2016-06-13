@@ -41,3 +41,14 @@ Log file
 - Layout/design aanpassingen
 - kijken naar mogelijke ListSwap (libary werkte niet :( )
 - Calender implenmenteren
+- 
+**09 06 2016**
+- Je kan nu inloggen
+- inlog pagina
+- Database update
+- Calender verfijning
+
+**10 06 2016**
+- je moet nu ingelogd zijn om te registreren
+- design veranderd, beter beveiligd ( users kunnen elkaar niet meer uitschrijven, inschrijfing zit gekoppeld aan unique user id)
+- registratie pagina, account pagina
