@@ -41,7 +41,7 @@ Log file
 - Layout/design aanpassingen
 - kijken naar mogelijke ListSwap (libary werkte niet :( )
 - Calender implenmenteren
-- 
+
 **09 06 2016**
 - Je kan nu inloggen
 - inlog pagina
