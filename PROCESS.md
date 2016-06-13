@@ -29,7 +29,7 @@ Log file
 - Kijken hoe ik de api kan maken
 - SQL database op server zetten?
 - Firebase! https://firebase.google.com/
-- 
+
 **06 06 2016**
 - Firebase geimplenteerd
 
