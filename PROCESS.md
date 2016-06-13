@@ -48,7 +48,7 @@ Log file
 - Database update
 - Calender verfijning
 
-**10 06 2016**
+**13 06 2016**
 - je moet nu ingelogd zijn om te registreren
 - design veranderd, beter beveiligd ( users kunnen elkaar niet meer uitschrijven, inschrijfing zit gekoppeld aan unique user id)
 - registratie pagina, account pagina
