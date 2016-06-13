@@ -20,20 +20,22 @@
         android:inputType="textPassword"
         android:id="@+id/field_password"/>
 
-    <Button
+    <com.dd.processbutton.iml.ActionProcessButton
+        android:id="@+id/email_sign_in_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sign In"
-        android:id="@+id/email_sign_in_button"/>
-
-    <com.dd.processbutton.FlatButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/signInButton"
-        android:text="Flat Button"
+        android:layout_marginBottom="16dp"
+        android:text="Sign_in"
         android:textColor="@android:color/white"
-        custom:pb_colorNormal="@android:color/holo_blue_light"
-        custom:pb_colorPressed="@android:color/holo_blue_dark" />
+        android:textSize="18sp"
+        custom:pb_colorComplete="@color/green_complete"
+        custom:pb_colorNormal="@color/blue_normal"
+        custom:pb_colorPressed="@color/blue_pressed"
+        custom:pb_colorProgress="@color/purple_progress"
+        custom:pb_textComplete="Success"
+        custom:pb_textProgress="Loading"
+        custom:pb_textError="Error"
+        custom:pb_colorError="@color/red_error" />
 
     <Button
         android:layout_width="wrap_content"

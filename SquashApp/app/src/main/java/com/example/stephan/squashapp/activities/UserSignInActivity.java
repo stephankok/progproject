@@ -19,8 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.dd.processbutton.FlatButton;
-import com.dd.processbutton.ProcessButton;
+import com.dd.processbutton.iml.ActionProcessButton;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -35,12 +34,11 @@ public class UserSignInActivity extends MainActivity implements
     private Dialog dialog;
     private EditText mPasswordField;
     private Button signOut;
-    private Button signIn;
+    private ActionProcessButton signInButton;
     private Button register;
     private Integer resultCode;
     private Button forgotPasswordButton;
     private FirebaseAuth mAuth;
-    private FlatButton signInButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,23 +48,17 @@ public class UserSignInActivity extends MainActivity implements
         // Views
         mEmailField = (EditText) findViewById(R.id.field_email);
         mPasswordField = (EditText) findViewById(R.id.field_password);
-        signInButton = (FlatButton) findViewById(R.id.signInButton);
-
-        signInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ProcessButton progress = (ProcessButton) signInButton;
-                progress.setProgress(0);
-            }
-        });
 
         // Buttons
-        signIn = (Button) findViewById(R.id.email_sign_in_button);
+        signInButton = (ActionProcessButton) findViewById(R.id.email_sign_in_button);
         register = (Button) findViewById(R.id.email_create_account_button);
         forgotPasswordButton = (Button) findViewById(R.id.forgotPasswordButton);
 
+        // set special mode
+        signInButton.setMode(ActionProcessButton.Mode.ENDLESS);
+
         // Set onClick listener.
-        signIn.setOnClickListener(this);
+        signInButton.setOnClickListener(this);
         register.setOnClickListener(this);
         forgotPasswordButton.setOnClickListener(this);
 
@@ -245,6 +237,7 @@ public class UserSignInActivity extends MainActivity implements
                 finish();
                 break;
             case R.id.email_sign_in_button:
+                signInButton.setProgress(1);
                 signIn(mEmailField.getText().toString(), mPasswordField.getText().toString());
                 break;
             case R.id.forgotPasswordButton:
