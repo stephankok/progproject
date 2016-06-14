@@ -15,14 +15,14 @@ import android.widget.ListView;
 
 import com.example.stephan.squashapp.adapters.EditTrainingAdapter;
 import com.example.stephan.squashapp.helpers.FirebaseConnector;
-import com.example.stephan.squashapp.helpers.NewTrainingCalander;
+import com.example.stephan.squashapp.helpers.NewTrainingCalender;
 import com.example.stephan.squashapp.models.Training;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
 public class AdminActivity extends AppCompatActivity implements FirebaseConnector.AsyncResponse,
-        NewTrainingCalander.AsyncResponse{
+        NewTrainingCalender.AsyncResponse{
 
     ListView mListView;
     EditTrainingAdapter myAdapter;
@@ -174,7 +174,7 @@ public class AdminActivity extends AppCompatActivity implements FirebaseConnecto
      * Update change to firebase
      */
     private void AddTraining(){
-        new NewTrainingCalander(this, this);
+        new NewTrainingCalender(this, this);
 
     }
 }

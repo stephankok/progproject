@@ -20,7 +20,7 @@ import java.util.Locale;
  * Created by Stephan on 8-6-2016.
  *
  */
-public class NewTrainingCalander {
+public class NewTrainingCalender {
 
     private Context context;
     private Calendar calendar;
@@ -40,7 +40,7 @@ public class NewTrainingCalander {
         void newTrainingDateSelected(final String date, final String start, final String end);
     }
 
-    public NewTrainingCalander(Context context, final AsyncResponse delegate){
+    public NewTrainingCalender(Context context, final AsyncResponse delegate){
         this.context = context;
         this.calendar = Calendar.getInstance();
         this.delegate = delegate;

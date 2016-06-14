@@ -25,9 +25,10 @@
         <activity
             android:name=".AdminActivity"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".UserSignInActivity" />
-        <activity android:name=".RegisterNewUser" />
-        <activity android:name=".UserAccountActivity"></activity>
+        <activity android:name=".UserAccountActivity" />
+        <activity android:name=".LoginActivity"
+            android:windowSoftInputMode="adjustResize" >
+        </activity>
     </application>
 
 </manifest>

@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -29,13 +30,14 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements FirebaseConnector.AsyncResponse {
 
-    ProgressDialog progressDialog;              // Wait for data
-    UserTrainingAdapter adapter;                // show trainings
+    private ProgressDialog progressDialog;              // Wait for data
+    private UserTrainingAdapter adapter;                // show trainings
+    private TextView mainInfo;
     FirebaseConnector firebase =
             new FirebaseConnector(FirebaseDatabase.getInstance().getReference());
-    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    ListView listview;
-    Menu menu;
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private ListView listview;
+    private Menu menu;
 
 
     @Override
@@ -47,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
 
         // set listview
         listview = (ListView) findViewById(R.id.ListViewTraining);
+        mainInfo = (TextView) findViewById(R.id.mainInfo);
         adapter = new UserTrainingAdapter(this, new ArrayList<Training>());
         listview.setAdapter(adapter);
 
@@ -114,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     Intent signIn = new Intent(MainActivity.this,
-                                            UserSignInActivity.class);
+                                            LoginActivity.class);
                                     startActivity(signIn);
                                 }
                             })
@@ -153,6 +156,19 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
                 getMenuInflater().inflate(R.menu.actionbar_main, menu);
             }
         }
+
+        TextView signInStatus = (TextView) findViewById(R.id.signinstatus);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if(user != null && user.getDisplayName() != null ){
+            signInStatus.setText("Welcome " + user.getDisplayName());
+            signInStatus.setVisibility(View.VISIBLE);
+            mainInfo.setVisibility(View.GONE);
+        }
+        else{
+            signInStatus.setVisibility(View.GONE);
+            mainInfo.setVisibility(View.VISIBLE);
+        }
     }
 
     /**
@@ -178,18 +194,6 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
         progressDialog.cancel();
     }
 
-    public void test(View v){
-        TextView status = (TextView) findViewById(R.id.signinstatus);
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if(user != null){
-            status.setText(user.getDisplayName());
-        }
-        else{
-            Toast.makeText(MainActivity.this, "Not signed in", Toast.LENGTH_SHORT).show();
-        }
-
-    }
-
     /**
      * create menu.
      */
@@ -203,6 +207,13 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
             getMenuInflater().inflate(R.menu.actionbar_main, menu);
         }
         return true;
+    }
+
+    private void signOutMenu(Menu menu) {
+        menu.clear();
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.actionbar_main, menu);
+
     }
 
     /**
@@ -225,7 +236,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
                 startActivity(newContactWindow);
                 break;
             case R.id.menu_sign_in:
-                Intent signIn = new Intent(this, UserSignInActivity.class);
+                Intent signIn = new Intent(this, LoginActivity.class);
                 startActivity(signIn);
                 break;
             case R.id.menu_user_account:
@@ -234,7 +245,8 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
                 break;
             case R.id.menu_sign_out:
                 FirebaseAuth.getInstance().signOut();
-                onCreateOptionsMenu(menu);
+                Log.v("setmenu", "user signed out");
+                signOutMenu(menu);
                 Toast.makeText(MainActivity.this, "Signed out", Toast.LENGTH_SHORT).show();
             default:
                 return super.onOptionsItemSelected(item);
