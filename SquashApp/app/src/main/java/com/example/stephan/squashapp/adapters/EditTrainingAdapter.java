@@ -7,15 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.stephan.squashapp.activities.R;
 import com.example.stephan.squashapp.helpers.FirebaseConnector;
 import com.example.stephan.squashapp.models.Training;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -27,8 +26,7 @@ public class EditTrainingAdapter extends ArrayAdapter<Training>{
     ArrayList<Training> trainingList;  // the items.
     Context context;
 
-    FirebaseConnector firebase =
-            new FirebaseConnector(FirebaseDatabase.getInstance().getReference());
+    FirebaseConnector firebase = new FirebaseConnector();
     /**
      * Initialize adapter
      */
@@ -75,9 +73,10 @@ public class EditTrainingAdapter extends ArrayAdapter<Training>{
 
         final Training item = trainingList.get(position);
 
-        date.setText(item.getDate());
+        // Set text.
+        date.setText(item.getFormattedDate());
         info.setText(item.getShortInfo());
-        String timeText = item.getStart() + " until " + item.getEnd();
+        String timeText =  item.getFormattedStart() + " until " + item.getFormattedEnd();
         time.setText(timeText);
         cp.setText("Registered: " + item.getCurrentPlayers());
         mp.setText("Max players: " + item.getMaxPlayers());
@@ -116,7 +115,6 @@ public class EditTrainingAdapter extends ArrayAdapter<Training>{
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "Todo: Show players registered", Toast.LENGTH_SHORT).show();
                 Iterator items = item.getRegisteredPlayers().values().iterator();
                 ArrayList<String> players = new ArrayList<String>();
                 while(items.hasNext()){
@@ -130,7 +128,6 @@ public class EditTrainingAdapter extends ArrayAdapter<Training>{
                         .setItems(cs, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-
                                 }
                             })
                         .setTitle("Registered players");
@@ -147,16 +144,16 @@ public class EditTrainingAdapter extends ArrayAdapter<Training>{
                 final View layout = li.inflate(R.layout.add_training, null);
 
                 // get all items
-                final EditText editDate = (EditText) layout.findViewById(R.id.date);
-                final EditText editStart = (EditText) layout.findViewById(R.id.startTime);
-                final EditText editEnd = (EditText) layout.findViewById(R.id.endTime);
+                final Button editDate = (Button) layout.findViewById(R.id.date);
+                final Button editStart = (Button) layout.findViewById(R.id.startTime);
+                final Button editEnd = (Button) layout.findViewById(R.id.endTime);
                 final EditText editTrainer = (EditText) layout.findViewById(R.id.trainer);
                 final EditText editInfo = (EditText) layout.findViewById(R.id.info);
                 final EditText editMax = (EditText) layout.findViewById(R.id.maxPlayers);
 
-                editDate.setText(item.getDate());
-                editStart.setText(item.getStart());
-                editEnd.setText(item.getEnd());
+                //editDate.setText(item.getDate());
+                //editStart.setText(item.getStart());
+                //editEnd.setText(item.getEnd());
                 editInfo.setText(item.getShortInfo());
                 editMax.setText(item.getMaxPlayers().toString());
                 editTrainer.setText(item.getTrainer());
@@ -170,9 +167,9 @@ public class EditTrainingAdapter extends ArrayAdapter<Training>{
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
 
-                                        item.changeDate(editDate.getText().toString());
-                                        item.changeStart(editStart.getText().toString());
-                                        item.changeEnd(editEnd.getText().toString());
+                                       // item.changeDate(editDate.getText().toString());
+                                       // item.changeStart(editStart.getText().toString());
+                                      //  item.changeEnd(editEnd.getText().toString());
                                         item.changeShortInfo(editInfo.getText().toString());
                                         item.changeTrainer(editTrainer.getText().toString());
                                         item.changeMaxPlayers(

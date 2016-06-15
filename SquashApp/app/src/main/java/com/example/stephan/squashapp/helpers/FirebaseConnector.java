@@ -6,6 +6,7 @@ import com.example.stephan.squashapp.models.Training;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -16,8 +17,8 @@ import java.util.ArrayList;
  */
 public class FirebaseConnector {
 
-    // firebase
-    private DatabaseReference rootRef;
+    // Root to database
+    DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
 
     private AsyncResponse delegate = null;       // initialize to null;
 
@@ -29,8 +30,8 @@ public class FirebaseConnector {
         void processFinish(ArrayList<Training> output);
     }
 
-    public FirebaseConnector(DatabaseReference rootRef){
-        this.rootRef = rootRef;
+    public FirebaseConnector(){
+        
     }
 
     public void getTraingen(final AsyncResponse delegate) {

@@ -1,5 +1,9 @@
 package com.example.stephan.squashapp.models;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -8,10 +12,10 @@ import java.util.Map;
 public class Training {
 
     private String trainer;
-    private String date;
+    private List<Integer> date;
     private String shortInfo;
-    private String start;
-    private String end;
+    private List<Integer> start;
+    private List<Integer> end;
     private Long maxPlayers;
     private Long currentPlayers;
     private Map<String,Object> registeredPlayers;
@@ -20,7 +24,7 @@ public class Training {
         // empty for firebase
     }
 
-    public void newTraining(String trainer, String date, String shortInfo, String start, String end,
+    public void newTraining(String trainer, List<Integer> date, String shortInfo, List<Integer> start, List<Integer> end,
                          Long maxPlayers){
         this.trainer = trainer;
         this.date = date;
@@ -36,7 +40,7 @@ public class Training {
         return this.trainer;
     }
 
-    public String getDate(){
+    public List<Integer> getDate(){
         return this.date;
     }
 
@@ -44,11 +48,11 @@ public class Training {
         return this.shortInfo;
     }
 
-    public String getStart(){
+    public List<Integer> getStart(){
         return this.start;
     }
 
-    public String getEnd(){
+    public List<Integer> getEnd(){
         return this.end;
     }
 
@@ -67,15 +71,15 @@ public class Training {
         return this.registeredPlayers;
     }
 
-    public void changeDate(String date){
+    public void changeDate(List<Integer> date){
         this.date = date;
     }
 
-    public void changeStart(String start){
+    public void changeStart(List<Integer> start){
         this.start = start;
     }
 
-    public void changeEnd(String end){
+    public void changeEnd(List<Integer> end){
         this.end = end;
     }
 
@@ -102,6 +106,28 @@ public class Training {
     public void deletePlayer(String id){
         this.currentPlayers--;
         this.registeredPlayers.remove(id);
+    }
+
+    public String getFormattedDate(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(date.get(0), date.get(1), date.get(2));
+        String dateFormatted =
+                new SimpleDateFormat("EEE, MMM d, ''yy", Locale.US).format(calendar.getTime());
+        return dateFormatted;
+    }
+
+    public String getFormattedStart(){
+        String startFormatted =
+                String.valueOf(start.get(0)) + ":" +
+                        String.format( Locale.US, "%02d", start.get(1));
+        return startFormatted;
+    }
+
+    public String getFormattedEnd(){
+        String endFormatted =
+                String.valueOf(end.get(0)) + ":" +
+                        String.format( Locale.US, "%02d", end.get(1));
+        return endFormatted;
     }
 
 }

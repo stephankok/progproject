@@ -1,7 +1,5 @@
 package com.example.stephan.squashapp.fragments;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -11,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.dd.processbutton.iml.ActionProcessButton;
 import com.example.stephan.squashapp.activities.R;
@@ -25,41 +22,28 @@ import com.google.firebase.auth.FirebaseUser;
  * Created by Stephan on 13-6-2016.
  */
 public class LoginFragment extends Fragment {
-    // Store instance variables
-    private String title;
-    private int page;
 
     private EditText mEmailField;
     private EditText mPasswordField;
     private TextView loginError;
     private ActionProcessButton signInButton;
-    private ActionProcessButton registerButton;
-    private Integer resultCode;
-    private TextView forgotPassword;
     private FirebaseAuth mAuth;
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
     // newInstance constructor for creating fragment with arguments
-    public static LoginFragment newInstance(int page, String title) {
-        LoginFragment fragmentLogin = new LoginFragment();
-        Bundle args = new Bundle();
-        args.putInt("someInt", page);
-        args.putString("someTitle", title);
-        fragmentLogin.setArguments(args);
-        return fragmentLogin;
+    public static LoginFragment newInstance() {
+        return new LoginFragment();
     }
 
     // Store instance variables based on arguments passed
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        page = getArguments().getInt("someInt", 0);
-        title = getArguments().getString("someTitle");
     }
 
     // Inflate the view for the fragment based on layout XML
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
 
@@ -69,8 +53,6 @@ public class LoginFragment extends Fragment {
 
         // Buttons
         signInButton = (ActionProcessButton) view.findViewById(R.id.email_sign_in_button);
-        forgotPassword = (TextView) view.findViewById(R.id.forgotPassword);
-
 
         // set special mode
         signInButton.setMode(ActionProcessButton.Mode.ENDLESS);
@@ -81,13 +63,6 @@ public class LoginFragment extends Fragment {
             public void onClick(View v) {
                 loginError.setVisibility(View.GONE);
                 signIn(mEmailField.getText().toString(), mPasswordField.getText().toString());
-            }
-        });
-        forgotPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loginError.setVisibility(View.GONE);
-                forgotPassword();
             }
         });
 
@@ -127,40 +102,6 @@ public class LoginFragment extends Fragment {
 
                     }
                 });
-    }
-
-    private void forgotPassword(){
-
-
-        AlertDialog.Builder dialog = new AlertDialog.Builder(getContext())
-                .setTitle("Forgot password").setMessage("Do you want a reset password mail?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String emailAddress = "stephan_handbal@hotmail.com";
-                        mAuth.sendPasswordResetEmail(emailAddress)
-                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isSuccessful()) {
-                                            Toast.makeText(getContext(), "Email send" +
-                                                    "\nIt may take a moment until it arrives",
-                                                    Toast.LENGTH_SHORT).show();
-                                        }
-                                        else{
-                                            loginError.setText(task.getException().getMessage());
-                                        }
-                                    }
-                                });
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-        dialog.create().show();
     }
 
     /**

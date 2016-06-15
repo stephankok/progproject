@@ -4,14 +4,13 @@
     <item
         android:id="@+id/menu_reload"
         android:title=""
-        android:icon="@drawable/reload"
+        android:icon="@drawable/ic_autorenew_white_24dp"
         android:orderInCategory="1"
         app:showAsAction="always"/>
 
     <item
-        android:id="@+id/menu_logo"
-        android:title=""
-        android:icon="@drawable/schietheader"
+        android:id="@+id/menu_sign_in"
+        android:title="@string/menuSignIn"
         android:orderInCategory="2"
         app:showAsAction="ifRoom"/>
 
@@ -25,8 +24,5 @@
         android:title="@string/menu_admin"
         android:orderInCategory="4" />
 
-    <item
-        android:id="@+id/menu_sign_in"
-        android:title="@string/menuSignIn"
-        android:orderInCategory="5" />
+
 </menu>

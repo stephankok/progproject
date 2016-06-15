@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SquashApp</string>
+    <string name="app_name">S.C.H.I.E.T. Squash</string>
     <string name="main_welcome">Welcome at the training\'s page!</string>
     <string name="main_training_subscribe">Upcomming trainings. Please register if you will be present.</string>
     <string name="menu_contact">Contact</string>
@@ -19,4 +19,5 @@
     <string name="registerNewUser">Register</string>
     <string name="menuAccount">Account</string>
     <string name="menuSignOut">Sign out</string>
+    <string name="signIn">Sign in</string>
 </resources>

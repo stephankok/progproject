@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,8 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        android:textStyle="bold"
-        android:textSize="20sp"
+        style="@style/HeaderSize"
         android:id="@+id/signinstatus"/>
 
     <TextView
@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:text="@string/main_welcome"
         android:id="@+id/mainInfo"
-        android:textStyle="bold"/>
+        style="@style/HeaderSize"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -34,13 +34,14 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Trainings:"
-        android:textStyle="bold"/>
+        android:text="Available Trainings:"
+        style="@style/HeaderSize"/>
 
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
+        android:paddingTop="10dp"
         android:id="@+id/ListViewTraining">
     </ListView>
 

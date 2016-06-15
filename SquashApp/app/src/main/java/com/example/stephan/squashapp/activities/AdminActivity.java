@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -17,9 +18,9 @@ import com.example.stephan.squashapp.adapters.EditTrainingAdapter;
 import com.example.stephan.squashapp.helpers.FirebaseConnector;
 import com.example.stephan.squashapp.helpers.NewTrainingCalender;
 import com.example.stephan.squashapp.models.Training;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AdminActivity extends AppCompatActivity implements FirebaseConnector.AsyncResponse,
         NewTrainingCalender.AsyncResponse{
@@ -27,8 +28,7 @@ public class AdminActivity extends AppCompatActivity implements FirebaseConnecto
     ListView mListView;
     EditTrainingAdapter myAdapter;
     ProgressDialog progressDialog;
-    FirebaseConnector firebase =
-            new FirebaseConnector(FirebaseDatabase.getInstance().getReference());
+    FirebaseConnector firebase = new FirebaseConnector();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,18 +98,18 @@ public class AdminActivity extends AppCompatActivity implements FirebaseConnecto
     }
 
 
-    public void newTrainingDateSelected(final String date, final String start, final String end){
+    public void newTrainingDateSelected(final List<Integer> date, final List<Integer> start, final List<Integer> end){
         // make layout
         LayoutInflater li = LayoutInflater.from(this);
         final View layout = li.inflate(R.layout.add_training, null);
 
         // Items to remove.
-        EditText editDate = (EditText) layout.findViewById(R.id.date);
-        EditText editStart = (EditText) layout.findViewById(R.id.startTime);
-        EditText editEnd = (EditText) layout.findViewById(R.id.endTime);
-        editDate.setVisibility(View.GONE);
-        editStart.setVisibility(View.GONE);
-        editEnd.setVisibility(View.GONE);
+        Button changeDate = (Button) layout.findViewById(R.id.date);
+        Button changeStart = (Button) layout.findViewById(R.id.startTime);
+        Button changeEnd = (Button) layout.findViewById(R.id.endTime);
+        changeDate.setVisibility(View.GONE);
+        changeStart.setVisibility(View.GONE);
+        changeEnd.setVisibility(View.GONE);
 
         // Needed items
         final EditText editTrainer = (EditText) layout.findViewById(R.id.trainer);

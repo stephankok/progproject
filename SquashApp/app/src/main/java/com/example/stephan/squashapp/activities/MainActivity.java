@@ -23,7 +23,6 @@ import com.example.stephan.squashapp.helpers.FirebaseConnector;
 import com.example.stephan.squashapp.models.Training;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
@@ -33,10 +32,10 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
     private ProgressDialog progressDialog;              // Wait for data
     private UserTrainingAdapter adapter;                // show trainings
     private TextView mainInfo;
-    FirebaseConnector firebase =
-            new FirebaseConnector(FirebaseDatabase.getInstance().getReference());
+    FirebaseConnector firebase = new FirebaseConnector();
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private ListView listview;
+    TextView signInStatus;
     private Menu menu;
 
 
@@ -50,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
         // set listview
         listview = (ListView) findViewById(R.id.ListViewTraining);
         mainInfo = (TextView) findViewById(R.id.mainInfo);
+        signInStatus = (TextView) findViewById(R.id.signinstatus);
         adapter = new UserTrainingAdapter(this, new ArrayList<Training>());
         listview.setAdapter(adapter);
 
@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
                         // ask for registration
                         AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this)
                                 .setTitle("Register").setMessage("Do you want to register for " +
-                                        adapter.getItem(position).getDate())
+                                        adapter.getItem(position).getFormattedDate())
                                 .setPositiveButton("Register", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -132,7 +132,6 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
 
             }
         });
-
     }
 
     private void updateUser(){
@@ -157,8 +156,6 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
             }
         }
 
-        TextView signInStatus = (TextView) findViewById(R.id.signinstatus);
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         if(user != null && user.getDisplayName() != null ){
             signInStatus.setText("Welcome " + user.getDisplayName());
@@ -213,6 +210,8 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
         menu.clear();
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.actionbar_main, menu);
+        signInStatus.setVisibility(View.GONE);
+        mainInfo.setVisibility(View.VISIBLE);
 
     }
 
@@ -227,9 +226,6 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
             case R.id.menu_admin:
                 adminMenu();
                 break;
-            case R.id.menu_logo:
-                Toast.makeText(MainActivity.this, "Logo", Toast.LENGTH_SHORT).show();
-                break;
             case R.id.menu_contact:
                 Toast.makeText(MainActivity.this, "Contact", Toast.LENGTH_SHORT).show();
                 Intent newContactWindow = new Intent(this, ContactActivity.class);
@@ -239,7 +235,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
                 Intent signIn = new Intent(this, LoginActivity.class);
                 startActivity(signIn);
                 break;
-            case R.id.menu_user_account:
+            case R.id.menu_account:
                 Intent accountActivity = new Intent(MainActivity.this, UserAccountActivity.class);
                 startActivity(accountActivity);
                 break;
@@ -248,6 +244,9 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
                 Log.v("setmenu", "user signed out");
                 signOutMenu(menu);
                 Toast.makeText(MainActivity.this, "Signed out", Toast.LENGTH_SHORT).show();
+            case R.id.menu_mega_chat:
+                Intent megaChat = new Intent(MainActivity.this, MegaChatActivity.class);
+                startActivity(megaChat);
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -257,46 +256,65 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
     /**
      * Create login for admin activity
      */
-    public void adminMenu(){
-        // make layout
-        LayoutInflater li = LayoutInflater.from(this);
-        View layout = li.inflate(R.layout.alertdialog_open_admin, null);
-        final EditText username = (EditText) layout.findViewById(R.id.username);
-        final EditText password = (EditText) layout.findViewById(R.id.password);
+    public void adminMenu() {
+        if (user != null) {
+            // make layout
+            LayoutInflater li = LayoutInflater.from(this);
+            View layout = li.inflate(R.layout.alertdialog_open_admin, null);
+            final EditText username = (EditText) layout.findViewById(R.id.username);
+            final EditText password = (EditText) layout.findViewById(R.id.password);
 
-        // create alertdialog
-        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+            // create alertdialog
+            AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
             builder1.setTitle("Admin")
-                .setMessage("Please login.")
-                .setCancelable(true)
-                .setView(layout)
-                .setPositiveButton(
-                    "Login",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            if(username.getText().toString().compareTo("admin") == 0 &&
-                                    password.getText().toString().compareTo("admin") == 0){
-                                Toast.makeText(
-                                        MainActivity.this, "Succes", Toast.LENGTH_SHORT).show();
-                                Intent adminScreen =
-                                        new Intent(MainActivity.this, AdminActivity.class);
-                                startActivity(adminScreen);
-                            }
-                            else{
-                                Toast.makeText(
-                                        MainActivity.this, "Invalid login!", Toast.LENGTH_SHORT)
-                                        .show();
-                            }
-                            dialog.cancel();
+                    .setMessage("Please login.")
+                    .setCancelable(true)
+                    .setView(layout)
+                    .setPositiveButton(
+                            "Login",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    if (username.getText().toString().compareTo("admin") == 0 &&
+                                            password.getText().toString().compareTo("admin") == 0) {
+                                        Toast.makeText(
+                                                MainActivity.this, "Succes", Toast.LENGTH_SHORT).show();
+                                        Intent adminScreen =
+                                                new Intent(MainActivity.this, AdminActivity.class);
+                                        startActivity(adminScreen);
+                                    } else {
+                                        Toast.makeText(
+                                                MainActivity.this, "Invalid login!", Toast.LENGTH_SHORT)
+                                                .show();
+                                    }
+                                    dialog.cancel();
+                                }
+                            })
+                    .setNegativeButton(
+                            "Cancel",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            })
+                    .create().show();
+        } else {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this)
+                    .setTitle("Not signed in").setMessage("Please sign in")
+                    .setPositiveButton("Sign in", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent signIn = new Intent(MainActivity.this,
+                                    LoginActivity.class);
+                            startActivity(signIn);
                         }
                     })
-                .setNegativeButton(
-                    "Cancel",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
                             dialog.cancel();
                         }
-                    })
-                .create().show();
+                    });
+            dialog.create().show();
+        }
     }
 }

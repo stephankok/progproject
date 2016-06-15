@@ -4,22 +4,21 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/fragment1"
     android:gravity="center">
 
     <EditText
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:hint="email"
+        android:hint="Email"
         android:gravity="center"
-        android:textStyle="italic"
         android:inputType="textEmailAddress"
         android:id="@+id/field_email"/>
 
     <EditText
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:hint="password"
-        android:textStyle="italic"
+        android:hint="Password"
         android:gravity="center"
         android:inputType="textPassword"
         android:id="@+id/field_password"/>
@@ -58,11 +57,27 @@
             custom:pb_colorError="@color/red_error" />
     </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/forgotPassword"
-        android:text="Forgot password"
-        android:textStyle="italic"/>
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="goToRegisterFragment"
+            android:layout_weight="1"
+            android:text="Register"
+            android:gravity="center"
+            android:textStyle="italic"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="goToForgetPasswordFragment"
+            android:text="Forgot password"
+            android:gravity="center"
+            android:textStyle="italic"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
 </LinearLayout>

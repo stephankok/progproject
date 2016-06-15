@@ -25,9 +25,6 @@ import com.google.firebase.auth.UserProfileChangeRequest;
  * Created by Stephan on 13-6-2016.
  */
 public class RegisterFragment extends Fragment{
-    // Store instance variables
-    private String title;
-    private int page;
 
     private EditText emailEdit;
     private EditText usernameEdit;
@@ -42,21 +39,14 @@ public class RegisterFragment extends Fragment{
     private FirebaseUser user;
 
     // newInstance constructor for creating fragment with arguments
-    public static RegisterFragment newInstance(int page, String title) {
-        RegisterFragment registerFragment = new RegisterFragment();
-        Bundle args = new Bundle();
-        args.putInt("someInt", page);
-        args.putString("someTitle", title);
-        registerFragment.setArguments(args);
-        return registerFragment;
+    public static RegisterFragment newInstance() {
+        return new RegisterFragment();
     }
 
     // Store instance variables based on arguments passed
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        page = getArguments().getInt("someInt", 0);
-        title = getArguments().getString("someTitle");
     }
 
     // Inflate the view for the fragment based on layout XML

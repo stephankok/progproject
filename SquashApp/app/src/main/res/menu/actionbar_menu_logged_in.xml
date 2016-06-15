@@ -4,14 +4,13 @@
     <item
         android:id="@+id/menu_reload"
         android:title=""
-        android:icon="@drawable/reload"
+        android:icon="@drawable/ic_autorenew_white_24dp"
         android:orderInCategory="1"
         app:showAsAction="always"/>
 
     <item
-        android:id="@+id/menu_logo"
-        android:title=""
-        android:icon="@drawable/schietheader"
+        android:id="@+id/menu_sign_out"
+        android:title="@string/menuSignOut"
         android:orderInCategory="2"
         app:showAsAction="ifRoom"/>
 
@@ -26,12 +25,14 @@
         android:orderInCategory="4" />
 
     <item
-        android:id="@+id/menu_user_account"
+        android:id="@+id/menu_account"
         android:title="@string/menuAccount"
         android:orderInCategory="5" />
 
     <item
-        android:id="@+id/menu_sign_out"
-        android:title="@string/menuSignOut"
+        android:id="@+id/menu_mega_chat"
+        android:title="Mega Chat"
         android:orderInCategory="6" />
+
+
 </menu>

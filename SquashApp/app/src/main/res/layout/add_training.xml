@@ -6,44 +6,51 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin">
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:gravity="center">
 
-    <EditText
-        android:layout_width="wrap_content"
+    <Button
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:id="@+id/date"
-        android:hint="date"
+        android:text="change date"
+        android:gravity="center"
         android:paddingBottom="10dp"/>
 
-    <EditText
-        android:layout_width="wrap_content"
+    <Button
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:hint="start"
+        android:text="change start"
+        android:gravity="center"
         android:id="@+id/startTime"/>
 
-    <EditText
-        android:layout_width="wrap_content"
+    <Button
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:hint="end"
+        android:text="change end"
+        android:gravity="center"
         android:id="@+id/endTime"/>
 
     <EditText
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:id="@+id/info"
         android:hint="short info"
+        android:gravity="center"
         android:paddingBottom="10dp"/>
     <EditText
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:id="@+id/trainer"
+        android:gravity="center"
         android:hint="trainer"/>
 
     <EditText
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:id="@+id/maxPlayers"
         android:inputType="number"
+        android:gravity="center"
         android:hint="Maxium registrations"/>
 
 

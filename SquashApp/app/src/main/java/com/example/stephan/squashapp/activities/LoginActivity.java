@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.example.stephan.squashapp.adapters.pageAdapter;
@@ -14,13 +15,14 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 public class LoginActivity extends AppCompatActivity {
 
     private Integer resultCode;
+    ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
+        viewPager = (ViewPager) findViewById(R.id.viewPager);
         pageAdapter adapter = new pageAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
 
@@ -30,8 +32,22 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         // Check if google play services are up-to-date
-        resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this.getApplicationContext());
+        resultCode =
+                GooglePlayServicesUtil.isGooglePlayServicesAvailable(this.getApplicationContext());
     }
+
+    public void goToSignInFragment(View v){
+        viewPager.setCurrentItem(0);
+    }
+
+    public void goToRegisterFragment(View v){
+        viewPager.setCurrentItem(1);
+    }
+
+    public void goToForgetPasswordFragment(View v){
+        viewPager.setCurrentItem(2);
+    }
+
 
     @Override
     public void onResume(){
