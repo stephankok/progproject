@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dd.processbutton.iml.ActionProcessButton;
 import com.example.stephan.squashapp.activities.R;
@@ -89,6 +90,7 @@ public class LoginFragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (!task.isSuccessful()) {
+                            Toast.makeText(getContext(), "Failed to log in " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             loginError.setText(task.getException().getMessage());
                             signInButton.setProgress(-1);
                         }

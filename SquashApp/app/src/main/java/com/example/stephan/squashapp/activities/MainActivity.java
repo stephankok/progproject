@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,9 +33,8 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
     private ProgressDialog progressDialog;              // Wait for data
     private UserTrainingAdapter adapter;                // show trainings
     private TextView mainInfo;
-    FirebaseConnector firebase = new FirebaseConnector();
-    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    private ListView listview;
+    private FirebaseConnector firebase = new FirebaseConnector();
+    private FirebaseUser user;
     TextView signInStatus;
     private Menu menu;
 
@@ -44,17 +44,34 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Log.d("startuplog", "hoi");
-
-        // set listview
-        listview = (ListView) findViewById(R.id.ListViewTraining);
+        // Get views.
+        ListView listview = (ListView) findViewById(R.id.ListViewTraining);
         mainInfo = (TextView) findViewById(R.id.mainInfo);
         signInStatus = (TextView) findViewById(R.id.signinstatus);
+
+        // Set adapter to listview.
         adapter = new UserTrainingAdapter(this, new ArrayList<Training>());
         listview.setAdapter(adapter);
 
-        // Register and deregister
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+        // Update users and set an on change listener.
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseAuth.getInstance().addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                user = firebaseAuth.getCurrentUser();
+            }
+        });
+
+        // Register and deregister.
+        listview.setOnItemClickListener(onItemClickListener());
+    }
+
+    /**
+     *
+     */
+    private AdapterView.OnItemClickListener onItemClickListener(){
+        return new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                 // reload user
@@ -131,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
                 }
 
             }
-        });
+        };
     }
 
     private void updateUser(){
