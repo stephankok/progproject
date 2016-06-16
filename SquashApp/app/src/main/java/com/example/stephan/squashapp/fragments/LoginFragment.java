@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.dd.processbutton.iml.ActionProcessButton;
 import com.example.stephan.squashapp.activities.R;
@@ -17,10 +16,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 /**
  * Created by Stephan on 13-6-2016.
+ *
  */
 public class LoginFragment extends Fragment {
 
@@ -29,79 +28,85 @@ public class LoginFragment extends Fragment {
     private TextView loginError;
     private ActionProcessButton signInButton;
     private FirebaseAuth mAuth;
-    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
     // newInstance constructor for creating fragment with arguments
     public static LoginFragment newInstance() {
         return new LoginFragment();
     }
 
-    // Store instance variables based on arguments passed
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Get root to the connection with firebase.
+        mAuth = FirebaseAuth.getInstance();
+
+        // Check if already logged on.
+        if(mAuth.getCurrentUser() != null){
+            getActivity().finish();
+        }
     }
 
-    // Inflate the view for the fragment based on layout XML
+    // Create view.
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
 
+        // Get items on view.
         mEmailField = (EditText) view.findViewById(R.id.field_email);
         mPasswordField = (EditText) view.findViewById(R.id.field_password);
         loginError = (TextView) view.findViewById(R.id.loginError);
-
-        // Buttons
         signInButton = (ActionProcessButton) view.findViewById(R.id.email_sign_in_button);
 
-        // set special mode
+        // Set button reaction on click.
         signInButton.setMode(ActionProcessButton.Mode.ENDLESS);
 
         // Set onClick listener.
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Remove error if any
                 loginError.setVisibility(View.GONE);
+
+                // Sign in
                 signIn(mEmailField.getText().toString(), mPasswordField.getText().toString());
             }
         });
-
-        mAuth = FirebaseAuth.getInstance();
-
-        // Check if really logged in
-        if(user != null){
-            //finish();
-        }
-
         return view;
     }
 
+    /**
+     *
+     * @param email
+     * @param password
+     */
     private void signIn(String email, String password) {
-        // check if correct form
+        // Check if for basic correct format.
         if (!validateForm()) {
             return;
         }
 
+        // Update button.
         signInButton.setProgress(1);
-        // sign in
+
+        // Sign in.
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+                        // Check if finished successfully or not.
                         if (!task.isSuccessful()) {
-                            Toast.makeText(getContext(), "Failed to log in " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            // Failed, set message.
                             loginError.setText(task.getException().getMessage());
+                            loginError.setVisibility(View.VISIBLE);
                             signInButton.setProgress(-1);
                         }
                         else{
+                            // Success, end activity.
                             signInButton.setProgress(100);
                             getActivity().finish();
-                            //finish();
                         }
-
-                        // done
-
                     }
                 });
     }

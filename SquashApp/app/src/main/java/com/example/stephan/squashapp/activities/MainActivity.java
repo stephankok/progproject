@@ -28,6 +28,13 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.ArrayList;
 
 
+/**
+ * Here everyone can see the upcomming trainings. If you login other features will be enabled.
+ *
+ * Logged in Features:
+ * Register, cancel registration, MegaChat, user account setting and if you have to password the
+ * admin page.
+ */
 public class MainActivity extends AppCompatActivity implements FirebaseConnector.AsyncResponse {
 
     private ProgressDialog progressDialog;              // Wait for data
@@ -35,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
     private TextView mainInfo;
     private FirebaseConnector firebase = new FirebaseConnector();
     private FirebaseUser user;
-    TextView signInStatus;
+    private TextView signInStatus;
     private Menu menu;
 
 
@@ -68,20 +75,21 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
     }
 
     /**
-     *
+     * OnItemClickListener that wil send you to login page, register alert or cancel
+     * registration alert.
      */
     private AdapterView.OnItemClickListener onItemClickListener(){
         return new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                // reload user
-                updateUser();
 
-                Training training = adapter.getItem(position);
+                // Check if user is logged in.
                 if(user != null){
+                    // Get current Training.
+                    Training training = adapter.getItem(position);
+                    // Check if user is registered.
                     if(training.getRegisteredPlayers().containsKey(user.getUid())){
-                        // already registered
-                        // ask for deregistration
+                        // Already registered, give option to cancel.
                         AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this)
                                 .setTitle("Cancel Registration").setMessage("Are you sure you want" +
                                         " to deregister?")
@@ -103,8 +111,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
                         dialog.create().show();
                     }
                     else {
-                        // not registered
-                        // ask for registration
+                        // Not registered, give option to register.
                         AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this)
                                 .setTitle("Register").setMessage("Do you want to register for " +
                                         adapter.getItem(position).getFormattedDate())
@@ -128,6 +135,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
                     }
                 }
                 else{
+                    // Not logged in, send to login page.
                     AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this)
                             .setTitle("Not signed in").setMessage("Please sign in")
                             .setPositiveButton("Sign in", new DialogInterface.OnClickListener() {
@@ -146,13 +154,8 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
                             });
                     dialog.create().show();
                 }
-
             }
         };
-    }
-
-    private void updateUser(){
-        user = FirebaseAuth.getInstance().getCurrentUser();
     }
 
     /**
@@ -161,7 +164,6 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
     @Override
     protected void onResume() {
         super.onResume();
-        updateUser();
         updateDatabase();
 
         if(menu != null) {
@@ -209,15 +211,18 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
     }
 
     /**
-     * create menu.
+     * Create menu.
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         this.menu = menu;
+        // Check if logged in.
         if(user != null){
+            // Set logged in menu.
             getMenuInflater().inflate(R.menu.actionbar_menu_logged_in, menu);
         }
         else{
+            // set logged out menu.
             getMenuInflater().inflate(R.menu.actionbar_main, menu);
         }
         return true;
@@ -233,37 +238,44 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
     }
 
     /**
-     * Set listener to menu items
+     * Set listener to menu items.
      */
     public boolean onOptionsItemSelected(MenuItem item){
         switch(item.getItemId()){
             case R.id.menu_reload:
+                // Reload trainings.
                 updateDatabase();
                 break;
             case R.id.menu_admin:
+                // Open admin page.
                 adminMenu();
                 break;
             case R.id.menu_contact:
+                // Open contact page.
                 Toast.makeText(MainActivity.this, "Contact", Toast.LENGTH_SHORT).show();
                 Intent newContactWindow = new Intent(this, ContactActivity.class);
                 startActivity(newContactWindow);
                 break;
             case R.id.menu_sign_in:
+                // Open sign in page.
                 Intent signIn = new Intent(this, LoginActivity.class);
                 startActivity(signIn);
                 break;
             case R.id.menu_account:
+                // Open user account page.
                 Intent accountActivity = new Intent(MainActivity.this, UserAccountActivity.class);
                 startActivity(accountActivity);
                 break;
             case R.id.menu_sign_out:
+                // Sign user out.
                 FirebaseAuth.getInstance().signOut();
-                Log.v("setmenu", "user signed out");
                 signOutMenu(menu);
                 Toast.makeText(MainActivity.this, "Signed out", Toast.LENGTH_SHORT).show();
             case R.id.menu_mega_chat:
+                // Open mega chat page.
                 Intent megaChat = new Intent(MainActivity.this, MegaChatActivity.class);
                 startActivity(megaChat);
+
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -271,9 +283,10 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
     }
 
     /**
-     * Create login for admin activity
+     * Create login for admin activity.
      */
     public void adminMenu() {
+        // Check if user really is logged in.
         if (user != null) {
             // make layout
             LayoutInflater li = LayoutInflater.from(this);

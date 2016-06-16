@@ -21,34 +21,21 @@ import java.util.Iterator;
 
 /**
  * Created by Stephan on 4-6-2016.
+ *
  */
 public class EditTrainingAdapter extends ArrayAdapter<Training>{
-    ArrayList<Training> trainingList;  // the items.
-    Context context;
 
-    FirebaseConnector firebase = new FirebaseConnector();
+    private ArrayList<Training> trainingList;  // the items.
+    private Context context;
+    private FirebaseConnector firebase = new FirebaseConnector();
+
     /**
      * Initialize adapter
      */
     public EditTrainingAdapter(Context context, ArrayList<Training> trainingList) {
         super(context, R.layout.single_training, trainingList);
-
         this.context = context;
         this.trainingList = trainingList;
-    }
-
-    /**
-     * Overwrite trainingslist
-     */
-    public void setTrainingList(ArrayList<Training> trainingList){
-        this.trainingList.clear();
-        for(int i = 0; i < trainingList.size(); i++){
-            this.trainingList.add(trainingList.get(i));
-        }
-    }
-
-    public Integer getAmountOfTrainingen(){
-        return this.trainingList.size();
     }
 
     /**
@@ -61,29 +48,67 @@ public class EditTrainingAdapter extends ArrayAdapter<Training>{
             view = inflater.inflate(R.layout.single_training, parent, false);
         }
 
-        // find Views.
+        // Find views.
         final ImageButton delete = (ImageButton) view.findViewById(R.id.deleteTraining);
         final TextView date = (TextView) view.findViewById(R.id.date);
         final TextView info = (TextView) view.findViewById(R.id.info);
         final TextView time = (TextView) view.findViewById(R.id.time);
         final TextView trainer = (TextView) view.findViewById(R.id.trainer);
-        final TextView cp = (TextView) view.findViewById(R.id.currentPlayers);
-        final TextView mp = (TextView) view.findViewById(R.id.maxPlayers);
+        final TextView currentPlayers = (TextView) view.findViewById(R.id.currentPlayers);
+        final TextView maxPlayers = (TextView) view.findViewById(R.id.maxPlayers);
 
+        // In admin menu the delete button must be visable.
+        delete.setVisibility(View.VISIBLE);
 
+        // Get training.
         final Training item = trainingList.get(position);
 
-        // Set text.
+        // Concatenate text
+        String timeText =  item.getFormattedStart() + " until " + item.getFormattedEnd();
+        String currentPlayersText = "Registered: " + item.getCurrentPlayers();
+        String maxPlayersText = "Max players: " + item.getMaxPlayers();
+        String trainerText = "By: " + item.getTrainer();
+
+        // Update view.
         date.setText(item.getFormattedDate());
         info.setText(item.getShortInfo());
-        String timeText =  item.getFormattedStart() + " until " + item.getFormattedEnd();
         time.setText(timeText);
-        cp.setText("Registered: " + item.getCurrentPlayers());
-        mp.setText("Max players: " + item.getMaxPlayers());
-        trainer.setText("By: " + item.getTrainer());
+        currentPlayers.setText(currentPlayersText);
+        maxPlayers.setText(maxPlayersText);
+        trainer.setText(trainerText);
 
-        delete.setVisibility(View.VISIBLE);
-        delete.setOnClickListener(new View.OnClickListener() {
+        // Delete selected training.
+        delete.setOnClickListener(deleteButtonClicked(position));
+
+        // Show registered players.
+        view.setOnClickListener(onClickShowUsers(position));
+
+        // Edit the selected training.
+        view.setOnLongClickListener(onLongClickEditTraining(position));
+
+        return view;
+    }
+
+    /**
+     * Overwrite the current trainingsList.
+     */
+    public void setTrainingList(ArrayList<Training> trainingList){
+        this.trainingList.clear();
+        for(int i = 0; i < trainingList.size(); i++){
+            this.trainingList.add(trainingList.get(i));
+        }
+        notifyDataSetChanged();
+    }
+
+    /**
+     * Return tne size of trainingList.
+     */
+    public Integer getAmountOfTrainings(){
+        return this.trainingList.size();
+    }
+
+    private View.OnClickListener deleteButtonClicked(final int position){
+        return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -106,17 +131,20 @@ public class EditTrainingAdapter extends ArrayAdapter<Training>{
                 };
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setMessage("Do you want to delete the training of " + item.getDate() + "?")
+                builder.setMessage("Do you want to delete the training of " +
+                        trainingList.get(position).getFormattedDate() + "?")
                         .setPositiveButton("Yes", dialogClickListener)
                         .setNegativeButton("No", dialogClickListener).show();
             }
-        });
+        };
+    }
 
-        view.setOnClickListener(new View.OnClickListener() {
+    private View.OnClickListener onClickShowUsers(final int position){
+        return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Iterator items = item.getRegisteredPlayers().values().iterator();
-                ArrayList<String> players = new ArrayList<String>();
+                Iterator items = trainingList.get(position).getRegisteredPlayers().values().iterator();
+                ArrayList<String> players = new ArrayList<>();
                 while(items.hasNext()){
                     Object element = items.next();
                     players.add(element.toString());
@@ -126,17 +154,19 @@ public class EditTrainingAdapter extends ArrayAdapter<Training>{
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(context)
                         .setItems(cs, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                }
-                            })
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        })
                         .setTitle("Registered players");
                 builder.show();
             }
 
-        });
+        };
+    }
 
-        view.setOnLongClickListener(new View.OnLongClickListener() {
+    private View.OnLongClickListener onLongClickEditTraining(final int position){
+        return new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 // make layout
@@ -151,12 +181,9 @@ public class EditTrainingAdapter extends ArrayAdapter<Training>{
                 final EditText editInfo = (EditText) layout.findViewById(R.id.info);
                 final EditText editMax = (EditText) layout.findViewById(R.id.maxPlayers);
 
-                //editDate.setText(item.getDate());
-                //editStart.setText(item.getStart());
-                //editEnd.setText(item.getEnd());
-                editInfo.setText(item.getShortInfo());
-                editMax.setText(item.getMaxPlayers().toString());
-                editTrainer.setText(item.getTrainer());
+                editInfo.setText(trainingList.get(position).getShortInfo());
+                editMax.setText(trainingList.get(position).getMaxPlayers().toString());
+                editTrainer.setText(trainingList.get(position).getTrainer());
 
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
                 builder1.setTitle("Edit Training")
@@ -167,15 +194,18 @@ public class EditTrainingAdapter extends ArrayAdapter<Training>{
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
 
-                                       // item.changeDate(editDate.getText().toString());
-                                       // item.changeStart(editStart.getText().toString());
-                                      //  item.changeEnd(editEnd.getText().toString());
-                                        item.changeShortInfo(editInfo.getText().toString());
-                                        item.changeTrainer(editTrainer.getText().toString());
-                                        item.changeMaxPlayers(
+                                        // item.changeDate(editDate.getText().toString());
+                                        // item.changeStart(editStart.getText().toString());
+                                        //  item.changeEnd(editEnd.getText().toString());
+                                        trainingList.get(position)
+                                                .changeShortInfo(editInfo.getText().toString());
+                                        trainingList.get(position)
+                                                .changeTrainer(editTrainer.getText().toString());
+                                        trainingList.get(position).changeMaxPlayers(
                                                 Long.parseLong(editMax.getText().toString()));
 
-                                        firebase.updateSingleTraining(item, position);
+                                        firebase.updateSingleTraining(trainingList.get(position),
+                                                position);
 
                                         notifyDataSetChanged();
                                         dialog.cancel();
@@ -193,10 +223,9 @@ public class EditTrainingAdapter extends ArrayAdapter<Training>{
 
                 AlertDialog alert11 = builder1.create();
                 alert11.show();
-                return false;
-            }
-        });
 
-        return view;
+                return true;
+            }
+        };
     }
 }

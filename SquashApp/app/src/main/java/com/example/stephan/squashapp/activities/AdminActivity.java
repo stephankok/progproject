@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,25 +14,32 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.example.stephan.squashapp.adapters.EditTrainingAdapter;
+import com.example.stephan.squashapp.helpers.CalenderPicker;
 import com.example.stephan.squashapp.helpers.FirebaseConnector;
-import com.example.stephan.squashapp.helpers.NewTrainingCalender;
 import com.example.stephan.squashapp.models.Training;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AdminActivity extends AppCompatActivity implements FirebaseConnector.AsyncResponse,
-        NewTrainingCalender.AsyncResponse{
+        CalenderPicker.AsyncResponse{
 
-    ListView mListView;
-    EditTrainingAdapter myAdapter;
-    ProgressDialog progressDialog;
-    FirebaseConnector firebase = new FirebaseConnector();
+    private EditTrainingAdapter myAdapter;
+    private ProgressDialog progressDialog;
+    private FirebaseConnector firebase = new FirebaseConnector();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin);
+
+        // Create listview.
+        ListView listView = (ListView) findViewById(R.id.ListViewAdminTraining);
+        myAdapter = new EditTrainingAdapter(this, new ArrayList<Training>());
+        listView.setAdapter(myAdapter);
+
+        // Get trainings.
+        updateDatabase();
 
         // Set action to add button
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -48,13 +54,6 @@ public class AdminActivity extends AppCompatActivity implements FirebaseConnecto
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-
-        // create listview
-        mListView = (ListView) findViewById(R.id.ListViewAdminTraining);
-        myAdapter = new EditTrainingAdapter(this, new ArrayList<Training>());
-        mListView.setAdapter(myAdapter);
-       // getData();
-        updateDatabase();
     }
 
     /**
@@ -92,8 +91,6 @@ public class AdminActivity extends AppCompatActivity implements FirebaseConnecto
      */
     public void processFinish(ArrayList<Training> output){
         myAdapter.setTrainingList(output);
-        Log.d("done", "done");
-        myAdapter.notifyDataSetChanged();
         progressDialog.cancel();
     }
 
@@ -103,7 +100,7 @@ public class AdminActivity extends AppCompatActivity implements FirebaseConnecto
         LayoutInflater li = LayoutInflater.from(this);
         final View layout = li.inflate(R.layout.add_training, null);
 
-        // Items to remove.
+        // Remove items from layout.
         Button changeDate = (Button) layout.findViewById(R.id.date);
         Button changeStart = (Button) layout.findViewById(R.id.startTime);
         Button changeEnd = (Button) layout.findViewById(R.id.endTime);
@@ -111,7 +108,7 @@ public class AdminActivity extends AppCompatActivity implements FirebaseConnecto
         changeStart.setVisibility(View.GONE);
         changeEnd.setVisibility(View.GONE);
 
-        // Needed items
+        // Find view.
         final EditText editTrainer = (EditText) layout.findViewById(R.id.trainer);
         final EditText editInfo = (EditText) layout.findViewById(R.id.info);
         final EditText editMax = (EditText) layout.findViewById(R.id.maxPlayers);
@@ -136,37 +133,41 @@ public class AdminActivity extends AppCompatActivity implements FirebaseConnecto
             @Override
             public void onClick(View v) {
                 // check for correct input
-                if(editInfo.getText().toString().isEmpty()) {
+                boolean falseInput = false;
+                if (editInfo.getText().toString().isEmpty()) {
                     editInfo.setError("Required");
+                    falseInput = true;
                 }
-                else{
-                    if(editTrainer.getText().toString().isEmpty()) {
-                        editTrainer.setError("Required");
-                    }
-                    else {
-                        if (editMax.getText().toString().isEmpty()) {
-                            editMax.setError("Required");
-                        }
-                        else {
-                            String info = editInfo.getText().toString();
-                            String trainer = editTrainer.getText().toString();
-                            Long max = Long.parseLong(editMax.getText().toString());
-
-                            Training training = new Training();
-                            training.newTraining(trainer, date, info, start, end, max);
-
-                            // add training online
-                            firebase.updateSingleTraining(training, myAdapter.getAmountOfTrainingen());
-
-                            myAdapter.add(training);
-                            myAdapter.notifyDataSetChanged();
-                            alert11.cancel();
-                        }
-                    }
+                if (editTrainer.getText().toString().isEmpty()) {
+                    editTrainer.setError("Required");
+                    falseInput = true;
                 }
+                if (editMax.getText().toString().isEmpty()) {
+                    editMax.setError("Required");
+                    falseInput = true;
+                }
+                if(falseInput){
+                    return;
+                }
+
+                // Passed the test.
+
+                // Get input.
+                String info = editInfo.getText().toString();
+                String trainer = editTrainer.getText().toString();
+                Long max = Long.parseLong(editMax.getText().toString());
+
+                Training training = new Training();
+                training.newTraining(trainer, date, info, start, end, max);
+
+                // Add training online.
+                firebase.updateSingleTraining(training, myAdapter.getAmountOfTrainings());
+                firebase.getTraingen(AdminActivity.this);
+
+                // Cancel dialog
+                alert11.cancel();
             }
         });
-
     }
     /**
      * Add training
@@ -174,7 +175,7 @@ public class AdminActivity extends AppCompatActivity implements FirebaseConnecto
      * Update change to firebase
      */
     private void AddTraining(){
-        new NewTrainingCalender(this, this);
+        new CalenderPicker(this, this);
 
     }
 }

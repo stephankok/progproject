@@ -14,7 +14,7 @@ import java.util.List;
  * Created by Stephan on 8-6-2016.
  *
  */
-public class NewTrainingCalender {
+public class CalenderPicker {
 
     // Context of activity.
     private Context context;
@@ -34,7 +34,7 @@ public class NewTrainingCalender {
     /**
      * Initialize date picker
      */
-    public NewTrainingCalender(Context context, final AsyncResponse delegate){
+    public CalenderPicker(Context context, final AsyncResponse delegate){
         // Initialize context.
         this.context = context;
         this.calendar = Calendar.getInstance();
