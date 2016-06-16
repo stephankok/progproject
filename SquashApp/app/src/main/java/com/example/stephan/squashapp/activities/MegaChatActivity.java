@@ -89,7 +89,7 @@ public class MegaChatActivity extends AppCompatActivity implements View.OnClickL
 
         MegaChatMessage message = new MegaChatMessage();
         Date time = Calendar.getInstance().getTime();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.US);
         String timeFormatted = format.format(time);
         message.setValues(user.getDisplayName(), messageEditText.getText().toString(), timeFormatted);
         addMessage(message);
