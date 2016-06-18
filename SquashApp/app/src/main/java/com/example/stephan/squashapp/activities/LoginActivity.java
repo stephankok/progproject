@@ -15,7 +15,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 public class LoginActivity extends AppCompatActivity {
 
     private Integer resultCode;
-    ViewPager viewPager;
+    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +25,7 @@ public class LoginActivity extends AppCompatActivity {
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         pageAdapter adapter = new pageAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
+        viewPager.setCurrentItem(1);
 
         // add back button
         if (getSupportActionBar() != null) {
@@ -37,11 +38,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void goToSignInFragment(View v){
-        viewPager.setCurrentItem(0);
+        viewPager.setCurrentItem(1);
     }
 
     public void goToRegisterFragment(View v){
-        viewPager.setCurrentItem(1);
+        viewPager.setCurrentItem(0);
     }
 
     public void goToForgetPasswordFragment(View v){

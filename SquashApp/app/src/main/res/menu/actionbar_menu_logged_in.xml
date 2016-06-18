@@ -2,37 +2,30 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto" >
     <item
-        android:id="@+id/menu_reload"
-        android:title=""
-        android:icon="@drawable/ic_autorenew_white_24dp"
-        android:orderInCategory="1"
-        app:showAsAction="always"/>
-
-    <item
         android:id="@+id/menu_sign_out"
         android:title="@string/menuSignOut"
-        android:orderInCategory="2"
+        android:orderInCategory="1"
         app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/menu_contact"
         android:title="@string/menu_contact"
-        android:orderInCategory="3" />
+        android:orderInCategory="2" />
 
     <item
         android:id="@+id/menu_admin"
         android:title="@string/menu_admin"
-        android:orderInCategory="4" />
+        android:orderInCategory="3" />
 
     <item
         android:id="@+id/menu_account"
         android:title="@string/menuAccount"
-        android:orderInCategory="5" />
+        android:orderInCategory="4" />
 
     <item
         android:id="@+id/menu_mega_chat"
         android:title="Mega Chat"
-        android:orderInCategory="6" />
+        android:orderInCategory="5" />
 
 
 </menu>

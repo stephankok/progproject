@@ -9,27 +9,59 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:gravity="center">
 
-    <Button
-        android:layout_width="150dp"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/date"
-        android:text="change date"
-        android:gravity="center"
-        android:paddingBottom="10dp"/>
+        android:orientation="horizontal">
 
-    <Button
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:text="change start"
-        android:gravity="center"
-        android:id="@+id/startTime"/>
+        <Button
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/dateButton"
+            android:text="change date"
+            android:gravity="center"
+            android:paddingBottom="10dp"/>
 
-    <Button
-        android:layout_width="150dp"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/datePicked"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="change end"
-        android:gravity="center"
-        android:id="@+id/endTime"/>
+        android:orientation="horizontal">
+        <Button
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="change start"
+            android:gravity="center"
+            android:id="@+id/startButton"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/startPicked"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="change end"
+            android:gravity="center"
+            android:id="@+id/endButton"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/endPicked"/>
+    </LinearLayout>
 
     <EditText
         android:layout_width="150dp"

@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -12,14 +13,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.stephan.squashapp.adapters.EditTrainingAdapter;
 import com.example.stephan.squashapp.helpers.CalenderPicker;
 import com.example.stephan.squashapp.helpers.FirebaseConnector;
 import com.example.stephan.squashapp.models.Training;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class AdminActivity extends AppCompatActivity implements FirebaseConnector.AsyncResponse,
         CalenderPicker.AsyncResponse{
@@ -27,17 +32,28 @@ public class AdminActivity extends AppCompatActivity implements FirebaseConnecto
     private EditTrainingAdapter myAdapter;
     private ProgressDialog progressDialog;
     private FirebaseConnector firebase = new FirebaseConnector();
+    private SwipeRefreshLayout refresh;
+    private CalenderPicker calendarPicker = new CalenderPicker(AdminActivity.this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin);
 
-        // Create listview.
+        // Get views.
         ListView listView = (ListView) findViewById(R.id.ListViewAdminTraining);
+        refresh = (SwipeRefreshLayout) findViewById(R.id.refreshContainerAdmin);
+
+        // Set adapter.
         myAdapter = new EditTrainingAdapter(this, new ArrayList<Training>());
         listView.setAdapter(myAdapter);
 
+        refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                updateDatabase();
+            }
+        });
         // Get trainings.
         updateDatabase();
 
@@ -46,7 +62,7 @@ public class AdminActivity extends AppCompatActivity implements FirebaseConnecto
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AddTraining();
+                calendarPicker.newTraining(AdminActivity.this);
             }
         });
 
@@ -77,11 +93,12 @@ public class AdminActivity extends AppCompatActivity implements FirebaseConnecto
     * Call class that will call firebase to get data
     */
     private void updateDatabase(){
+        refresh.setRefreshing(true);
+        TextView errorDisplay = (TextView) findViewById(R.id.errorGetTraingsAdmin);
+        errorDisplay.setVisibility(View.GONE);
+
         myAdapter.clear();
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Updating...");
-        progressDialog.show();
-        firebase.getTraingen(this);
+        firebase.getTraingen(this, errorDisplay);
     }
 
     /**
@@ -91,7 +108,7 @@ public class AdminActivity extends AppCompatActivity implements FirebaseConnecto
      */
     public void processFinish(ArrayList<Training> output){
         myAdapter.setTrainingList(output);
-        progressDialog.cancel();
+        refresh.setRefreshing(false);
     }
 
 
@@ -101,12 +118,50 @@ public class AdminActivity extends AppCompatActivity implements FirebaseConnecto
         final View layout = li.inflate(R.layout.add_training, null);
 
         // Remove items from layout.
-        Button changeDate = (Button) layout.findViewById(R.id.date);
-        Button changeStart = (Button) layout.findViewById(R.id.startTime);
-        Button changeEnd = (Button) layout.findViewById(R.id.endTime);
-        changeDate.setVisibility(View.GONE);
-        changeStart.setVisibility(View.GONE);
-        changeEnd.setVisibility(View.GONE);
+        Button dateButton = (Button) layout.findViewById(R.id.dateButton);
+        Button startButton = (Button) layout.findViewById(R.id.startButton);
+        Button endButton = (Button) layout.findViewById(R.id.endButton);
+
+        final TextView datePicked = (TextView) layout.findViewById(R.id.datePicked);
+        final TextView startPicked = (TextView) layout.findViewById(R.id.startPicked);
+        final TextView endPicked = (TextView) layout.findViewById(R.id.endPicked);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(date.get(0), date.get(1), date.get(2));
+        String dateFormatted =
+                new SimpleDateFormat("EEE, MMM d, ''yy", Locale.US).format(calendar.getTime());
+        String startFormatted =
+                String.valueOf(start.get(0)) + ":" +
+                        String.format( Locale.US, "%02d", start.get(1));
+        String endFormatted =
+                String.valueOf(end.get(0)) + ":" +
+                        String.format( Locale.US, "%02d", end.get(1));
+
+        datePicked.setText(dateFormatted);
+        startPicked.setText(startFormatted);
+        endPicked.setText(endFormatted);
+
+
+        dateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                calendarPicker.changeDate(date, datePicked);
+            }
+        });
+
+        startButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                calendarPicker.changeStart(start,startPicked);
+            }
+        });
+
+        endButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                calendarPicker.changeEnd(end, endPicked);
+            }
+        });
 
         // Find view.
         final EditText editTrainer = (EditText) layout.findViewById(R.id.trainer);
@@ -162,20 +217,21 @@ public class AdminActivity extends AppCompatActivity implements FirebaseConnecto
 
                 // Add training online.
                 firebase.updateSingleTraining(training, myAdapter.getAmountOfTrainings());
-                firebase.getTraingen(AdminActivity.this);
+                updateDatabase();
 
                 // Cancel dialog
                 alert11.cancel();
             }
         });
     }
-    /**
-     * Add training
-     *
-     * Update change to firebase
-     */
-    private void AddTraining(){
-        new CalenderPicker(this, this);
-
-    }
 }
+
+// Logo on startup
+// sortoor op datum, als voorbij is gooi weg
+// mega chat sorteer op datum
+// edittext schuift niet.
+// account moet gemaakt worden
+// contact moet gemaakt worden
+// change datum
+// mega chat max messages
+// Set user property for admin login

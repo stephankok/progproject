@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
     private FirebaseUser user;
     private TextView signInStatus;
     private Menu menu;
+    SwipeRefreshLayout refresh;
 
 
     @Override
@@ -55,11 +57,20 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
         ListView listview = (ListView) findViewById(R.id.ListViewTraining);
         mainInfo = (TextView) findViewById(R.id.mainInfo);
         signInStatus = (TextView) findViewById(R.id.signinstatus);
+        refresh = (SwipeRefreshLayout) findViewById(R.id.refreshContainer);
+        refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                updateDatabase();
+            }
+        });
 
         // Set adapter to listview.
         adapter = new UserTrainingAdapter(this, new ArrayList<Training>());
         listview.setAdapter(adapter);
 
+        // First time load database.
+        updateDatabase();
 
         // Update users and set an on change listener.
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -100,6 +111,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
                                         firebase.updateRegisteredPlayers(adapter.getItem(position),
                                                 position);
                                         adapter.notifyDataSetChanged();
+                                        Toast.makeText(MainActivity.this, "Canceled registration", Toast.LENGTH_SHORT).show();
                                     }
                                 })
                                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -123,6 +135,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
                                                 position);
                                         adapter.notifyDataSetChanged();
                                         dialog.cancel();
+                                        Toast.makeText(MainActivity.this, "Succesfully registered!", Toast.LENGTH_SHORT).show();
                                     }
                                 })
                                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -164,7 +177,6 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
     @Override
     protected void onResume() {
         super.onResume();
-        updateDatabase();
 
         if(menu != null) {
             menu.clear();
@@ -191,11 +203,11 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
      * Call class that will call firebase to get data
      */
     private void updateDatabase(){
+        refresh.setRefreshing(true);
+        TextView errorDisplay = (TextView) findViewById(R.id.errorGetTraingsMain);
+        errorDisplay.setVisibility(View.GONE);
         adapter.clear();
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Updating...");
-        progressDialog.show();
-        firebase.getTraingen(this);
+        firebase.getTraingen(this, errorDisplay);
     }
 
     /**
@@ -207,7 +219,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
         adapter.setTrainingList(output);
         Log.d("done", "done");
         adapter.notifyDataSetChanged();
-        progressDialog.cancel();
+        refresh.setRefreshing(false);
     }
 
     /**
@@ -242,10 +254,6 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
      */
     public boolean onOptionsItemSelected(MenuItem item){
         switch(item.getItemId()){
-            case R.id.menu_reload:
-                // Reload trainings.
-                updateDatabase();
-                break;
             case R.id.menu_admin:
                 // Open admin page.
                 adminMenu();

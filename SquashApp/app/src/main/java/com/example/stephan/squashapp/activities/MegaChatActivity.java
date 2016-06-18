@@ -2,7 +2,6 @@ package com.example.stephan.squashapp.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -29,11 +28,11 @@ import java.util.Locale;
 
 public class MegaChatActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Button sendMessageButton;
-    EditText messageEditText;
-    ChatAdapter adapter;
-    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference()
+    private Button sendMessageButton;
+    private EditText messageEditText;
+    private ChatAdapter adapter;
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference()
             .child("MessageBoard").child("MainBoard");
 
     @Override
@@ -81,7 +80,7 @@ public class MegaChatActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    public void addMessage(){
+    private void addMessage(){
         if(messageEditText.getText().toString().isEmpty()){
             messageEditText.setError("Required");
             return;
@@ -108,15 +107,16 @@ public class MegaChatActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    public void addMessage(MegaChatMessage message){
+    private void addMessage(MegaChatMessage message){
         rootRef.push().setValue(message);
     }
 
-    public void getMessages() {
+    private void getMessages() {
         rootRef.addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+                        adapter.clear();
                         for (DataSnapshot childSnapShot : dataSnapshot.getChildren()) {
                             // get the trainingen
                             MegaChatMessage message = childSnapShot.getValue(MegaChatMessage.class);
@@ -126,13 +126,12 @@ public class MegaChatActivity extends AppCompatActivity implements View.OnClickL
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-                        Log.v("database", "error");
-                        Log.v("getUser:onCancelled", databaseError.toString());
+                        Toast.makeText(MegaChatActivity.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
-    public void setNewMessageListener(){
+    private void setNewMessageListener(){
         rootRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {

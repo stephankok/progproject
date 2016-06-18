@@ -22,10 +22,22 @@
             android:text="@string/admin_info"
             style="@style/HeaderSize"/>
 
-        <ListView
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/ListViewAdminTraining"/>
+            android:visibility="gone"
+            android:id="@+id/errorGetTraingsAdmin"
+            style="@style/ErrorEditText"/>
+        <android.support.v4.widget.SwipeRefreshLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/refreshContainerAdmin"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/ListViewAdminTraining"/>
+        </android.support.v4.widget.SwipeRefreshLayout>
 
     </LinearLayout>
 

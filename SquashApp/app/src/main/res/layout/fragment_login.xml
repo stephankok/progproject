@@ -8,7 +8,7 @@
     android:gravity="center">
 
     <EditText
-        android:layout_width="150dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="Email"
         android:gravity="center"
@@ -16,7 +16,7 @@
         android:id="@+id/field_email"/>
 
     <EditText
-        android:layout_width="150dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="Password"
         android:gravity="center"
@@ -30,32 +30,23 @@
         android:textColor="@color/red_error"
         android:gravity="center"/>
 
-    <LinearLayout
+
+    <com.dd.processbutton.iml.ActionProcessButton
+        android:id="@+id/email_sign_in_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Remember me "/>
-
-        <com.dd.processbutton.iml.ActionProcessButton
-            android:id="@+id/email_sign_in_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="Sign in"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            custom:pb_colorComplete="@color/green_complete"
-            custom:pb_colorNormal="@color/blue_normal"
-            custom:pb_colorPressed="@color/blue_pressed"
-            custom:pb_colorProgress="@color/purple_progress"
-            custom:pb_textComplete="Success"
-            custom:pb_textProgress="Loading"
-            custom:pb_textError="Error"
-            custom:pb_colorError="@color/red_error" />
-    </LinearLayout>
+        android:layout_marginBottom="16dp"
+        android:text="Sign in"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        custom:pb_colorComplete="@color/green_complete"
+        custom:pb_colorNormal="@color/blue_normal"
+        custom:pb_colorPressed="@color/blue_pressed"
+        custom:pb_colorProgress="@color/purple_progress"
+        custom:pb_textComplete="Success"
+        custom:pb_textProgress="Loading"
+        custom:pb_textError="Error"
+        custom:pb_colorError="@color/red_error" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -66,7 +57,8 @@
             android:layout_height="wrap_content"
             android:onClick="goToRegisterFragment"
             android:layout_weight="1"
-            android:text="Register"
+            android:padding="10dp"
+            android:text="@string/register_left"
             android:gravity="center"
             android:textStyle="italic"/>
 
@@ -74,7 +66,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="goToForgetPasswordFragment"
-            android:text="Forgot password"
+            android:text="@string/forgot_password_right"
+            android:padding="10dp"
             android:gravity="center"
             android:textStyle="italic"
             android:layout_weight="1"/>

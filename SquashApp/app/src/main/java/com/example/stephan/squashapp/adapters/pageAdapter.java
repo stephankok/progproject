@@ -31,9 +31,9 @@ public class pageAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return LoginFragment.newInstance();
-            case 1:
                 return RegisterFragment.newInstance();
+            case 1:
+                return LoginFragment.newInstance();
             case 2:
                 return ForgotPasswordFragment.newInstance();
             default:
@@ -46,9 +46,9 @@ public class pageAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch (position){
             case 0:
-                return "Log in";
-            case 1:
                 return "Register";
+            case 1:
+                return "Sign in";
             case 2:
                 return "Forgot password";
             default:

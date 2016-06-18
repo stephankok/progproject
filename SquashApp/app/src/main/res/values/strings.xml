@@ -20,4 +20,8 @@
     <string name="menuAccount">Account</string>
     <string name="menuSignOut">Sign out</string>
     <string name="signIn">Sign in</string>
+    <string name="sign_in_left"><![CDATA[<< Sign in]]></string>
+    <string name="register_left"><![CDATA[<< Register]]></string>
+    <string name="forgot_password_right"><![CDATA[Forgot password >>]]></string>
+    <string name="sign_in_right"><![CDATA[Sign in >>]]></string>
 </resources>

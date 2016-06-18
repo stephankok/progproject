@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.stephan.squashapp.activities.R;
+import com.example.stephan.squashapp.helpers.CalenderPicker;
 import com.example.stephan.squashapp.helpers.FirebaseConnector;
 import com.example.stephan.squashapp.models.Training;
 
@@ -28,6 +29,7 @@ public class EditTrainingAdapter extends ArrayAdapter<Training>{
     private ArrayList<Training> trainingList;  // the items.
     private Context context;
     private FirebaseConnector firebase = new FirebaseConnector();
+    private CalenderPicker calendarPicker;
 
     /**
      * Initialize adapter
@@ -36,6 +38,7 @@ public class EditTrainingAdapter extends ArrayAdapter<Training>{
         super(context, R.layout.single_training, trainingList);
         this.context = context;
         this.trainingList = trainingList;
+        calendarPicker = new CalenderPicker(context);
     }
 
     /**
@@ -166,6 +169,10 @@ public class EditTrainingAdapter extends ArrayAdapter<Training>{
     }
 
     private View.OnLongClickListener onLongClickEditTraining(final int position){
+        // Get item.
+        final Training item = trainingList.get(position);
+
+        // Return
         return new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -174,16 +181,45 @@ public class EditTrainingAdapter extends ArrayAdapter<Training>{
                 final View layout = li.inflate(R.layout.add_training, null);
 
                 // get all items
-                final Button editDate = (Button) layout.findViewById(R.id.date);
-                final Button editStart = (Button) layout.findViewById(R.id.startTime);
-                final Button editEnd = (Button) layout.findViewById(R.id.endTime);
+                final Button dateButton = (Button) layout.findViewById(R.id.dateButton);
+                final Button startButton = (Button) layout.findViewById(R.id.startButton);
+                final Button endButton = (Button) layout.findViewById(R.id.endButton);
                 final EditText editTrainer = (EditText) layout.findViewById(R.id.trainer);
                 final EditText editInfo = (EditText) layout.findViewById(R.id.info);
                 final EditText editMax = (EditText) layout.findViewById(R.id.maxPlayers);
 
-                editInfo.setText(trainingList.get(position).getShortInfo());
-                editMax.setText(trainingList.get(position).getMaxPlayers().toString());
-                editTrainer.setText(trainingList.get(position).getTrainer());
+                final TextView datePicked = (TextView) layout.findViewById(R.id.datePicked);
+                final TextView startPicked = (TextView) layout.findViewById(R.id.startPicked);
+                final TextView endPicked = (TextView) layout.findViewById(R.id.endPicked);
+
+                datePicked.setText(item.getFormattedDate());
+                startPicked.setText(item.getFormattedStart());
+                endPicked.setText(item.getFormattedEnd());
+
+                dateButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        calendarPicker.changeDate(item.getDate(), datePicked);
+                    }
+                });
+
+                startButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        calendarPicker.changeStart(item.getStart(), startPicked);
+                    }
+                });
+
+                endButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        calendarPicker.changeEnd(item.getEnd(), endPicked);
+                    }
+                });
+
+                editInfo.setText(item.getShortInfo());
+                editMax.setText(item.getMaxPlayers().toString());
+                editTrainer.setText(item.getTrainer());
 
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
                 builder1.setTitle("Edit Training")
@@ -194,18 +230,12 @@ public class EditTrainingAdapter extends ArrayAdapter<Training>{
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
 
-                                        // item.changeDate(editDate.getText().toString());
-                                        // item.changeStart(editStart.getText().toString());
-                                        //  item.changeEnd(editEnd.getText().toString());
-                                        trainingList.get(position)
-                                                .changeShortInfo(editInfo.getText().toString());
-                                        trainingList.get(position)
-                                                .changeTrainer(editTrainer.getText().toString());
-                                        trainingList.get(position).changeMaxPlayers(
+                                        item.changeShortInfo(editInfo.getText().toString());
+                                        item.changeTrainer(editTrainer.getText().toString());
+                                        item.changeMaxPlayers(
                                                 Long.parseLong(editMax.getText().toString()));
 
-                                        firebase.updateSingleTraining(trainingList.get(position),
-                                                position);
+                                        firebase.updateSingleTraining(item,position);
 
                                         notifyDataSetChanged();
                                         dialog.cancel();

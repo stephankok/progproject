@@ -1,6 +1,7 @@
 package com.example.stephan.squashapp.helpers;
 
-import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 import com.example.stephan.squashapp.models.Training;
 import com.google.firebase.database.DataSnapshot;
@@ -34,14 +35,13 @@ public class FirebaseConnector {
         
     }
 
-    public void getTraingen(final AsyncResponse delegate) {
+    public void getTraingen(final AsyncResponse delegate, final TextView errorTextView) {
         // get data
-        final ArrayList<Training> newTrainingslist = new ArrayList<Training>();
+        final ArrayList<Training> newTrainingslist = new ArrayList<>();
         rootRef.child("trainingen").addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        Log.v("hello", "hoi");
                         for (DataSnapshot childSnapShot : dataSnapshot.getChildren()) {
                             // get the trainingen
                             Training newTraining = childSnapShot.getValue(Training.class);
@@ -53,8 +53,9 @@ public class FirebaseConnector {
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-                        Log.v("database", "error");
-                        Log.v("getUser:onCancelled", databaseError.toString());
+                        errorTextView.setText(databaseError.getMessage());
+                        errorTextView.setVisibility(View.VISIBLE);
+                        delegate.processFinish(newTrainingslist);
                     }
                 });
     }

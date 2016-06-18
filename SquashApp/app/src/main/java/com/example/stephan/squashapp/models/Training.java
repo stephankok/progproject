@@ -1,5 +1,7 @@
 package com.example.stephan.squashapp.models;
 
+import com.google.firebase.database.Exclude;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -108,6 +110,7 @@ public class Training {
         this.registeredPlayers.remove(id);
     }
 
+    @Exclude
     public String getFormattedDate(){
         Calendar calendar = Calendar.getInstance();
         calendar.set(date.get(0), date.get(1), date.get(2));
@@ -116,6 +119,7 @@ public class Training {
         return dateFormatted;
     }
 
+    @Exclude
     public String getFormattedStart(){
         String startFormatted =
                 String.valueOf(start.get(0)) + ":" +
@@ -123,6 +127,7 @@ public class Training {
         return startFormatted;
     }
 
+    @Exclude
     public String getFormattedEnd(){
         String endFormatted =
                 String.valueOf(end.get(0)) + ":" +

@@ -4,11 +4,14 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.widget.DatePicker;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Stephan on 8-6-2016.
@@ -34,17 +37,68 @@ public class CalenderPicker {
     /**
      * Initialize date picker
      */
-    public CalenderPicker(Context context, final AsyncResponse delegate){
-        // Initialize context.
+    public CalenderPicker(Context context){
+        calendar = Calendar.getInstance();
         this.context = context;
-        this.calendar = Calendar.getInstance();
-        this.delegate = delegate;
+    }
 
-        // Set listeners that will check if you have set the date.
-        setListeners();
+    public void changeDate(final List<Integer> date, final TextView datePicked){
 
-        // Call first DatePicker
-        callDatePicker();
+        DatePickerDialog datePickerDialog = new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                date.clear();
+                date.add(year);
+                date.add(monthOfYear);
+                date.add(dayOfMonth);
+
+                calendar.set(date.get(0), date.get(1), date.get(2));
+                String dateFormatted =
+                        new SimpleDateFormat("EEE, MMM d, ''yy", Locale.US).format(calendar.getTime());
+                datePicked.setText(dateFormatted);
+            }
+        }, date.get(0), date.get(1), date.get(2));
+
+        datePickerDialog.setMessage("Starting time");
+        datePickerDialog.show();
+    }
+
+    public void changeStart(final List<Integer> start, final TextView startPicked){
+
+        TimePickerDialog startTimePickerDialog =
+                new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        start.clear();
+                        start.add(hourOfDay);
+                        start.add(minute);
+                        String startFormatted =
+                                String.valueOf(hourOfDay) + ":" +
+                                        String.format( Locale.US, "%02d", minute);
+                        startPicked.setText(startFormatted);
+                    }
+                },start.get(0), start.get(1), true);
+        startTimePickerDialog.setMessage("Starting time");
+        startTimePickerDialog.show();
+    }
+
+    public void changeEnd(final List<Integer> end, final TextView endPicked){
+
+        TimePickerDialog startTimePickerDialog =
+                new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        end.clear();
+                        end.add(hourOfDay);
+                        end.add(minute);
+                        String startFormatted =
+                                String.valueOf(hourOfDay) + ":" +
+                                        String.format( Locale.US, "%02d", minute);
+                        endPicked.setText(startFormatted);
+                    }
+                },end.get(0), end.get(1), true);
+        startTimePickerDialog.setMessage("End time");
+        startTimePickerDialog.show();
     }
 
     /**
@@ -53,6 +107,22 @@ public class CalenderPicker {
      */
     public interface AsyncResponse{
         void newTrainingDateSelected(final List<Integer> date, final List<Integer> start, final List<Integer> end);
+    }
+
+    public void newTraining(final AsyncResponse delegate){
+        // Make sure they are empty
+        date.clear();
+        start.clear();
+        end.clear();
+
+        // Set response
+        this.delegate = delegate;
+
+        // Set listeners that will check if you have set the date.
+        setListeners();
+
+        // Call first DatePicker
+        callDatePicker();
     }
 
     /**

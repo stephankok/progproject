@@ -7,7 +7,7 @@
     android:gravity="center">
 
     <EditText
-        android:layout_width="150dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textEmailAddress"
         android:hint="@string/email_adress"
@@ -15,14 +15,14 @@
         android:id="@+id/emailEditText"/>
 
     <EditText
-        android:layout_width="150dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="@string/registrationName"
         android:gravity="center"
         android:id="@+id/usernameEditText"/>
 
     <EditText
-        android:layout_width="150dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="@string/password"
         android:gravity="center"
@@ -30,7 +30,7 @@
         android:id="@+id/passwordEditText"/>
 
     <EditText
-        android:layout_width="150dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="@string/password"
         android:inputType="textPassword"
@@ -66,7 +66,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="goToSignInFragment"
-        android:text="@string/signIn"
+        android:text="@string/sign_in_right"
+        android:padding="10dp"
         android:textStyle="italic"/>
 
 </LinearLayout>

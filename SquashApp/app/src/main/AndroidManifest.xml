@@ -26,8 +26,8 @@
         <activity android:name=".UserAccountActivity" />
         <activity
             android:name=".LoginActivity"
-            android:windowSoftInputMode="adjustResize"></activity>
-        <activity android:name=".MegaChatActivity"></activity>
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
+        <activity android:name=".MegaChatActivity"/>
     </application>
 
 </manifest>
