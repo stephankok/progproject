@@ -49,6 +49,26 @@ Log file
 - Calender verfijning
 
 **13 06 2016**
-- je moet nu ingelogd zijn om te registreren
+- je moet nu ingelogd zijn om te registreren voor trainingen
 - design veranderd, beter beveiligd ( users kunnen elkaar niet meer uitschrijven, inschrijfing zit gekoppeld aan unique user id)
 - registratie pagina, account pagina
+
+**14 06 2016**
+- Login screen is mooiegemaakt
+- Viewpager voor login gemaakt
+
+**15 06 2016**
+- Megachat geimplementeerd
+- Hier een ondatachanged listener op geplaatst zodat je live updates krijgt
+
+**16 06 2016**
+- Veel effecientie in code aangepast
+- User niet meer onodig checken, data te vaak ophalen enz.
+
+**17 06 2016**
+- Feedback geimplementeerd
+- Login pagina layout veranderd.
+- Sortering op datum
+
+**20 06 2016**
+- vandaag
