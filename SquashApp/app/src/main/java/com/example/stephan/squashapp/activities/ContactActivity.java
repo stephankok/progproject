@@ -4,6 +4,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+/**
+ * Show contact information of S.C.H.I.E.T. Squash
+ */
 public class ContactActivity extends AppCompatActivity {
 
     @Override
@@ -15,7 +18,6 @@ public class ContactActivity extends AppCompatActivity {
         if(getSupportActionBar() != null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-
     }
 
     /**

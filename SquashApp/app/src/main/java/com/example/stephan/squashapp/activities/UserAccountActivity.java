@@ -1,28 +1,37 @@
 package com.example.stephan.squashapp.activities;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
 public class UserAccountActivity extends AppCompatActivity implements View.OnClickListener{
 
-    TextView userDetails;
     Button emailButton;
     Button usernameButton;
     Button passwordButton;
     Button deleteAccountButton;
     Button signOutButton;
+    TextView currentUser;
+    TextView currentEmail;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private FirebaseAuth auth = FirebaseAuth.getInstance();
 
@@ -47,12 +56,14 @@ public class UserAccountActivity extends AppCompatActivity implements View.OnCli
             finish();
         }
 
-        // get buttons
+        // Get views.
         emailButton = (Button) findViewById(R.id.changeEmailButton);
         usernameButton = (Button) findViewById(R.id.changeUsernameButton);
         passwordButton = (Button) findViewById(R.id.changePasswordButton);
         deleteAccountButton = (Button) findViewById(R.id.deleteAccountButton);
         signOutButton = (Button) findViewById(R.id.signOutButton);
+        currentUser = (TextView) findViewById(R.id.currentUserName);
+        currentEmail = (TextView) findViewById(R.id.currentEmail);
 
         // set onClickListener
         emailButton.setOnClickListener(this);
@@ -62,10 +73,8 @@ public class UserAccountActivity extends AppCompatActivity implements View.OnCli
         signOutButton.setOnClickListener(this);
 
         // set details
-        userDetails = (TextView) findViewById(R.id.userDetails);
-        String userDetailsText = "Email: " + user.getEmail() +
-                "\nUsername: " +user.getDisplayName();
-        userDetails.setText(userDetailsText);
+        currentUser.setText(user.getDisplayName());
+        currentEmail.setText(user.getEmail());
 
         // add back button
         if (getSupportActionBar() != null) {
@@ -91,71 +100,19 @@ public class UserAccountActivity extends AppCompatActivity implements View.OnCli
     }
 
     @Override
-    public void onClick(View view){
+    public void onClick(View view) {
         switch (view.getId()) {
             case R.id.changeEmailButton:
-                user.updateEmail("user@example.com")
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    Toast.makeText(UserAccountActivity.this, "Succesfully changed email", Toast.LENGTH_SHORT).show();
-                                }
-                                else{
-                                    Toast.makeText(UserAccountActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
+                changeMail();
                 break;
             case R.id.changeUsernameButton:
-
-                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                        .setDisplayName("Jane Q. User")
-                        .build();
-
-                user.updateProfile(profileUpdates)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    Toast.makeText(UserAccountActivity.this, "Succesfully changed username", Toast.LENGTH_SHORT).show();
-                                }
-                                else{
-                                    Toast.makeText(UserAccountActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
+                changeUserName();
                 break;
             case R.id.changePasswordButton:
-                String newPassword = "test1234";
-                user.updatePassword(newPassword)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    Toast.makeText(UserAccountActivity.this, "Successfully changed password to test1234", Toast.LENGTH_SHORT).show();
-                                }
-                                else{
-                                    Toast.makeText(UserAccountActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-                Toast.makeText(UserAccountActivity.this, "Not implemented", Toast.LENGTH_SHORT).show();
+                changePassword();
                 break;
             case R.id.deleteAccountButton:
-                // ask password again
-                user.delete().addOnCompleteListener(this, new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()) {
-                            Toast.makeText(UserAccountActivity.this, "Successfully removed your account!", Toast.LENGTH_SHORT).show();
-                            finish();
-                        }
-                        else{
-                            Toast.makeText(UserAccountActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+                deleteAccount();
                 // make sure to cancel all subscibsions.
                 break;
             case R.id.signOutButton:
@@ -164,7 +121,288 @@ public class UserAccountActivity extends AppCompatActivity implements View.OnCli
                 finish();
                 break;
         }
+    }
+
+    /**
+     * Change email adress
+     */
+    private void changeMail(){
+
+        LayoutInflater li = LayoutInflater.from(this);
+        final View layout = li.inflate(R.layout.alertdialog_auth_change_setting, null);
+
+        final EditText password = (EditText) layout.findViewById(R.id.reAutenticate);
+        final EditText settingToChange = (EditText) layout.findViewById(R.id.settingToChange);
+        settingToChange.setHint(user.getEmail());
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setTitle("Change email adress")
+                .setView(layout)
+                .setPositiveButton("Change mail", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                        return;
+                    }
+                });
+
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                AuthCredential credential = EmailAuthProvider
+                        .getCredential(user.getEmail(), password.getText().toString());
+
+                // Prompt the user to re-provide their sign-in credentials
+                user.reauthenticate(credential)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    final String email = settingToChange.getText().toString();
+
+                                    if (TextUtils.isEmpty(email)) {
+                                        settingToChange.setError("Required.");
+                                        return;
+                                    } else if (!email.contains("@")) {
+                                        settingToChange.setError("It must be a valid email adress.");
+                                        return;
+                                    } else {
+                                        settingToChange.setError(null);
+                                    }
+
+                                    user.updateEmail(email)
+                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(UserAccountActivity.this, "Succesfully changed email", Toast.LENGTH_SHORT).show();
+                                                        currentEmail.setText(email);
+                                                        dialog.cancel();
+                                                    } else {
+                                                        settingToChange.setError(task.getException().getMessage());
+                                                    }
+                                                }
+                                            });
+
+                                } else {
+                                    password.setError(task.getException().getMessage());
+                                }
+                            }
+                        });
+            }
+        });
+    }
+
+    private void changeUserName(){
+        final EditText userNameText = new EditText(this);
+        userNameText.setHint(user.getDisplayName());
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setTitle("Change username")
+                .setView(userNameText)
+                .setPositiveButton("Change username", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // empty will come after show.
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                        return;
+                    }
+                });
+
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                final String userName = userNameText.getText().toString();
+
+                if(TextUtils.isEmpty(userName)){
+                    userNameText.setError("Required.");
+                    return;
+                }
 
 
+                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                        .setDisplayName(userName)
+                        .build();
+
+                user.updateProfile(profileUpdates)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(UserAccountActivity.this, "Successfully changed username", Toast.LENGTH_SHORT).show();
+                                    currentUser.setText(userName);
+                                    dialog.cancel();
+                                }
+                                else{
+                                    userNameText.setError(task.getException().getMessage());
+                                }
+                            }
+                        });
+            }
+        });
+    }
+
+    private void changePassword(){
+        LayoutInflater li = LayoutInflater.from(this);
+        final View layout = li.inflate(R.layout.alertdialog_auth_change_setting, null);
+
+        final EditText Oldpassword = (EditText) layout.findViewById(R.id.reAutenticate);
+        final EditText settingToChange = (EditText) layout.findViewById(R.id.settingToChange);
+        final EditText secondSetting = (EditText) layout.findViewById(R.id.secondSettingToChange);
+        settingToChange.setHint("New password");
+        settingToChange.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        secondSetting.setHint("Confirm password");
+        secondSetting.setVisibility(View.VISIBLE);
+        secondSetting.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setTitle("Change password")
+                .setView(layout)
+                .setPositiveButton("Change password", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                        return;
+                    }
+                });
+
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                AuthCredential credential = EmailAuthProvider
+                        .getCredential(user.getEmail(), Oldpassword.getText().toString());
+
+                // Prompt the user to re-provide their sign-in credentials
+                user.reauthenticate(credential)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    final String password = settingToChange.getText().toString();
+                                    final String confirm = secondSetting.getText().toString();
+
+                                    if (TextUtils.isEmpty(password)) {
+                                        settingToChange.setError("Required.");
+                                        return;
+                                    }
+                                    else if(password.length() < 6){
+                                        settingToChange.setError("Minimal 6 characters.");
+                                        return;
+                                    }
+                                    else {
+                                        settingToChange.setError(null);
+                                    }
+
+                                    if(confirm.compareTo(password) != 0){
+                                        secondSetting.setError("Passwords dont match");
+                                        return;
+                                    }
+                                    else{
+                                        secondSetting.setError(null);
+                                    }
+
+                                    user.updatePassword(password)
+                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(UserAccountActivity.this, "Succesfully changed password", Toast.LENGTH_SHORT).show();
+                                                        dialog.cancel();
+                                                    } else {
+                                                        settingToChange.setError(task.getException().getMessage());
+                                                    }
+                                                }
+                                            });
+
+                                } else {
+                                    Oldpassword.setError(task.getException().getMessage());
+                                }
+                            }
+                        });
+            }
+        });
+    }
+
+    private void deleteAccount(){
+        final EditText Oldpassword = new EditText(this);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setTitle("Change password")
+                .setView(Oldpassword)
+                .setPositiveButton("Change password", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                        return;
+                    }
+                });
+
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                AuthCredential credential = EmailAuthProvider
+                        .getCredential(user.getEmail(), Oldpassword.getText().toString());
+
+                // Prompt the user to re-provide their sign-in credentials
+                user.reauthenticate(credential)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    user.delete().addOnCompleteListener(UserAccountActivity.this, new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                Toast.makeText(UserAccountActivity.this, "Successfully removed your account!", Toast.LENGTH_SHORT).show();
+                                                dialog.cancel();
+                                                finish();
+                                            } else {
+                                                Toast.makeText(UserAccountActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });
+
+                                } else {
+                                    Oldpassword.setError(task.getException().getMessage());
+                                }
+                            }
+                        });
+            }
+        });
     }
 }

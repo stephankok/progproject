@@ -13,8 +13,7 @@ import com.example.stephan.squashapp.models.Training;
 import java.util.ArrayList;
 
 /**
- * Created by Stephan on 1-6-2016.
- *
+ * Show to available trainings.
  */
 
 public class UserTrainingAdapter extends ArrayAdapter<Training> {
@@ -27,7 +26,6 @@ public class UserTrainingAdapter extends ArrayAdapter<Training> {
      */
     public UserTrainingAdapter(Context context, ArrayList<Training> trainingList) {
         super(context, R.layout.single_training, trainingList);
-
         this.context = context;
         this.trainingList = trainingList;
     }
@@ -57,24 +55,26 @@ public class UserTrainingAdapter extends ArrayAdapter<Training> {
         final TextView info = (TextView) view.findViewById(R.id.info);
         final TextView time = (TextView) view.findViewById(R.id.time);
         final TextView trainer = (TextView) view.findViewById(R.id.trainer);
-        final TextView cp = (TextView) view.findViewById(R.id.currentPlayers);
-        final TextView mp = (TextView) view.findViewById(R.id.maxPlayers);
+        final TextView currentPlayers = (TextView) view.findViewById(R.id.currentPlayers);
+        final TextView maxPlayers = (TextView) view.findViewById(R.id.maxPlayers);
 
-        // The training
-        final Training item = trainingList.get(position);
+        // get Training
+        Training item = trainingList.get(position);
+
+        // get information
+        String timeText =  item.getFormattedStart() + " until " + item.getFormattedEnd();
+        String currentPlayerText = "Registered: " + item.getCurrentPlayers();
+        String maxPlayersText = "Max players: " + item.getMaxPlayers();
+        String trainerText = "By: " + item.getTrainer();
 
         // Set text.
         date.setText(item.getFormattedDate());
         info.setText(item.getShortInfo());
-        String timeText =  item.getFormattedStart() + " until " + item.getFormattedEnd();
         time.setText(timeText);
-        cp.setText("Registered: " + item.getCurrentPlayers());
-        mp.setText("Max players: " + item.getMaxPlayers());
-        trainer.setText("By: " + item.getTrainer());
+        currentPlayers.setText(currentPlayerText);
+        maxPlayers.setText(maxPlayersText);
+        trainer.setText(trainerText);
 
         return view;
     }
-
 }
-
-// ContextMenu?

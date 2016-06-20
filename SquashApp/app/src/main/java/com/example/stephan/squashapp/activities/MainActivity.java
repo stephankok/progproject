@@ -1,7 +1,6 @@
 package com.example.stephan.squashapp.activities;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -38,8 +37,7 @@ import java.util.ArrayList;
  */
 public class MainActivity extends AppCompatActivity implements FirebaseConnector.AsyncResponse {
 
-    private ProgressDialog progressDialog;              // Wait for data
-    private UserTrainingAdapter adapter;                // show trainings
+    private UserTrainingAdapter adapter;
     private TextView mainInfo;
     private FirebaseConnector firebase = new FirebaseConnector();
     private FirebaseUser user;
@@ -80,20 +78,6 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
                 user = firebaseAuth.getCurrentUser();
             }
         });
-
-//  user reload
-// user.reload().addOnCompleteListener(this, new OnCompleteListener<Void>() {
-//            @Override
-//            public void onComplete(@NonNull Task<Void> task) {
-//                Log.d("reloadtask", "done");
-//                if(!task.isSuccessful()){
-//                    Toast.makeText(MainActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-//                    Log.d("reloadtask", task.getException().getMessage());
-//                    return;
-//                }
-//                Log.d("reloadtask", "succes");
-//            }
-//        });
 
         // Register and deregister.
         listview.setOnItemClickListener(onItemClickListener());
@@ -192,15 +176,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
     protected void onResume() {
         super.onResume();
 
-        // user reload
-//        user.reload().addOnCompleteListener(this, new OnCompleteListener<Void>() {
-//            @Override
-//            public void onComplete(@NonNull Task<Void> task) {
-//                if(!task.isSuccessful()){
-//                    Toast.makeText(MainActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
+        user.reload();
 
         if(menu != null) {
             menu.clear();
@@ -213,7 +189,8 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
 
 
         if(user != null && user.getDisplayName() != null ){
-            signInStatus.setText("Welcome " + user.getDisplayName());
+            String welcomeUser = "Welcome " + user.getDisplayName();
+            signInStatus.setText(welcomeUser);
             signInStatus.setVisibility(View.VISIBLE);
             mainInfo.setVisibility(View.GONE);
         }
@@ -231,7 +208,9 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
             refresh.setRefreshing(true);
         }
         TextView errorDisplay = (TextView) findViewById(R.id.errorGetTraingsMain);
-        errorDisplay.setVisibility(View.GONE);
+        if (errorDisplay != null) {
+            errorDisplay.setVisibility(View.GONE);
+        }
         adapter.clear();
         firebase.getTraingen(this, errorDisplay);
     }
@@ -286,7 +265,6 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
                 break;
             case R.id.menu_contact:
                 // Open contact page.
-                Toast.makeText(MainActivity.this, "Contact", Toast.LENGTH_SHORT).show();
                 Intent newContactWindow = new Intent(this, ContactActivity.class);
                 startActivity(newContactWindow);
                 break;
