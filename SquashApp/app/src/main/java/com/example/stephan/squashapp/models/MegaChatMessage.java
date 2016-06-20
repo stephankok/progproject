@@ -7,12 +7,12 @@ public class MegaChatMessage {
 
     String userName;
     String message;
-    String timeStamp;
+    Long timeStamp;
 
     public MegaChatMessage(){
     }
 
-    public void setValues(String userName, String message, String timeStamp){
+    public void setValues(String userName, String message, Long timeStamp){
         this.userName = userName;
         this.message = message;
         this.timeStamp = timeStamp;
@@ -22,11 +22,11 @@ public class MegaChatMessage {
         return this.message;
     }
 
-    public String getUser(){
+    public String getUserName(){
         return this.userName;
     }
 
-    public String getDate(){
+    public Long getTimeStamp(){
         return this.timeStamp;
     }
 }

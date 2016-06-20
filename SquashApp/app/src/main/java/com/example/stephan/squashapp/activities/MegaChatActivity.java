@@ -20,11 +20,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
 public class MegaChatActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -87,10 +84,10 @@ public class MegaChatActivity extends AppCompatActivity implements View.OnClickL
         }
 
         MegaChatMessage message = new MegaChatMessage();
-        Date time = Calendar.getInstance().getTime();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.US);
-        String timeFormatted = format.format(time);
-        message.setValues(user.getDisplayName(), messageEditText.getText().toString(), timeFormatted);
+
+        Long timeStamp = Calendar.getInstance().getTimeInMillis();
+        message.setValues(user.getDisplayName(), messageEditText.getText().toString(), timeStamp);
+
         addMessage(message);
 
         messageEditText.setText("");

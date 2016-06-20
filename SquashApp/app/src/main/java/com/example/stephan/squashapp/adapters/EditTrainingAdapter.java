@@ -106,8 +106,8 @@ public class EditTrainingAdapter extends ArrayAdapter<Training>{
     /**
      * Return tne size of trainingList.
      */
-    public Integer getAmountOfTrainings(){
-        return this.trainingList.size();
+    public ArrayList<Training> getAll(){
+        return this.trainingList;
     }
 
     private View.OnClickListener deleteButtonClicked(final int position){
@@ -122,7 +122,7 @@ public class EditTrainingAdapter extends ArrayAdapter<Training>{
                             case DialogInterface.BUTTON_POSITIVE:
                                 //Yes button clicked
                                 trainingList.remove(position);
-                                firebase.updateAllTrainingen(trainingList);
+                                firebase.updateAllTrainings(trainingList);
                                 notifyDataSetChanged();
                                 break;
 
@@ -235,7 +235,7 @@ public class EditTrainingAdapter extends ArrayAdapter<Training>{
                                         item.changeMaxPlayers(
                                                 Long.parseLong(editMax.getText().toString()));
 
-                                        firebase.updateSingleTraining(item,position);
+                                        firebase.updateAllTrainings(trainingList);
 
                                         notifyDataSetChanged();
                                         dialog.cancel();

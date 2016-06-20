@@ -81,6 +81,20 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
             }
         });
 
+//  user reload
+// user.reload().addOnCompleteListener(this, new OnCompleteListener<Void>() {
+//            @Override
+//            public void onComplete(@NonNull Task<Void> task) {
+//                Log.d("reloadtask", "done");
+//                if(!task.isSuccessful()){
+//                    Toast.makeText(MainActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+//                    Log.d("reloadtask", task.getException().getMessage());
+//                    return;
+//                }
+//                Log.d("reloadtask", "succes");
+//            }
+//        });
+
         // Register and deregister.
         listview.setOnItemClickListener(onItemClickListener());
     }
@@ -178,6 +192,16 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
     protected void onResume() {
         super.onResume();
 
+        // user reload
+//        user.reload().addOnCompleteListener(this, new OnCompleteListener<Void>() {
+//            @Override
+//            public void onComplete(@NonNull Task<Void> task) {
+//                if(!task.isSuccessful()){
+//                    Toast.makeText(MainActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        });
+
         if(menu != null) {
             menu.clear();
             if (user != null) {
@@ -203,7 +227,9 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
      * Call class that will call firebase to get data
      */
     private void updateDatabase(){
-        refresh.setRefreshing(true);
+        if(!refresh.isRefreshing()) {
+            refresh.setRefreshing(true);
+        }
         TextView errorDisplay = (TextView) findViewById(R.id.errorGetTraingsMain);
         errorDisplay.setVisibility(View.GONE);
         adapter.clear();

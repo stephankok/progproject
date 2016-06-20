@@ -216,7 +216,7 @@ public class AdminActivity extends AppCompatActivity implements FirebaseConnecto
                 training.newTraining(trainer, date, info, start, end, max);
 
                 // Add training online.
-                firebase.updateSingleTraining(training, myAdapter.getAmountOfTrainings());
+                firebase.updateAllTrainings(myAdapter.getAll());
                 updateDatabase();
 
                 // Cancel dialog
@@ -226,12 +226,10 @@ public class AdminActivity extends AppCompatActivity implements FirebaseConnecto
     }
 }
 
-// Logo on startup
-// sortoor op datum, als voorbij is gooi weg
-// mega chat sorteer op datum
-// edittext schuift niet.
+// Logo on startup, Lelijk vraag jaap
+// sortoor op datum (done), als voorbij is gooi weg archiev
+// mega chat sorteer op datum, gaat veel rekenpower kosten?
 // account moet gemaakt worden
 // contact moet gemaakt worden
-// change datum
 // mega chat max messages
 // Set user property for admin login

@@ -10,7 +10,11 @@ import android.widget.TextView;
 import com.example.stephan.squashapp.activities.R;
 import com.example.stephan.squashapp.models.MegaChatMessage;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by Stephan on 1-6-2016.
@@ -52,8 +56,14 @@ public class ChatAdapter extends ArrayAdapter<MegaChatMessage> {
 
         MegaChatMessage message = messages.get(position);
 
+        // Time
+        Date time = Calendar.getInstance().getTime();
+        time.setTime(message.getTimeStamp());
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.US);
+        String messageInfo = message.getUserName() + "\n" + format.format(time);
+
         messageShow.setText(message.getMessage());
-        userOfMessage.setText(message.getUser() + "\n" + message.getDate());
+        userOfMessage.setText(messageInfo);
 
 
         return view;

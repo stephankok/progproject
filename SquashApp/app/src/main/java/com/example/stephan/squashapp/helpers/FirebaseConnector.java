@@ -11,6 +11,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Created by Stephan on 6-6-2016.
@@ -69,15 +71,23 @@ public class FirebaseConnector {
 
     }
 
-    public void updateAllTrainingen(ArrayList<Training> trainingList){
+    public void updateAllTrainings(ArrayList<Training> trainingList){
+        sortList(trainingList);
         rootRef.child("trainingen").setValue(trainingList);
     }
 
-    /**
-     * Add training to database
-     */
-    public void updateSingleTraining(Training training, int pos){
-        rootRef.child("trainingen").child(String.valueOf(pos)).setValue(training);
+    private void sortList(ArrayList<Training> trainingArrayList){
+        Collections.sort(trainingArrayList, new Comparator<Training>() {
+            @Override
+            public int compare(Training lhs, Training rhs) {
+                for(int i = 0; i < 3; i++){
+                    if(!lhs.getDate().get(i).equals(rhs.getDate().get(i))){
+                        return lhs.getDate().get(i) - rhs.getDate().get(i);
+                    }
+                }
+                return 0;
+            }
+        });
     }
 
 }
