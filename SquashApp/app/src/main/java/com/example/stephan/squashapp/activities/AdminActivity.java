@@ -1,12 +1,12 @@
 package com.example.stephan.squashapp.activities;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,14 +23,13 @@ import com.example.stephan.squashapp.models.Training;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 
 public class AdminActivity extends AppCompatActivity implements FirebaseConnector.AsyncResponse,
         CalenderPicker.AsyncResponse{
 
+    private TextView errorGetTraingsAdmin;
     private EditTrainingAdapter myAdapter;
-    private ProgressDialog progressDialog;
     private FirebaseConnector firebase = new FirebaseConnector();
     private SwipeRefreshLayout refresh;
     private CalenderPicker calendarPicker = new CalenderPicker(AdminActivity.this);
@@ -43,6 +42,7 @@ public class AdminActivity extends AppCompatActivity implements FirebaseConnecto
         // Get views.
         ListView listView = (ListView) findViewById(R.id.ListViewAdminTraining);
         refresh = (SwipeRefreshLayout) findViewById(R.id.refreshContainerAdmin);
+        errorGetTraingsAdmin = (TextView) findViewById(R.id.errorGetTraingsAdmin);
 
         // Set adapter.
         myAdapter = new EditTrainingAdapter(this, new ArrayList<Training>());
@@ -112,10 +112,11 @@ public class AdminActivity extends AppCompatActivity implements FirebaseConnecto
     }
 
 
-    public void newTrainingDateSelected(final List<Integer> date, final List<Integer> start, final List<Integer> end){
+    public void newTrainingDateSelected(final Calendar date, final Calendar end){
+        final Training training = new Training();
+
         // make layout
-        LayoutInflater li = LayoutInflater.from(this);
-        final View layout = li.inflate(R.layout.add_training, null);
+        final View layout = LayoutInflater.from(this).inflate(R.layout.alertdialog_add_training, null);
 
         // Remove items from layout.
         Button dateButton = (Button) layout.findViewById(R.id.dateButton);
@@ -126,16 +127,14 @@ public class AdminActivity extends AppCompatActivity implements FirebaseConnecto
         final TextView startPicked = (TextView) layout.findViewById(R.id.startPicked);
         final TextView endPicked = (TextView) layout.findViewById(R.id.endPicked);
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(date.get(0), date.get(1), date.get(2));
         String dateFormatted =
-                new SimpleDateFormat("EEE, MMM d, ''yy", Locale.US).format(calendar.getTime());
+                new SimpleDateFormat("EEE, MMM d, ''yy", Locale.US).format(date.getTime());
         String startFormatted =
-                String.valueOf(start.get(0)) + ":" +
-                        String.format( Locale.US, "%02d", start.get(1));
+                String.valueOf(date.get(Calendar.HOUR_OF_DAY)) + ":" +
+                        String.format( Locale.US, "%02d", date.get(Calendar.MINUTE));
         String endFormatted =
-                String.valueOf(end.get(0)) + ":" +
-                        String.format( Locale.US, "%02d", end.get(1));
+                String.valueOf(end.get(Calendar.HOUR_OF_DAY)) + ":" +
+                        String.format( Locale.US, "%02d", end.get(Calendar.MINUTE));
 
         datePicked.setText(dateFormatted);
         startPicked.setText(startFormatted);
@@ -145,21 +144,21 @@ public class AdminActivity extends AppCompatActivity implements FirebaseConnecto
         dateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                calendarPicker.changeDate(date, datePicked);
+                calendarPicker.changeDate(training, datePicked);
             }
         });
 
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                calendarPicker.changeStart(start,startPicked);
+                calendarPicker.changeStart(training,startPicked);
             }
         });
 
         endButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                calendarPicker.changeEnd(end, endPicked);
+                calendarPicker.changeEnd(training, endPicked);
             }
         });
 
@@ -212,11 +211,12 @@ public class AdminActivity extends AppCompatActivity implements FirebaseConnecto
                 String trainer = editTrainer.getText().toString();
                 Long max = Long.parseLong(editMax.getText().toString());
 
-                Training training = new Training();
-                training.newTraining(trainer, date, info, start, end, max);
+                training.newTraining(trainer, date.getTimeInMillis(), info, end.getTimeInMillis(), max);
+                myAdapter.add(training);
 
                 // Add training online.
-                firebase.updateAllTrainings(myAdapter.getAll());
+                Log.d("update", "call");
+                firebase.updateAllTrainings(myAdapter.getAll(), errorGetTraingsAdmin);
                 updateDatabase();
 
                 // Cancel dialog
@@ -225,11 +225,3 @@ public class AdminActivity extends AppCompatActivity implements FirebaseConnecto
         });
     }
 }
-
-// Logo on startup, Lelijk vraag jaap
-// sortoor op datum (done), als voorbij is gooi weg archiev
-// mega chat sorteer op datum, gaat veel rekenpower kosten?
-// account moet gemaakt worden
-// contact moet gemaakt worden
-// mega chat max messages
-// Set user property for admin login

@@ -1,8 +1,12 @@
 package com.example.stephan.squashapp.activities;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -14,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -50,6 +55,17 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ConnectivityManager cm =
+                (ConnectivityManager)  getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+
+        if(!isConnected){
+            Toast.makeText(MainActivity.this, "You have no internet Connection",
+                    Toast.LENGTH_SHORT).show();
+        }
 
         // Get views.
         ListView listview = (ListView) findViewById(R.id.ListViewTraining);
@@ -176,7 +192,9 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
     protected void onResume() {
         super.onResume();
 
-        user.reload();
+        if(user != null){
+            user.reload();
+        }
 
         if(menu != null) {
             menu.clear();
@@ -205,7 +223,12 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
      */
     private void updateDatabase(){
         if(!refresh.isRefreshing()) {
-            refresh.setRefreshing(true);
+            refresh.post(new Runnable() {
+                @Override
+                public void run() {
+                    refresh.setRefreshing(true);
+                }
+            });
         }
         TextView errorDisplay = (TextView) findViewById(R.id.errorGetTraingsMain);
         if (errorDisplay != null) {
@@ -280,9 +303,25 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
                 break;
             case R.id.menu_sign_out:
                 // Sign user out.
-                FirebaseAuth.getInstance().signOut();
-                signOutMenu(menu);
-                Toast.makeText(MainActivity.this, "Signed out", Toast.LENGTH_SHORT).show();
+                new AlertDialog.Builder(this).setTitle("Log out")
+                        .setMessage("Are you sure you want to log out?")
+                        .setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                FirebaseAuth.getInstance().signOut();
+                                signOutMenu(menu);
+                                Toast.makeText(MainActivity.this, "Signed out", Toast.LENGTH_SHORT).show();
+                                dialog.cancel();
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        })
+                        .show();
+                break;
             case R.id.menu_mega_chat:
                 // Open mega chat page.
                 Intent megaChat = new Intent(MainActivity.this, MegaChatActivity.class);
@@ -300,11 +339,21 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
     public void adminMenu() {
         // Check if user really is logged in.
         if (user != null) {
+
+            SharedPreferences sp1 = this.getSharedPreferences("Login", 0);
+
+            String unm=sp1.getString("Unm", null);
+            String pass = sp1.getString("Psw", null);
+
             // make layout
             LayoutInflater li = LayoutInflater.from(this);
             View layout = li.inflate(R.layout.alertdialog_open_admin, null);
             final EditText username = (EditText) layout.findViewById(R.id.username);
             final EditText password = (EditText) layout.findViewById(R.id.password);
+            final CheckBox rememberMe = (CheckBox) layout.findViewById(R.id.rememberMe);
+            username.setText(unm);
+            password.setText(pass);
+
 
             // create alertdialog
             AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
@@ -316,6 +365,22 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
                             "Login",
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
+
+                                    if(rememberMe.isChecked()){
+                                        SharedPreferences sp=getSharedPreferences("Login", 0);
+                                        SharedPreferences.Editor Ed=sp.edit();
+                                        Ed.putString("Unm",username.getText().toString());
+                                        Ed.putString("Psw",password.getText().toString());
+                                        Ed.apply();
+                                    }
+                                    else{
+                                        SharedPreferences sp=getSharedPreferences("Login", 0);
+                                        SharedPreferences.Editor Ed=sp.edit();
+                                        Ed.putString("Unm",null);
+                                        Ed.putString("Psw",null);
+                                        Ed.apply();
+                                    }
+
                                     if (username.getText().toString().compareTo("admin") == 0 &&
                                             password.getText().toString().compareTo("admin") == 0) {
                                         Toast.makeText(
@@ -360,3 +425,15 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
         }
     }
 }
+// Logo on startup, Lelijk vraag jaap
+
+// Check internet
+
+// no offline login
+
+// admin adapter onclick // UI of adapter
+
+// login device 1
+// login device 2 -> delete account -> what will happen
+
+// register for deleted event?

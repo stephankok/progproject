@@ -10,57 +10,58 @@
     android:gravity="center">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/datePicked"/>
 
         <Button
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:id="@+id/dateButton"
             android:text="change date"
-            android:gravity="center"
             android:paddingBottom="10dp"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/datePicked"/>
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/startPicked"/>
+
         <Button
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:text="change start"
-            android:gravity="center"
             android:id="@+id/startButton"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/startPicked"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            android:layout_weight="1"
+            android:id="@+id/endPicked"/>
 
         <Button
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:text="change end"
-            android:gravity="center"
             android:id="@+id/endButton"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/endPicked"/>
     </LinearLayout>
 
     <EditText

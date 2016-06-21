@@ -7,10 +7,10 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.example.stephan.squashapp.models.Training;
+
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 
 /**
@@ -30,9 +30,8 @@ public class CalenderPicker {
     private TimePickerDialog.OnTimeSetListener endTimeListener;
 
     // Items to give back.
-    private List<Integer> date = new ArrayList<>();
-    private List<Integer> start= new ArrayList<>();
-    private List<Integer> end= new ArrayList<>();
+    private Calendar date = Calendar.getInstance();
+    private Calendar end = Calendar.getInstance();
 
     /**
      * Initialize date picker
@@ -42,79 +41,76 @@ public class CalenderPicker {
         this.context = context;
     }
 
-    public void changeDate(final List<Integer> date, final TextView datePicked){
-
-        DatePickerDialog datePickerDialog = new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                date.clear();
-                date.add(year);
-                date.add(monthOfYear);
-                date.add(dayOfMonth);
-
-                calendar.set(date.get(0), date.get(1), date.get(2));
-                String dateFormatted =
-                        new SimpleDateFormat("EEE, MMM d, ''yy", Locale.US).format(calendar.getTime());
-                datePicked.setText(dateFormatted);
-            }
-        }, date.get(0), date.get(1), date.get(2));
-
-        datePickerDialog.setMessage("Starting time");
-        datePickerDialog.show();
-    }
-
-    public void changeStart(final List<Integer> start, final TextView startPicked){
-
-        TimePickerDialog startTimePickerDialog =
-                new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        start.clear();
-                        start.add(hourOfDay);
-                        start.add(minute);
-                        String startFormatted =
-                                String.valueOf(hourOfDay) + ":" +
-                                        String.format( Locale.US, "%02d", minute);
-                        startPicked.setText(startFormatted);
-                    }
-                },start.get(0), start.get(1), true);
-        startTimePickerDialog.setMessage("Starting time");
-        startTimePickerDialog.show();
-    }
-
-    public void changeEnd(final List<Integer> end, final TextView endPicked){
-
-        TimePickerDialog startTimePickerDialog =
-                new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        end.clear();
-                        end.add(hourOfDay);
-                        end.add(minute);
-                        String startFormatted =
-                                String.valueOf(hourOfDay) + ":" +
-                                        String.format( Locale.US, "%02d", minute);
-                        endPicked.setText(startFormatted);
-                    }
-                },end.get(0), end.get(1), true);
-        startTimePickerDialog.setMessage("End time");
-        startTimePickerDialog.show();
-    }
-
     /**
      * Function in the activity to give the information.
      * ! So these functions must be present!
      */
     public interface AsyncResponse{
-        void newTrainingDateSelected(final List<Integer> date, final List<Integer> start, final List<Integer> end);
+        void newTrainingDateSelected(final Calendar date, final Calendar end);
+    }
+
+    public void changeDate(final Training training, final TextView datePicked){
+        date.setTimeInMillis(training.getDate());
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                date.set(year, monthOfYear, dayOfMonth);
+                String dateFormatted =
+                        new SimpleDateFormat("EEE, MMM d, ''yy", Locale.US).format(date.getTime());
+
+                training.changeDate(date.getTimeInMillis());
+                datePicked.setText(dateFormatted);
+            }
+        },date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH));
+
+        datePickerDialog.setMessage("Starting time");
+        datePickerDialog.show();
+    }
+
+    public void changeStart(final Training training, final TextView startPicked){
+        date.setTimeInMillis(training.getDate());
+
+        TimePickerDialog startTimePickerDialog =
+                new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        date.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                        date.set(Calendar.MINUTE, minute);
+                        String startFormatted =
+                                String.valueOf(hourOfDay) + ":" +
+                                        String.format( Locale.US, "%02d", minute);
+
+                        training.changeDate(date.getTimeInMillis());
+                        startPicked.setText(startFormatted);
+                    }
+                },date.get(Calendar.HOUR_OF_DAY), date.get(Calendar.MINUTE), true);
+        startTimePickerDialog.setMessage("Starting time");
+        startTimePickerDialog.show();
+    }
+
+    public void changeEnd(final Training training, final TextView endPicked){
+        end.setTimeInMillis(training.getEnd());
+
+        TimePickerDialog startTimePickerDialog =
+                new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        end.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                        end.set(Calendar.MINUTE, minute);
+                        String startFormatted =
+                                String.valueOf(hourOfDay) + ":" +
+                                        String.format( Locale.US, "%02d", minute);
+
+                        training.changeEnd(end.getTimeInMillis());
+                        endPicked.setText(startFormatted);
+                    }
+                },end.get(Calendar.HOUR_OF_DAY), end.get(Calendar.MINUTE), true);
+        startTimePickerDialog.setMessage("End time");
+        startTimePickerDialog.show();
     }
 
     public void newTraining(final AsyncResponse delegate){
-        // Make sure they are empty
-        date.clear();
-        start.clear();
-        end.clear();
-
         // Set response
         this.delegate = delegate;
 
@@ -163,13 +159,13 @@ public class CalenderPicker {
      * Set listeners to Date- and Time- PickerDialog
      */
     private void setListeners(){
+        // Date.
         dateListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 // add values
-                date.add(year);
-                date.add(monthOfYear);
-                date.add(dayOfMonth);
+
+                date.set(year, monthOfYear, dayOfMonth);
 
                 // now call start time.
                 callStartTimePicker();
@@ -180,8 +176,8 @@ public class CalenderPicker {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 // set starting time.
-                start.add(hourOfDay);
-                start.add(minute);
+                date.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                date.set(Calendar.MINUTE, minute);
 
                 // call end time
                 callEndTimePicker();
@@ -192,11 +188,12 @@ public class CalenderPicker {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 // Set ending time.
-                end.add(hourOfDay);
-                end.add(minute);
+                end.setTime(date.getTime());
+                end.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                end.set(Calendar.MINUTE, minute);
 
                 // Done call back to UI.
-                delegate.newTrainingDateSelected(date, start, end);
+                delegate.newTrainingDateSelected(date, end);
             }
         };
     }

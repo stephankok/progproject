@@ -95,10 +95,10 @@ public class EditTrainingAdapter extends ArrayAdapter<Training>{
     /**
      * Overwrite the current trainingsList.
      */
-    public void setTrainingList(ArrayList<Training> trainingList){
+    public void setTrainingList(ArrayList<Training> trainingList) {
         this.trainingList.clear();
-        for(int i = 0; i < trainingList.size(); i++){
-            this.trainingList.add(trainingList.get(i));
+        for (Training training : trainingList) {
+            this.trainingList.add(training);
         }
         notifyDataSetChanged();
     }
@@ -122,7 +122,7 @@ public class EditTrainingAdapter extends ArrayAdapter<Training>{
                             case DialogInterface.BUTTON_POSITIVE:
                                 //Yes button clicked
                                 trainingList.remove(position);
-                                firebase.updateAllTrainings(trainingList);
+                                firebase.updateAllTrainings(trainingList,null);
                                 notifyDataSetChanged();
                                 break;
 
@@ -178,7 +178,7 @@ public class EditTrainingAdapter extends ArrayAdapter<Training>{
             public boolean onLongClick(View v) {
                 // make layout
                 LayoutInflater li = LayoutInflater.from(context);
-                final View layout = li.inflate(R.layout.add_training, null);
+                final View layout = li.inflate(R.layout.alertdialog_add_training, null);
 
                 // get all items
                 final Button dateButton = (Button) layout.findViewById(R.id.dateButton);
@@ -199,21 +199,21 @@ public class EditTrainingAdapter extends ArrayAdapter<Training>{
                 dateButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        calendarPicker.changeDate(item.getDate(), datePicked);
+                        calendarPicker.changeDate(item, datePicked);
                     }
                 });
 
                 startButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        calendarPicker.changeStart(item.getStart(), startPicked);
+                        calendarPicker.changeStart(item, startPicked);
                     }
                 });
 
                 endButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        calendarPicker.changeEnd(item.getEnd(), endPicked);
+                        calendarPicker.changeEnd(item, endPicked);
                     }
                 });
 
@@ -235,7 +235,8 @@ public class EditTrainingAdapter extends ArrayAdapter<Training>{
                                         item.changeMaxPlayers(
                                                 Long.parseLong(editMax.getText().toString()));
 
-                                        firebase.updateAllTrainings(trainingList);
+                                        // TODO
+                                        firebase.updateAllTrainings(trainingList, null);
 
                                         notifyDataSetChanged();
                                         dialog.cancel();

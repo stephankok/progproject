@@ -11,6 +11,7 @@ import com.example.stephan.squashapp.activities.R;
 import com.example.stephan.squashapp.models.Training;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Show to available trainings.
@@ -35,9 +36,13 @@ public class UserTrainingAdapter extends ArrayAdapter<Training> {
      */
     public void setTrainingList(ArrayList<Training> trainingList){
         this.trainingList.clear();
-        for(int i = 0; i < trainingList.size(); i++){
-            this.trainingList.add(trainingList.get(i));
+        for(Training training: trainingList) {
+            // if the end of the training + 1/2 a day has passed, dont show to users.
+            if(!((training.getEnd() + 43200000) < Calendar.getInstance().getTimeInMillis())){
+                this.trainingList.add(training);
+            }
         }
+        notifyDataSetChanged();
     }
 
     /**

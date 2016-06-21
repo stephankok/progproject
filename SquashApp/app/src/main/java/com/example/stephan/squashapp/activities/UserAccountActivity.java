@@ -15,25 +15,27 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.stephan.squashapp.helpers.FirebaseConnector;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
 
 public class UserAccountActivity extends AppCompatActivity implements View.OnClickListener{
 
-    Button emailButton;
-    Button usernameButton;
-    Button passwordButton;
-    Button deleteAccountButton;
-    Button signOutButton;
-    TextView currentUser;
-    TextView currentEmail;
-    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private Button emailButton;
+    private Button usernameButton;
+    private Button passwordButton;
+    private Button deleteAccountButton;
+    private Button signOutButton;
+    private TextView currentUser;
+    private TextView currentEmail;
+    private TextView accountErrorShow;
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private FirebaseAuth auth = FirebaseAuth.getInstance();
+    private FirebaseConnector firebaseConnector = new FirebaseConnector();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +66,7 @@ public class UserAccountActivity extends AppCompatActivity implements View.OnCli
         signOutButton = (Button) findViewById(R.id.signOutButton);
         currentUser = (TextView) findViewById(R.id.currentUserName);
         currentEmail = (TextView) findViewById(R.id.currentEmail);
+        accountErrorShow = (TextView) findViewById(R.id.accountErrorShow);
 
         // set onClickListener
         emailButton.setOnClickListener(this);
@@ -235,26 +238,14 @@ public class UserAccountActivity extends AppCompatActivity implements View.OnCli
                     userNameText.setError("Required.");
                     return;
                 }
+                else if(userName.length() < 3){
+                    userNameText.setError("Must be al least 3 characters.");
+                    return;
+                }
 
+                firebaseConnector.renameUser(user, userName, currentUser, UserAccountActivity.this);
 
-                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                        .setDisplayName(userName)
-                        .build();
-
-                user.updateProfile(profileUpdates)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    Toast.makeText(UserAccountActivity.this, "Successfully changed username", Toast.LENGTH_SHORT).show();
-                                    currentUser.setText(userName);
-                                    dialog.cancel();
-                                }
-                                else{
-                                    userNameText.setError(task.getException().getMessage());
-                                }
-                            }
-                        });
+                dialog.cancel();
             }
         });
     }
@@ -350,15 +341,17 @@ public class UserAccountActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void deleteAccount(){
-        final EditText Oldpassword = new EditText(this);
-
+        // Ask te user to reauthenticate.
+        final EditText oldPassword = new EditText(this);
+        oldPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        oldPassword.setHint("password");
         AlertDialog.Builder builder = new AlertDialog.Builder(this)
-                .setTitle("Change password")
-                .setView(Oldpassword)
-                .setPositiveButton("Change password", new DialogInterface.OnClickListener() {
+                .setTitle("Delete account")
+                .setView(oldPassword)
+                .setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        // empty will come.
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -368,37 +361,38 @@ public class UserAccountActivity extends AppCompatActivity implements View.OnCli
                         return;
                     }
                 });
-
         final AlertDialog dialog = builder.create();
         dialog.show();
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String password = oldPassword.getText().toString();
+                if(password.isEmpty()){
+                    oldPassword.setError("Required");
+                    return;
+                }
+                else if(password.length() < 6){
+                    oldPassword.setError("Must be larger then 6 characters");
+                    return;
+                }
 
                 AuthCredential credential = EmailAuthProvider
-                        .getCredential(user.getEmail(), Oldpassword.getText().toString());
+                        .getCredential(user.getEmail(), password);
 
-                // Prompt the user to re-provide their sign-in credentials
+                // Reauthenicate the user.
                 user.reauthenticate(credential)
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
-                                    user.delete().addOnCompleteListener(UserAccountActivity.this, new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                Toast.makeText(UserAccountActivity.this, "Successfully removed your account!", Toast.LENGTH_SHORT).show();
-                                                dialog.cancel();
-                                                finish();
-                                            } else {
-                                                Toast.makeText(UserAccountActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                            }
-                                        }
-                                    });
+                                    // On succes remove registrations and delete account.
+                                    firebaseConnector.deleteUser(
+                                            FirebaseAuth.getInstance().getCurrentUser(),
+                                            accountErrorShow);
+                                    dialog.cancel();
 
                                 } else {
-                                    Oldpassword.setError(task.getException().getMessage());
+                                    oldPassword.setError(task.getException().getMessage());
                                 }
                             }
                         });

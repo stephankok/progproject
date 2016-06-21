@@ -11,10 +11,11 @@ import com.example.stephan.squashapp.fragments.RegisterFragment;
 
 /**
  * Created by Stephan on 13-6-2016.
+ *
  */
 public class pageAdapter extends FragmentPagerAdapter {
-    private static int NUM_ITEMS = 3;
-    public Fragment forgotPasswordFragment;
+
+    private static int NUM_FRAGMENTS = 3;
 
     public pageAdapter(FragmentManager fragmentManager) {
         super(fragmentManager);
@@ -23,7 +24,7 @@ public class pageAdapter extends FragmentPagerAdapter {
     // Returns total number of pages
     @Override
     public int getCount() {
-        return NUM_ITEMS;
+        return NUM_FRAGMENTS;
     }
 
     // Returns the fragment to display for that page

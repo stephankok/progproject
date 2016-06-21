@@ -17,45 +17,31 @@
         android:text="User Details"
         style="@style/HeaderSize"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_horizontal">
+        android:id="@+id/currentUserName"
+        android:padding="20dp"
+        android:text="example user"/>
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/changeUsernameButton"
-            android:text="Change username"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/currentUserName"
-            android:text="example user"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_horizontal">
+        android:id="@+id/currentEmail"
+        android:text="example@mail.com"
+        android:padding="20dp"/>
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/changeEmailButton"
-            android:text="Change email"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/changeUsernameButton"
+        android:text="Change username"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/currentEmail"
-            android:text="example@mail.com"/>
-
-    </LinearLayout>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/changeEmailButton"
+        android:text="Change email"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -74,5 +60,12 @@
         android:layout_height="wrap_content"
         android:id="@+id/signOutButton"
         android:text="Sign out"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/accountErrorShow"
+        android:textColor="@color/red_error"
+        android:visibility="gone"/>
 
 </LinearLayout>

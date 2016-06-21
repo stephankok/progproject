@@ -19,4 +19,11 @@
         android:id="@+id/password"
         android:gravity="center"
         android:inputType="textPassword"/>
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Remember me"
+        android:checked="true"
+        android:id="@+id/rememberMe" />
 </LinearLayout>

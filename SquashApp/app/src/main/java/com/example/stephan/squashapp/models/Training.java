@@ -4,7 +4,6 @@ import com.google.firebase.database.Exclude;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -14,10 +13,9 @@ import java.util.Map;
 public class Training {
 
     private String trainer;
-    private List<Integer> date;
+    private Long date;
     private String shortInfo;
-    private List<Integer> start;
-    private List<Integer> end;
+    private Long end;
     private Long maxPlayers;
     private Long currentPlayers;
     private Map<String,Object> registeredPlayers;
@@ -26,12 +24,11 @@ public class Training {
         // empty for firebase
     }
 
-    public void newTraining(String trainer, List<Integer> date, String shortInfo, List<Integer> start, List<Integer> end,
+    public void newTraining(String trainer, Long date, String shortInfo, Long end,
                          Long maxPlayers){
         this.trainer = trainer;
         this.date = date;
         this.shortInfo = shortInfo;
-        this.start = start;
         this.end = end;
         this.maxPlayers = maxPlayers;
         this.currentPlayers = 0L;
@@ -42,7 +39,7 @@ public class Training {
         return this.trainer;
     }
 
-    public List<Integer> getDate(){
+    public Long getDate(){
         return this.date;
     }
 
@@ -50,11 +47,7 @@ public class Training {
         return this.shortInfo;
     }
 
-    public List<Integer> getStart(){
-        return this.start;
-    }
-
-    public List<Integer> getEnd(){
+    public Long getEnd(){
         return this.end;
     }
 
@@ -73,15 +66,11 @@ public class Training {
         return this.registeredPlayers;
     }
 
-    public void changeDate(List<Integer> date){
+    public void changeDate(Long date){
         this.date = date;
     }
 
-    public void changeStart(List<Integer> start){
-        this.start = start;
-    }
-
-    public void changeEnd(List<Integer> end){
+    public void changeEnd(Long end){
         this.end = end;
     }
 
@@ -112,8 +101,10 @@ public class Training {
 
     @Exclude
     public String getFormattedDate(){
+
         Calendar calendar = Calendar.getInstance();
-        calendar.set(date.get(0), date.get(1), date.get(2));
+        calendar.setTimeInMillis(date);
+
         String dateFormatted =
                 new SimpleDateFormat("EEE, MMM d, ''yy", Locale.US).format(calendar.getTime());
         return dateFormatted;
@@ -121,17 +112,25 @@ public class Training {
 
     @Exclude
     public String getFormattedStart(){
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(date);
+
         String startFormatted =
-                String.valueOf(start.get(0)) + ":" +
-                        String.format( Locale.US, "%02d", start.get(1));
+                String.valueOf(calendar.get(Calendar.HOUR_OF_DAY) + ":" +
+                        String.format(Locale.US, "%02d", calendar.get(Calendar.MINUTE)));
         return startFormatted;
     }
 
     @Exclude
     public String getFormattedEnd(){
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(end);
+
         String endFormatted =
-                String.valueOf(end.get(0)) + ":" +
-                        String.format( Locale.US, "%02d", end.get(1));
+                String.valueOf(calendar.get(Calendar.HOUR_OF_DAY)) + ":" +
+                        String.format( Locale.US, "%02d", calendar.get(Calendar.MINUTE));
         return endFormatted;
     }
 

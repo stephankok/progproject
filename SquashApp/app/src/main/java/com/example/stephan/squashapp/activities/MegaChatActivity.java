@@ -1,6 +1,7 @@
 package com.example.stephan.squashapp.activities;
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,7 +19,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -28,6 +28,7 @@ public class MegaChatActivity extends AppCompatActivity implements View.OnClickL
     private Button sendMessageButton;
     private EditText messageEditText;
     private ChatAdapter adapter;
+    private SwipeRefreshLayout refreshContainerChat;
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference()
             .child("MessageBoard").child("MainBoard");
@@ -42,9 +43,6 @@ public class MegaChatActivity extends AppCompatActivity implements View.OnClickL
             finish();
         }
 
-        getMessages();
-        setNewMessageListener();
-
         messageEditText = (EditText) findViewById(R.id.messageEditText);
         sendMessageButton = (Button) findViewById(R.id.sendMessageButton);
 
@@ -58,6 +56,8 @@ public class MegaChatActivity extends AppCompatActivity implements View.OnClickL
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+
+        setNewMessageListener();
     }
 
     /**
@@ -108,28 +108,9 @@ public class MegaChatActivity extends AppCompatActivity implements View.OnClickL
         rootRef.push().setValue(message);
     }
 
-    private void getMessages() {
-        rootRef.addListenerForSingleValueEvent(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        adapter.clear();
-                        for (DataSnapshot childSnapShot : dataSnapshot.getChildren()) {
-                            // get the trainingen
-                            MegaChatMessage message = childSnapShot.getValue(MegaChatMessage.class);
-                            adapter.push(message);
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Toast.makeText(MegaChatActivity.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
-
     private void setNewMessageListener(){
-        rootRef.addChildEventListener(new ChildEventListener() {
+        // Show 100 last messages
+        rootRef.limitToLast(100).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 MegaChatMessage message = dataSnapshot.getValue(MegaChatMessage.class);
