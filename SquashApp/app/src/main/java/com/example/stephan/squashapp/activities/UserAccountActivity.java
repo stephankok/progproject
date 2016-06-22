@@ -344,7 +344,7 @@ public class UserAccountActivity extends AppCompatActivity implements View.OnCli
         // Ask te user to reauthenticate.
         final EditText oldPassword = new EditText(this);
         oldPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-        oldPassword.setHint("password");
+        oldPassword.setHint("Password");
         AlertDialog.Builder builder = new AlertDialog.Builder(this)
                 .setTitle("Delete account")
                 .setView(oldPassword)

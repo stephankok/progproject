@@ -14,12 +14,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:windowSoftInputMode="adjustPan">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".ContactActivity" />
         <activity android:name=".AdminActivity" />
         <activity android:name=".UserAccountActivity" />
@@ -27,6 +22,14 @@
             android:name=".LoginActivity"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity android:name=".MegaChatActivity" />
+        <activity android:name=".SplashActivity"
+            android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

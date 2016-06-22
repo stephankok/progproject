@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
     android:gravity="center">
 
     <LinearLayout
@@ -15,7 +15,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:id="@+id/datePicked"/>
@@ -24,17 +24,17 @@
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:id="@+id/dateButton"
-            android:text="change date"
+            android:text="@string/change_date"
             android:paddingBottom="10dp"/>
-
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:id="@+id/startPicked"/>
@@ -42,7 +42,7 @@
         <Button
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:text="change start"
+            android:text="@string/change_start"
             android:id="@+id/startButton"/>
     </LinearLayout>
 
@@ -52,7 +52,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:id="@+id/endPicked"/>
@@ -60,31 +60,30 @@
         <Button
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:text="change end"
+            android:text="@string/change_end"
             android:id="@+id/endButton"/>
     </LinearLayout>
 
     <EditText
-        android:layout_width="150dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/info"
-        android:hint="short info"
+        android:hint="@string/short_info"
         android:gravity="center"
         android:paddingBottom="10dp"/>
+
     <EditText
-        android:layout_width="150dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/trainer"
         android:gravity="center"
-        android:hint="trainer"/>
+        android:hint="@string/trainer"/>
 
     <EditText
-        android:layout_width="150dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/maxPlayers"
         android:inputType="number"
         android:gravity="center"
-        android:hint="Maxium registrations"/>
-
-
+        android:hint="@string/maximum_registrations"/>
 </LinearLayout>

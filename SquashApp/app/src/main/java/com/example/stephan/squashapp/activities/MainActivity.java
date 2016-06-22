@@ -358,7 +358,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
             // create alertdialog
             AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
             builder1.setTitle("Admin")
-                    .setMessage("Please login.")
+                    .setMessage("Please login")
                     .setCancelable(true)
                     .setView(layout)
                     .setPositiveButton(
@@ -425,7 +425,6 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
         }
     }
 }
-// Logo on startup, Lelijk vraag jaap
 
 // Check internet
 
@@ -437,3 +436,8 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
 // login device 2 -> delete account -> what will happen
 
 // register for deleted event?
+
+// Admin, changedate gebreurd altijd, update database!
+// crash on change date when new is added
+
+// delete max messages

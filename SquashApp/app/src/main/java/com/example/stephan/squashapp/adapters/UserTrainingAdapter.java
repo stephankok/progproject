@@ -68,9 +68,9 @@ public class UserTrainingAdapter extends ArrayAdapter<Training> {
 
         // get information
         String timeText =  item.getFormattedStart() + " until " + item.getFormattedEnd();
-        String currentPlayerText = "Registered: " + item.getCurrentPlayers();
-        String maxPlayersText = "Max players: " + item.getMaxPlayers();
-        String trainerText = "By: " + item.getTrainer();
+        String currentPlayerText = "Participants: " + item.getCurrentPlayers();
+        String maxPlayersText = "Max participants: " + item.getMaxPlayers();
+        String trainerText = "By " + item.getTrainer();
 
         // Set text.
         date.setText(item.getFormattedDate());

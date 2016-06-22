@@ -68,9 +68,9 @@ public class EditTrainingAdapter extends ArrayAdapter<Training>{
 
         // Concatenate text
         String timeText =  item.getFormattedStart() + " until " + item.getFormattedEnd();
-        String currentPlayersText = "Registered: " + item.getCurrentPlayers();
-        String maxPlayersText = "Max players: " + item.getMaxPlayers();
-        String trainerText = "By: " + item.getTrainer();
+        String currentPlayersText = "Participants: " + item.getCurrentPlayers();
+        String maxPlayersText = "Max participants: " + item.getMaxPlayers();
+        String trainerText = "By " + item.getTrainer();
 
         // Update view.
         date.setText(item.getFormattedDate());

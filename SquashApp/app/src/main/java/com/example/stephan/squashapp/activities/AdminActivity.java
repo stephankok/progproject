@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.stephan.squashapp.adapters.EditTrainingAdapter;
 import com.example.stephan.squashapp.helpers.CalenderPicker;
@@ -28,7 +29,7 @@ import java.util.Locale;
 public class AdminActivity extends AppCompatActivity implements FirebaseConnector.AsyncResponse,
         CalenderPicker.AsyncResponse{
 
-    private TextView errorGetTraingsAdmin;
+    private TextView errorGetTrainingsAdmin;
     private EditTrainingAdapter myAdapter;
     private FirebaseConnector firebase = new FirebaseConnector();
     private SwipeRefreshLayout refresh;
@@ -42,7 +43,7 @@ public class AdminActivity extends AppCompatActivity implements FirebaseConnecto
         // Get views.
         ListView listView = (ListView) findViewById(R.id.ListViewAdminTraining);
         refresh = (SwipeRefreshLayout) findViewById(R.id.refreshContainerAdmin);
-        errorGetTraingsAdmin = (TextView) findViewById(R.id.errorGetTraingsAdmin);
+        errorGetTrainingsAdmin = (TextView) findViewById(R.id.errorGetTrainingsAdmin);
 
         // Set adapter.
         myAdapter = new EditTrainingAdapter(this, new ArrayList<Training>());
@@ -94,11 +95,10 @@ public class AdminActivity extends AppCompatActivity implements FirebaseConnecto
     */
     private void updateDatabase(){
         refresh.setRefreshing(true);
-        TextView errorDisplay = (TextView) findViewById(R.id.errorGetTraingsAdmin);
-        errorDisplay.setVisibility(View.GONE);
+        errorGetTrainingsAdmin.setVisibility(View.GONE);
 
         myAdapter.clear();
-        firebase.getTraingen(this, errorDisplay);
+        firebase.getTraingen(this, errorGetTrainingsAdmin);
     }
 
     /**
@@ -168,7 +168,7 @@ public class AdminActivity extends AppCompatActivity implements FirebaseConnecto
         final EditText editMax = (EditText) layout.findViewById(R.id.maxPlayers);
 
         final AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
-        builder1.setTitle("Add Training")
+        builder1.setTitle("Add training")
                 .setCancelable(true)
                 .setView(layout)
                 .setPositiveButton("Add",null);
@@ -216,8 +216,10 @@ public class AdminActivity extends AppCompatActivity implements FirebaseConnecto
 
                 // Add training online.
                 Log.d("update", "call");
-                firebase.updateAllTrainings(myAdapter.getAll(), errorGetTraingsAdmin);
+                firebase.updateAllTrainings(myAdapter.getAll(), errorGetTrainingsAdmin);
                 updateDatabase();
+
+                Toast.makeText(AdminActivity.this, "Training is added!", Toast.LENGTH_SHORT).show();
 
                 // Cancel dialog
                 alert11.cancel();

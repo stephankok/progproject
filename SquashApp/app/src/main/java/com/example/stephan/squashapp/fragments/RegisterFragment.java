@@ -110,7 +110,7 @@ public class RegisterFragment extends Fragment{
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
-                                            Toast.makeText(getContext(), "Created " +
+                                            Toast.makeText(getContext(), "Welcome " +
                                                     user.getDisplayName(), Toast.LENGTH_SHORT).show();
                                             registerNewUserButton.setProgress(100);
                                             getActivity().finish();

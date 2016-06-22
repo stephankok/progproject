@@ -1,19 +1,19 @@
 <resources>
     <string name="app_name">S.C.H.I.E.T. Squash</string>
-    <string name="main_welcome">Welcome at the training\'s page!</string>
-    <string name="main_training_subscribe">Upcomming trainings. Please register if you will be present.</string>
+    <string name="main_welcome">Welcome at the trainings page!</string>
+    <string name="main_training_subscribe">Upcoming trainings. Please register if you will be present.</string>
     <string name="menu_contact">Contact</string>
     <string name="menu_admin">Admin</string>
     <string name="contact_info">Contact information</string>
     <string name="admin_info">Admin page</string>
-    <string name="alertdialog_open_admin_user">Inlog</string>
+    <string name="alertdialog_open_admin_user">Username</string>
     <string name="alertdialog_open_admin_password">Password</string>
     <string name="delete_button_description">DeleteButton</string>
     <string name="register">Name</string>
     <string name="title_activity_admin2">AdminActivity2</string>
     <string name="menuSignIn">Sign in</string>
     <string name="registerButton">Register</string>
-    <string name="email_adress">Email adress</string>
+    <string name="email_adress">Email</string>
     <string name="registrationName">Name</string>
     <string name="password">Password</string>
     <string name="registerNewUser">Register</string>
@@ -24,4 +24,18 @@
     <string name="register_left"><![CDATA[<< Register]]></string>
     <string name="forgot_password_right"><![CDATA[Forgot password >>]]></string>
     <string name="sign_in_right"><![CDATA[Sign in >>]]></string>
+    <string name="change_date">change date</string>
+    <string name="change_start">change start</string>
+    <string name="change_end">change end</string>
+    <string name="short_info">Kind of training</string>
+    <string name="trainer">Trainer</string>
+    <string name="maximum_registrations">Maximum participants</string>
+    <string name="example_training_info">Here you will put the information about the training</string>
+    <string name="example_training_date">Thu, Jun 23, \'16</string>
+    <string name="example_training_start">20:00 until 21:00</string>
+    <string name="example_training_trainer">By: Name</string>
+    <string name="example_training_registered">participants: 0</string>
+    <string name="example_training_max">Max participants: 99</string>
+    <string name="example_message_user">Stephan Kok\n2016-06-21 16:45</string>
+    <string name="example_message_message">The message</string>
 </resources>

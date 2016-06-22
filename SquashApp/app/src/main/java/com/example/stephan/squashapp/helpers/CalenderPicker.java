@@ -85,7 +85,7 @@ public class CalenderPicker {
                         startPicked.setText(startFormatted);
                     }
                 },date.get(Calendar.HOUR_OF_DAY), date.get(Calendar.MINUTE), true);
-        startTimePickerDialog.setMessage("Starting time");
+        startTimePickerDialog.setMessage("Start time");
         startTimePickerDialog.show();
     }
 
@@ -140,7 +140,7 @@ public class CalenderPicker {
         TimePickerDialog startTimePickerDialog =
                 new TimePickerDialog(context,startTimeListener,
                         calendar.get(Calendar.HOUR_OF_DAY), 0, true);
-        startTimePickerDialog.setMessage("Starting time");
+        startTimePickerDialog.setMessage("Start time");
         startTimePickerDialog.show();
     }
 
