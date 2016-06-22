@@ -62,6 +62,7 @@ public class UserTrainingAdapter extends ArrayAdapter<Training> {
         final TextView trainer = (TextView) view.findViewById(R.id.trainer);
         final TextView currentPlayers = (TextView) view.findViewById(R.id.currentPlayers);
         final TextView maxPlayers = (TextView) view.findViewById(R.id.maxPlayers);
+        final TextView subjectOfTraining = (TextView) view.findViewById(R.id.subjectOfTraining);
 
         // get Training
         Training item = trainingList.get(position);
@@ -79,6 +80,7 @@ public class UserTrainingAdapter extends ArrayAdapter<Training> {
         currentPlayers.setText(currentPlayerText);
         maxPlayers.setText(maxPlayersText);
         trainer.setText(trainerText);
+        subjectOfTraining.setText(item.getSubjectOfTraining());
 
         return view;
     }

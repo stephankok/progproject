@@ -137,28 +137,36 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
                         dialog.create().show();
                     }
                     else {
-                        // Not registered, give option to register.
-                        AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this)
-                                .setTitle("Register").setMessage("Do you want to register for " +
-                                        adapter.getItem(position).getFormattedDate())
-                                .setPositiveButton("Register", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        adapter.getItem(position).registerPlayer(user.getUid(), user.getDisplayName());
-                                        firebase.updateRegisteredPlayers(adapter.getItem(position),
-                                                position);
-                                        adapter.notifyDataSetChanged();
-                                        dialog.cancel();
-                                        Toast.makeText(MainActivity.this, "Succesfully registered!", Toast.LENGTH_SHORT).show();
-                                    }
-                                })
-                                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.cancel();
-                                    }
-                                });
-                        dialog.create().show();
+                        // Not registered, give option to register
+
+                        // Check if not at max
+                        if(training.getCurrentPlayers().compareTo(training.getMaxPlayers()) < 0) {
+                            AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this)
+                                    .setTitle("Register").setMessage("Do you want to register for " +
+                                            adapter.getItem(position).getFormattedDate())
+                                    .setPositiveButton("Register", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            adapter.getItem(position).registerPlayer(user.getUid(), user.getDisplayName());
+                                            firebase.updateRegisteredPlayers(adapter.getItem(position),
+                                                    position);
+                                            adapter.notifyDataSetChanged();
+                                            dialog.cancel();
+                                            Toast.makeText(MainActivity.this, "Succesfully registered!", Toast.LENGTH_SHORT).show();
+                                        }
+                                    })
+                                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.cancel();
+                                        }
+                                    });
+                            dialog.create().show();
+                        }
+                        else{
+                            Toast.makeText(MainActivity.this, "Max participants reached.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
                 else{
@@ -426,18 +434,4 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
     }
 }
 
-// Check internet
-
-// no offline login
-
-// admin adapter onclick // UI of adapter
-
-// login device 1
-// login device 2 -> delete account -> what will happen
-
-// register for deleted event?
-
-// Admin, changedate gebreurd altijd, update database!
-// crash on change date when new is added
-
-// delete max messages
+// Check alle code

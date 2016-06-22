@@ -15,6 +15,7 @@ public class Training {
     private String trainer;
     private Long date;
     private String shortInfo;
+    private String subjectOfTraining;
     private Long end;
     private Long maxPlayers;
     private Long currentPlayers;
@@ -25,7 +26,7 @@ public class Training {
     }
 
     public void newTraining(String trainer, Long date, String shortInfo, Long end,
-                         Long maxPlayers){
+                         Long maxPlayers, String subjectOfTraining){
         this.trainer = trainer;
         this.date = date;
         this.shortInfo = shortInfo;
@@ -33,6 +34,7 @@ public class Training {
         this.maxPlayers = maxPlayers;
         this.currentPlayers = 0L;
         this.registeredPlayers = new android.support.v4.util.ArrayMap<>();
+        this.subjectOfTraining = subjectOfTraining;
     }
 
     public String getTrainer(){
@@ -53,6 +55,10 @@ public class Training {
 
     public Long getMaxPlayers(){
         return this.maxPlayers;
+    }
+
+    public String getSubjectOfTraining(){
+        return this.subjectOfTraining;
     }
 
     public Long getCurrentPlayers(){
@@ -99,6 +105,10 @@ public class Training {
         this.registeredPlayers.remove(id);
     }
 
+    public void changeSubjectOfTraining(String subjectOfTraining){
+        this.subjectOfTraining = subjectOfTraining;
+    }
+
     @Exclude
     public String getFormattedDate(){
 
@@ -133,5 +143,4 @@ public class Training {
                         String.format( Locale.US, "%02d", calendar.get(Calendar.MINUTE));
         return endFormatted;
     }
-
 }

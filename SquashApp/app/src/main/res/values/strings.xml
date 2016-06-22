@@ -38,4 +38,5 @@
     <string name="example_training_max">Max participants: 99</string>
     <string name="example_message_user">Stephan Kok\n2016-06-21 16:45</string>
     <string name="example_message_message">The message</string>
+    <string name="subject_of_training">Subject of training</string>
 </resources>
