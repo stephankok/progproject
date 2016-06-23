@@ -1,6 +1,7 @@
 # S.C.H.I.E.T. Squash App
 *By Stephan Kok from the University of Amsterdam.*
 
+<img src="https://github.com/stephankok/progproject/blob/master/doc/final%20images/main.png" align="right" height="326" width="183" >
 The squash club 'S.C.H.I.E.T. Squash' wants to show all available trainings to their members. The best way to do this is with an app. Therefore is now available the S.C.H.I.E.T. Squash App!
 
 The mainscreen of the app shows all available trainings. These are always visable, so even when you are not signed in. But when you want to register you will have to login first. If you dont have an account don't worry because you can create one in the app. If you suddenly can't make it to the training or you just pressed a wrong training, you can easily cancel your registration.
@@ -13,13 +14,13 @@ For the trainers there is a special page, the admin page. Here they can add new 
 
 Your GitHub repository should contain a complete README.md file that states the application name, a couple of screen shots (resized to appropriate width/height for readability), its purpose, your name and a copyright statement. The README should be easy to read.
 
+<img src="https://github.com/stephankok/progproject/blob/master/doc/final%20images/admin.png" align="right" height="326" width="183" >
 
-<img src="https://github.com/stephankok/progproject/blob/master/doc/final%20images/account.png" align="left" height="300" width="150" >
-<img src="https://github.com/stephankok/progproject/blob/master/doc/final%20images/admin.png" align="left" height="300" width="150" >
-<img src="https://github.com/stephankok/progproject/blob/master/doc/final%20images/contact.png" align="left" height="300" width="150" >
-<img src="https://github.com/stephankok/progproject/blob/master/doc/final%20images/main.png" align="left" height="300" width="150" >
-<img src="https://github.com/stephankok/progproject/blob/master/doc/final%20images/megachat.png" align="left" height="300" width="150" >
-<img src="https://github.com/stephankok/progproject/blob/master/doc/final%20images/menu.png" align="left" height="300" width="150" >
+<img src="https://github.com/stephankok/progproject/blob/master/doc/final%20images/contact.png"align="right" height="326" width="183" >
+<img src="https://github.com/stephankok/progproject/blob/master/doc/final%20images/account.png" align="right" height="326" width="183" >
+<img src="https://github.com/stephankok/progproject/blob/master/doc/final%20images/main.png" align="right" height="326" width="183" >
+<img src="https://github.com/stephankok/progproject/blob/master/doc/final%20images/megachat.png" align="right" height="326" width="183" >
+<img src="https://github.com/stephankok/progproject/blob/master/doc/final%20images/menu.png" align="right" height="326" width="183" >
 
 ### References
 
