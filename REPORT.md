@@ -15,6 +15,26 @@ Activities
 - Admin
 - Contact
 - Account
+- Splash
+- Mega Chat
+
+Adapters
+--------
+- Chat
+- Users
+- Admin
+- FragmentInlog
+
+Fragments
+--------
+- Forgot password
+- Login
+- Register
+
+Helpers
+--------
+- Calendar Picker
+- Firebase
 
 Modules
 --------
