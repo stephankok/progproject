@@ -45,14 +45,15 @@ Modules
 - MegaChatMessage
 
 #### Why i have created the app as it is
-There are three main Activities. Main activity where trainings are shown and users can registrate, Admin activity where admins can edit trainings and Inlog activity where users can login.
+MainActivity and AdminActivity both use the Training model. But the property's of the adapters are completly diffrent so i have create diffrent adapters. One for user registration and one for editting.
+
+Apps run smoother when an single subject can be performed within one activity and thus exist UserActivity of three fragments, one for loggin in, one for registration and one if the user has forgotten his password. Registration, changing account details, chatting and editting Activities can all individually be created within one activity and  thus don't need any fragments.
 
 I created a class FirebaseConnector to get, update or change information on the database. Since the root of firebase is already a singleton, this class doesn't have to be a singleton. A refference to an TextView is given to display errors. Firebase will validate all the input given by the users. Since conencecting to firebase takes time, some validation is done on the app.
 
+Firebase only supports a few amounts of dataformats. Namely: Strings, Longs, List<Object>, Map<Object,Object>, so these dataformats are the only types i used within my models.
+
+Because each players has to be able to subscribe to trainingen, i have implemented an login and registration option. Since everyplayer has its own phone they will stay logged on when they will close the app, unless they log out first.
 
 ### challenges
-De club heeft zijn eigen server, ik wou een eigen api maken om te communiceren tussen de server en de app. Dit is helaas niet gelukt omdat dit te veel tijd zou kosten. In plaats hiervan heb ik firebase gebruikt. Firebase had ook zijn eigen valkuilen, zo bleek het net overgenomen te zijn door google. Dit zorgde ervoor dat heel veel sintax veranderd was en niet meer klopte met wat online te vinden was.
-
-Alle informatie in de juiste format krijgen was ook veel werk. Zo kan firebase maar met een beperkt aantal types van data werken en was ik gelimiteerd tot String, Long, List<Object> en Map<Object,Object>. Dit zorgde ervoor dat ik mijn app moest bouwen om dit dataformat inplaats van de dataformat om mijn app.
-
-Elke speler van de club moet zich kunnen registreren. Hiervoor heb ik uiteindelijk besloten om een inlog te maken, anders zouden medespelers elkaar kunnen in en uitschrijven.
+The club has its own server. I wanted to create my own api, so my own communication between the app and the server. Unfortinatly this didn't work and would take to much time to fix. So instead i used Firebase. Firebase works fine, but it had its own troubles. Firebase is recently taken over by google, they changed the sintax of how you must implement firebase. Because of this the code you find only mostly dont match with the current version of firebase. I have been stuck with it for some time, but i got it to work.
