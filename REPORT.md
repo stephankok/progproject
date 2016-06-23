@@ -14,7 +14,7 @@ For the trainers there is a special page, the admin page. Here they can add new 
 ### Design
 Below you can see a clearly described flow of the app.
 
-<img src="https://github.com/stephankok/progproject/blob/master/doc/final%20images/flow_chart.png" align="left" >
+<img src="https://github.com/stephankok/progproject/blob/master/doc/final%20images/flow chart.png" align="left" >
 
 Activities
 - MainActivity: Showing trainings to user, registration, deregistration
