@@ -12,8 +12,6 @@ When users are logged in they will recieve acces to the MegaChat. Here all regis
 
 For the trainers there is a special page, the admin page. Here they can add new trainings, change them or even delete them. In the admin page all the previous (not deleted) trainings will remain visable.
 
-Your GitHub repository should contain a complete README.md file that states the application name, a couple of screen shots (resized to appropriate width/height for readability), its purpose, your name and a copyright statement. The README should be easy to read.
-
 <img src="https://github.com/stephankok/progproject/blob/master/doc/final%20images/admin.png" align="left" height="326" width="183" >
 <img src="https://github.com/stephankok/progproject/blob/master/doc/final%20images/contact.png"align="left" height="326" width="183" >
 <img src="https://github.com/stephankok/progproject/blob/master/doc/final%20images/account.png" align="left" height="326" width="183" >
