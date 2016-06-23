@@ -9,6 +9,8 @@ Mocht je andere informatie nodig hebben is er een contact pagina waar je informa
 ### Design
 Clearly describe the technical design: how is the functionality implemented in your code? This should be like your DESIGN.md but updated to reflect the final application. First, give a high level overview, which helps us navigate and understand the total of your code (which components are there?). Second, go into detail, and describe the modules/classes and how they relate.
 
+<img src="https://github.com/stephankok/progproject/blob/master/doc/final%20images/flow_chart.png" align="left" >
+
 #### Activities
 - Main
 - Inlog
