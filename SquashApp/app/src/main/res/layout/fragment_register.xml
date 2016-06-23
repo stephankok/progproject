@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textEmailAddress"
-        android:hint="@string/email_adress"
+        android:hint="@string/email"
         android:gravity="center"
         android:id="@+id/emailEditText"/>
 
@@ -69,5 +69,4 @@
         android:text="@string/sign_in_right"
         android:padding="10dp"
         android:textStyle="italic"/>
-
 </LinearLayout>

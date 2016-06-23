@@ -7,6 +7,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -119,11 +120,33 @@ public class UserAccountActivity extends AppCompatActivity implements View.OnCli
                 // make sure to cancel all subscibsions.
                 break;
             case R.id.signOutButton:
-                auth.signOut();
-                Toast.makeText(UserAccountActivity.this, "Signed out", Toast.LENGTH_SHORT).show();
+                signOut();
                 finish();
                 break;
         }
+    }
+
+    /**
+     * Sign out.
+     */
+    private void signOut(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setTitle("Log out")
+                .setMessage("Are you sure you want to log out?")
+                .setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        auth.signOut();
+                        Toast.makeText(UserAccountActivity.this, "Signed out", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+        builder.show();
     }
 
     /**
@@ -208,6 +231,7 @@ public class UserAccountActivity extends AppCompatActivity implements View.OnCli
     private void changeUserName(){
         final EditText userNameText = new EditText(this);
         userNameText.setHint(user.getDisplayName());
+        userNameText.setGravity(Gravity.CENTER);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this)
                 .setTitle("Change username")

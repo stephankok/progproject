@@ -67,5 +67,4 @@
         android:id="@+id/accountErrorShow"
         android:textColor="@color/red_error"
         android:visibility="gone"/>
-
 </LinearLayout>

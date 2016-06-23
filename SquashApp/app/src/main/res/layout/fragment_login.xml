@@ -10,7 +10,7 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Email"
+        android:hint="@string/email"
         android:gravity="center"
         android:inputType="textEmailAddress"
         android:id="@+id/field_email"/>
@@ -18,7 +18,7 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Password"
+        android:hint="@string/password"
         android:gravity="center"
         android:inputType="textPassword"
         android:id="@+id/field_password"/>
@@ -30,13 +30,12 @@
         android:textColor="@color/red_error"
         android:gravity="center"/>
 
-
     <com.dd.processbutton.iml.ActionProcessButton
         android:id="@+id/email_sign_in_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:text="Sign in"
+        android:text="@string/signIn"
         android:textColor="@android:color/white"
         android:textSize="18sp"
         custom:pb_colorComplete="@color/green_complete"
@@ -52,6 +51,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -71,6 +71,5 @@
             android:gravity="center"
             android:textStyle="italic"
             android:layout_weight="1"/>
-
     </LinearLayout>
 </LinearLayout>

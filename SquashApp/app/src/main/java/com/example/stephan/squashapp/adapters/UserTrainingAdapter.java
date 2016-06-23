@@ -21,6 +21,7 @@ public class UserTrainingAdapter extends ArrayAdapter<Training> {
 
     ArrayList<Training> trainingList;  // the items.
     Context context;
+    int offset;
 
     /**
      * Initialize adapter
@@ -36,13 +37,21 @@ public class UserTrainingAdapter extends ArrayAdapter<Training> {
      */
     public void setTrainingList(ArrayList<Training> trainingList){
         this.trainingList.clear();
+        this.offset = 0;
         for(Training training: trainingList) {
             // if the end of the training + 1/2 a day has passed, dont show to users.
             if(!((training.getEnd() + 43200000) < Calendar.getInstance().getTimeInMillis())){
                 this.trainingList.add(training);
             }
+            else{
+                this.offset += 1;
+            }
         }
         notifyDataSetChanged();
+    }
+
+    public int getOffset(){
+        return this.offset;
     }
 
     /**

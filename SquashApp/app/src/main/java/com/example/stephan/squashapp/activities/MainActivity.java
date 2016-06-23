@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
                                     public void onClick(DialogInterface dialog, int which) {
                                         adapter.getItem(position).deletePlayer(user.getUid());
                                         firebase.updateRegisteredPlayers(adapter.getItem(position),
-                                                position);
+                                                position + adapter.getOffset());
                                         adapter.notifyDataSetChanged();
                                         Toast.makeText(MainActivity.this, "Canceled registration", Toast.LENGTH_SHORT).show();
                                     }
@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseConnector
                                         public void onClick(DialogInterface dialog, int which) {
                                             adapter.getItem(position).registerPlayer(user.getUid(), user.getDisplayName());
                                             firebase.updateRegisteredPlayers(adapter.getItem(position),
-                                                    position);
+                                                    position + adapter.getOffset());
                                             adapter.notifyDataSetChanged();
                                             dialog.cancel();
                                             Toast.makeText(MainActivity.this, "Succesfully registered!", Toast.LENGTH_SHORT).show();

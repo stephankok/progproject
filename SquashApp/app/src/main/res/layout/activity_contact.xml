@@ -7,13 +7,13 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.stephan.squashapp.activities.ContactActivity"
-    >
+    tools:context="com.example.stephan.squashapp.activities.ContactActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -24,25 +24,25 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="S.C.H.I.E.T. Squash"
+            android:text="@string/s_c_h_i_e_t_squash"
             android:paddingTop="10dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Science Park 306"
+            android:text="@string/science_park_306"
             android:paddingTop="10dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="1098 XH Amsterdam"
+            android:text="@string/_1098_xh_amsterdam"
             android:paddingTop="10dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Telefoon S.C.H.I.E.T. Squash: Stuur een mail naar info@schietsquash.nl met je nummer en we bellen zsm terug"
+            android:text="@string/call_squash"
             android:paddingTop="10dp"/>
 
         <LinearLayout
@@ -52,14 +52,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Telefoon USC (baan reserveren): " />
+                android:text="@string/telefoon_usc_baan_reserveren" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/blue_pressed"
                 android:id="@+id/callUSC"
-                android:text="020 5258955"
+                android:text="@string/phone_USC"
                 />
         </LinearLayout>
 
@@ -71,14 +71,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="E-Mail: " />
+                android:text="@string/e_mail" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/blue_pressed"
                 android:id="@+id/emailSchiet"
-                android:text="info@schietsquash.nl" />
+                android:text="@string/email_schiet" />
         </LinearLayout>
 
         <LinearLayout
@@ -88,14 +88,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Website: " />
+                android:text="@string/website" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/blue_pressed"
                 android:id="@+id/webPageSchiet"
-                android:text="http://www.schietsquash.nl" />
+                android:text="@string/http_www_schietsquash_nl" />
         </LinearLayout>
 
         <LinearLayout
@@ -106,14 +106,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Website USC: " />
+                android:text="@string/website_usc" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/blue_pressed"
                 android:id="@+id/webPageUSC"
-                android:text="http://www.usc.nl" />
+                android:text="@string/http_www_usc_nl" />
         </LinearLayout>
 
         <LinearLayout
@@ -123,15 +123,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Facebook: " />
+                android:text="@string/facebook" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/blue_pressed"
                 android:id="@+id/webPageFacebook"
-                android:text="http://www.facebook.com/schietsquashamsterdam" />
+                android:text="@string/fb_squash" />
         </LinearLayout>
     </LinearLayout>
-
 </ScrollView>

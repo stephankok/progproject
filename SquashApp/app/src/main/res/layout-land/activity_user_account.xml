@@ -75,7 +75,5 @@
             android:layout_height="wrap_content"
             android:id="@+id/signOutButton"
             android:text="Sign out"/>
-
     </LinearLayout>
-
 </LinearLayout>
