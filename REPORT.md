@@ -7,8 +7,6 @@ Voor de trainers van de club is er een Admin page gemaakt. Hier kunnen ze traini
 Mocht je andere informatie nodig hebben is er een contact pagina waar je informatie kunt vinden over de locatie van de club en de contact gegevens.
 
 ### Design
-Clearly describe the technical design: how is the functionality implemented in your code? This should be like your DESIGN.md but updated to reflect the final application. First, give a high level overview, which helps us navigate and understand the total of your code (which components are there?). Second, go into detail, and describe the modules/classes and how they relate.
-
 <img src="https://github.com/stephankok/progproject/blob/master/doc/final%20images/flow_chart.png" align="left" >
 
 There are three main Activities. Main activity where trainings are shown and users can registrate, Admin activity where admins can edit trainings and Inlog activity where users can login.
