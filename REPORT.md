@@ -44,6 +44,10 @@ Modules
 - Training
 - MegaChatMessage
 
+https://firebase.google.com/
+- Real time database
+- Authentication
+
 #### Why i have created the app as it is
 MainActivity and AdminActivity both use the Training model. But the property's of the adapters are completly diffrent so i have create diffrent adapters. One for user registration and one for editting.
 
@@ -57,3 +61,5 @@ Because each players has to be able to subscribe to trainings, i have implemente
 
 ### challenges
 The club has its own server. I wanted to create my own api, so my own communication between the app and the server. Unfortinatly this didn't work and would take to much time to fix. So instead i used Firebase. Firebase works fine, but it had its own troubles. Firebase is recently taken over by google, they changed the sintax of how you must implement firebase. Because of this the code you find only mostly dont match with the current version of firebase. I have been stuck with it for some time, but i got it to work.
+
+Connecting to the firebase will happen on the background. Communicating back to the UI has been an strugle, but with the use of an AsyncResonse it has succeseeded.
