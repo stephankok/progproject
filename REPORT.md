@@ -1,48 +1,65 @@
 # S.C.H.I.E.T. Squash App
+<img src="https://github.com/stephankok/progproject/blob/master/doc/final%20images/main.png" align="right" height="326" width="183" >
 
-### Info
-De squash club 'S.C.H.I.E.T. Squash' wilt graag een app waar ze trainingen kunnen aanbieden aan hun leden. Hiervoor is deze app gemaakt.
-Het hoofdscherm zijn de trainingen. Deze zijn altijd zichtbaar, ook als je niet ingelogd bent. Mocht je je willen registreren voor de training moet je echter wel eerst inloggen. Als je ingelogd bent kun je ook nog bij de Mega Chat wat één groot gesprek is voor alle geregistreerde van de app. Mocht je foutief hebben ingeschreven hebben of kun je tog niet? Geen probleem want je kunt je gewoon uitschrijven.
-Voor de trainers van de club is er een Admin page gemaakt. Hier kunnen ze trainingen toevoegen, wijzigen en verwijderen. De trainingen uit het verleden (die niet meer zichbaar zijn voor leden) zijn ook hier terug te vinden.
-Mocht je andere informatie nodig hebben is er een contact pagina waar je informatie kunt vinden over de locatie van de club en de contact gegevens.
+The squash club 'S.C.H.I.E.T. Squash' wants to show all available trainings to their members. The best way to do this is with an app. Therefore is now available the S.C.H.I.E.T. Squash App!
+
+The mainscreen of the app shows all available trainings. These are always visable, so even when you are not signed in. But when you want to register you will have to login first. If you dont have an account don't worry because you can create one in the app. If you suddenly can't make it to the training or you just pressed a wrong training, you can easily cancel your registration.
+
+Logged in or not, you will always have premission to go the the contact page. Here you can find some contact information about the club.
+
+When users are logged in they will recieve acces to the MegaChat. Here all registered user of the app can speak with each other on one big messageboard. The app is also very dynamic. If you want to change your email adress, password, username you can easaly do this at the user account page.
+
+For the trainers there is a special page, the admin page. Here they can add new trainings, change them or even delete them. In the admin page all the previous (not deleted) trainings will remain visable.
 
 ### Design
-Clearly describe the technical design: how is the functionality implemented in your code? This should be like your DESIGN.md but updated to reflect the final application. First, give a high level overview, which helps us navigate and understand the total of your code (which components are there?). Second, go into detail, and describe the modules/classes and how they relate.
+Below you can see a clearly described flow of the app.
 
-#### Activities
-- Main
-- Inlog
-- Admin
-- Contact
-- Account
-- Splash
-- Mega Chat
+<img src="https://github.com/stephankok/progproject/blob/master/doc/final%20images/flow_chart.png" align="left" >
 
-#### Adapters
-- Chat
-- Users
-- Admin
-- FragmentInlog
+Activities
+- MainActivity
+- LoginActivity
+- AdminActivity
+- ContactActivity
+- UserAccountActivity
+- SplashActivity
+- MegaChatActivity
 
-#### Fragments
-- Forgot password
-- Login
-- Register
+Adapters
+- MegaChatAdapter
+- UserTrainingAdapter
+- EditTrainingAdapter
+- FragmentInlogAdapter
 
-#### Helpers
-- Calendar Picker
-- Firebase
+Fragments
+- ForgotPasswordFragment
+- LoginFragment
+- RegisterFragment
 
-#### Modules
+Helpers
+- CalendarPicker
+- FirebaseConnector
+
+Modules
 - Training
-- Message
+- MegaChatMessage
 
-Clearly describe challenges that your have met during development. Document all important changes that your have made with regard to your design document (from the PROCESS.md). Here, we can see how much you have learned in the past month.
-Api, opslaan, verwerken
+https://firebase.google.com/
+- Real time database
+- Authentication
+
+#### Why i have created the app as it is
+MainActivity and AdminActivity both use the Training model. But the property's of the adapters are completly diffrent so i have create diffrent adapters. One for user registration and one for editting.
+
+Apps run smoother when an single subject can be performed within one activity and thus exist UserActivity of three fragments, one for loggin in, one for registration and one if the user has forgotten his password. Registration, changing account details, chatting and editting Activities can all individually be created within one activity and  thus don't need any fragments.
+
+I created a class FirebaseConnector to get, update or change information on the database. Since the root of firebase is already a singleton, this class doesn't have to be a singleton. A refference to an TextView is given to display errors. Firebase will validate all the input given by the users. Since conencecting to firebase takes time, some validation is done on the app.
+
+Firebase only supports a few amounts of dataformats. Namely: Strings, Longs, List<Object>, Map<Object,Object>, so these dataformats are the only types i used within my models.
+
+Because each players has to be able to subscribe to trainings, i have implemented an login and registration option. Since everyplayer has its own phone they will stay logged on when they will close the app, unless they log out first.
 
 ### challenges
-De club heeft zijn eigen server, ik wou een eigen api maken om te communiceren tussen de server en de app. Dit is helaas niet gelukt omdat dit te veel tijd zou kosten. In plaats hiervan heb ik firebase gebruikt. Firebase had ook zijn eigen valkuilen, zo bleek het net overgenomen te zijn door google. Dit zorgde ervoor dat heel veel sintax veranderd was en niet meer klopte met wat online te vinden was.
+The club has its own server. I wanted to create my own api, so my own communication between the app and the server. Unfortinatly this didn't work and would take to much time to fix. So instead i used Firebase. Firebase works fine, but it had its own troubles. Firebase is recently taken over by google, they changed the sintax of how you must implement firebase. Because of this the code you find only mostly dont match with the current version of firebase. I have been stuck with it for some time, but i got it to work.
 
-Alle informatie in de juiste format krijgen was ook veel werk. Zo kan firebase maar met een beperkt aantal types van data werken en was ik gelimiteerd tot String, Long, List<Object> en Map<Object,Object>. Dit zorgde ervoor dat ik mijn app moest bouwen om dit dataformat inplaats van de dataformat om mijn app.
-
-Elke speler van de club moet zich kunnen registreren. Hiervoor heb ik uiteindelijk besloten om een inlog te maken, anders zouden medespelers elkaar kunnen in en uitschrijven.
+Connecting to the firebase will happen on the background. Communicating back to the UI has been an strugle, but with the use of an AsyncResonse it has succeseeded.

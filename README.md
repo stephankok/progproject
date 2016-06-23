@@ -1,61 +1,27 @@
-Programmeer Project
-==============
-Schiet Squash
---------------
-*Door Stephan Kok van de Universiteit van Amsterdam.*
+# S.C.H.I.E.T. Squash App
+*By Stephan Kok from the University of Amsterdam.*
 
-De squash club (www.schietsquash.nl) wilt een app voor de leden. Hier willen ze trainingen aanbieden waar leden zich voor kunnen inschrijven. Er moet een duidelijk weergave van de verschillende trainingen komen en wanneer ze zijn. Het is ook belangrijk dat mensen zich uit kunnen schrijven als ze toch niet kunnen komen. Idealiter moeten de beheerders van de app (De voorzitters van de club) de trainingen kunnen aanpassen, updaten en verwijderen via de app.
+<img src="https://github.com/stephankok/progproject/blob/master/doc/final%20images/main.png" align="right" height="326" width="183" >
+The squash club 'S.C.H.I.E.T. Squash' wants to show all available trainings to their members. The best way to do this is with an app. Therefore is now available the S.C.H.I.E.T. Squash App!
 
-Voor het opslaan van de trainingen word firebase gebruikt. Hier is een database in trie structuur met integers en strings.
-*Voor deze app zal een eigen api gemaakt moeten worden. Deze moet get request en put request kunnen hendelen. Hiervoor is tot nu toe (www.myjson.com) gevonden. Maar het zal iedealer zijn als dit via hun eigen server (wordpress) mogelijk is. Dit zal vrij veel werk zijn en zal ik me eerst in verdiepen.*
+The mainscreen of the app shows all available trainings. These are always visable, so even when you are not signed in. But when you want to register you will have to login first. If you dont have an account don't worry because you can create one in the app. If you suddenly can't make it to the training or you just pressed a wrong training, you can easily cancel your registration.
 
-Dit ga ik maken door een aantal activity's, met arrayadapters te gebruiken en zoals eerder vermeld een eigen api te maken. Zie ook wel onder voor meer details.
+Logged in or not, you will always have premission to go the the contact page. Here you can find some contact information about the club.
 
-Als extra's zou de ladder competitie ook in de komen, waarbij de stand door zou gegeven kunnen worden via de app (ipv via de mail) en dit dan live geupdate kan worden. Een andere optie is een Mega chat waar iedereen op kan reageren. Hier zal wel een vorm van inlog/database voor nodig zijn. Het inloggen zal ook handig zijn om gebruikers te laten registeren. Voor het mogelijk maken van inloggen zal echter wel een database gemaakt moeten worden en aangezien de club ook geen inlog voor de website heeft is dit mischien niet ideaal.
+When users are logged in they will recieve acces to the MegaChat. Here all registered user of the app can speak with each other on one big messageboard. The app is also very dynamic. If you want to change your email adress, password, username you can easaly do this at the user account page.
 
-Activity’s
--	startscherm: korte welkom en laat de beschikbare trainingen zien waar gebruikers mensen kunnen inloggen.
--	Training admin edit: activity is beveiligd met inlog, laat admins trainingen wijzigen
--	Contact activity: gevens van de club, hoe ze te benaderen zijn, mogelijk inschrijf formulier
--	Extra: laddar, mega chat, inlog
+For the trainers there is a special page, the admin page. Here they can add new trainings, change them or even delete them. In the admin page all the previous (not deleted) trainings will remain visable.
 
-http/asynctask
--	GET, om gebruikers de trainingen te laten zien
--	PUT, om admins de trainingen te laten updaten
+<img src="https://github.com/stephankok/progproject/blob/master/doc/final%20images/admin.png" align="left" height="326" width="183" >
+<img src="https://github.com/stephankok/progproject/blob/master/doc/final%20images/contact.png"align="left" height="326" width="183" >
+<img src="https://github.com/stephankok/progproject/blob/master/doc/final%20images/account.png" align="left" height="326" width="183" >
+<img src="https://github.com/stephankok/progproject/blob/master/doc/final%20images/megachat.png" align="left" height="326" width="183" >
 
-Adapters
--	Training view: Weergave en inschrijven van trainingen
--	Training cancel registratie: laat de inschreven leden zien en geef een optie om te cancelen.
--	Training edit: Weergave en aanpassen van trainingen.
--	Extra: ladder, mega chat, inlog
+### References
 
-API 
--	Training: Jsonformat waar de trainings gevens staan, moet aanpasbaar zijn (www.myjson.com)
--	Extra: ladder met stand, megachat, inlog
+In order to write my code i used the documentation of firebase on https://firebase.google.com/docs/ & https://www.firebase.com/docs/ when i got stuck i reffered myself to stackoverflow. This and some feedback from the staff of the minor Programming of the University of Amsterdam got me through this project.
 
+This project is under the Apache License.
 
-
-Screenshots:
-
-
-
-<img src="https://github.com/stephankok/progproject/blob/master/doc/start_activity_training.png" align="left" height="300" width="150" >
-<img src="https://github.com/stephankok/progproject/blob/master/doc/login_admin.png" align="left" height="300" width="150" >
-<img src="https://github.com/stephankok/progproject/blob/master/doc/admin_edit_training.png" align="left" height="300" width="150" >
-<img src="https://github.com/stephankok/progproject/blob/master/doc/contact_information.png" align="left" height="300" width="150" >
-
-<br></br>
-<br></br>
-<br></br>
-<br></br>
-<br></br>
-<br></br>
-
-
-**Bestaande apps**
-
-Vooral sportscholen bieden soms vergelijkbare apps aan. Waar leden zich kunnen inschrijven voor trainingen. Zie ook wel https://play.google.com/store/apps/details?id=br.com.wiki4fit & https://play.google.com/store/apps/details?id=org.lredacademy.training.
-
-Aangezien deze app speciaal ontworpen moet worden per vereniging is het niet mogelijk een bestaande app te gebruiken. Wel zouden vergelijkbare ideeën mischien toepasbaar. Zo zie je in bovenstaande apps dat ze ook gebruik maken van een inlog systeem en een chat systeem.
 
 Copyright (c) 2016 Stephan Kok
