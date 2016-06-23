@@ -1,6 +1,5 @@
 # S.C.H.I.E.T. Squash App
 
-### Info
 De squash club 'S.C.H.I.E.T. Squash' wilt graag een app waar ze trainingen kunnen aanbieden aan hun leden. Hiervoor is deze app gemaakt.
 Het hoofdscherm zijn de trainingen. Deze zijn altijd zichtbaar, ook als je niet ingelogd bent. Mocht je je willen registreren voor de training moet je echter wel eerst inloggen. Als je ingelogd bent kun je ook nog bij de Mega Chat wat één groot gesprek is voor alle geregistreerde van de app. Mocht je foutief hebben ingeschreven hebben of kun je tog niet? Geen probleem want je kunt je gewoon uitschrijven.
 Voor de trainers van de club is er een Admin page gemaakt. Hier kunnen ze trainingen toevoegen, wijzigen en verwijderen. De trainingen uit het verleden (die niet meer zichbaar zijn voor leden) zijn ook hier terug te vinden.
@@ -14,35 +13,32 @@ There are three main Activities. Main activity where trainings are shown and use
 I created a class FirebaseConnector to get, update or change information on the database. Since the root of firebase is already a singleton, this class doesn't have to be a singleton. A refference to an TextView is given to display errors. Firebase will validate all the input given by the users. Since conencecting to firebase takes time, some validation is done on the app.
 
 #### Activities
-- Main
-- Inlog
-- Admin
-- Contact
-- Account
-- Splash
-- Mega Chat
+- MainActivity
+- LoginActivity
+- AdminActivity
+- ContactActivity
+- UserAccountActivity
+- SplashActivity
+- MegaChatActivity
 
 #### Adapters
-- Chat
-- Users
-- Admin
-- FragmentInlog
+- ChatAdapter
+- UserTrainingAdapter
+- EditTrainingAdapter
+- FragmentInlogAdapter
 
 #### Fragments
-- Forgot password
-- Login
-- Register
+- ForgotPasswordFragment
+- LoginFragment
+- RegisterFragment
 
 #### Helpers
-- Calendar Picker
+- CalendarPicker
 - FirebaseConnector
 
 #### Modules
 - Training
-- Message
-
-Clearly describe challenges that your have met during development. Document all important changes that your have made with regard to your design document (from the PROCESS.md). Here, we can see how much you have learned in the past month.
-Api, opslaan, verwerken
+- MegaChatMessage
 
 ### challenges
 De club heeft zijn eigen server, ik wou een eigen api maken om te communiceren tussen de server en de app. Dit is helaas niet gelukt omdat dit te veel tijd zou kosten. In plaats hiervan heb ik firebase gebruikt. Firebase had ook zijn eigen valkuilen, zo bleek het net overgenomen te zijn door google. Dit zorgde ervoor dat heel veel sintax veranderd was en niet meer klopte met wat online te vinden was.
