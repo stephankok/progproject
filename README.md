@@ -14,13 +14,10 @@ For the trainers there is a special page, the admin page. Here they can add new 
 
 Your GitHub repository should contain a complete README.md file that states the application name, a couple of screen shots (resized to appropriate width/height for readability), its purpose, your name and a copyright statement. The README should be easy to read.
 
-<img src="https://github.com/stephankok/progproject/blob/master/doc/final%20images/admin.png" align="right" height="326" width="183" >
-
-<img src="https://github.com/stephankok/progproject/blob/master/doc/final%20images/contact.png"align="right" height="326" width="183" >
-<img src="https://github.com/stephankok/progproject/blob/master/doc/final%20images/account.png" align="right" height="326" width="183" >
-<img src="https://github.com/stephankok/progproject/blob/master/doc/final%20images/main.png" align="right" height="326" width="183" >
-<img src="https://github.com/stephankok/progproject/blob/master/doc/final%20images/megachat.png" align="right" height="326" width="183" >
-<img src="https://github.com/stephankok/progproject/blob/master/doc/final%20images/menu.png" align="right" height="326" width="183" >
+<img src="https://github.com/stephankok/progproject/blob/master/doc/final%20images/admin.png" align="left" height="326" width="183" >
+<img src="https://github.com/stephankok/progproject/blob/master/doc/final%20images/contact.png"align="left" height="326" width="183" >
+<img src="https://github.com/stephankok/progproject/blob/master/doc/final%20images/account.png" align="left" height="326" width="183" >
+<img src="https://github.com/stephankok/progproject/blob/master/doc/final%20images/megachat.png" align="left" height="326" width="183" >
 
 ### References
 
