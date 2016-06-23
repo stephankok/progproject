@@ -20,7 +20,7 @@
 
     <!-- Splash application theme. -->
     <style name="SplashTheme" parent="android:Theme">
-        <item name="android:windowBackground">@drawable/schietheader</item>
+        <item name="android:windowBackground">@drawable/splash</item>
         <item name="android:windowNoTitle">true</item>
     </style>
 

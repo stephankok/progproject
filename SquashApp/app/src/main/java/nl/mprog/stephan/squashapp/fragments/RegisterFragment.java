@@ -28,10 +28,10 @@ import nl.mprog.stephan.squashapp.activities.R;
  */
 public class RegisterFragment extends Fragment{
 
-    private final int SENDING = 1;
-    private final int FINISHED = 100;
-    private final int ERROR = -1;
-    private final int NEUTRAL = 0;
+    private final int SENDING = 1;      // Button sending code
+    private final int FINISHED = 100;   // Button finished code
+    private final int ERROR = -1;       // Button error code
+    private final int NEUTRAL = 0;      // Button neutral code
 
     private EditText emailEdit;
     private EditText usernameEdit;
@@ -42,34 +42,41 @@ public class RegisterFragment extends Fragment{
     private Context context;
 
     // connect to firebase
-    private FirebaseAuth mAuth;
+    private FirebaseAuth auth;
     private FirebaseUser user;
 
-    // newInstance constructor for creating fragment with arguments
+    /**
+     * newInstance constructor for creating fragment with arguments.
+     */
     public static RegisterFragment newInstance() {
         return new RegisterFragment();
     }
 
-    // Store instance variables based on arguments passed
+    /**
+     * Store instance variables based on arguments passed.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
-    // Inflate the view for the fragment based on layout XML
+    /**
+     * Inflate the view for the fragment based on layout XML.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_register, container, false);
         context = view.getContext();
 
+        // Get view.
         emailEdit = (EditText) view.findViewById(R.id.emailEditText);
         usernameEdit = (EditText) view.findViewById(R.id.usernameEditText);
         passwordEdit = (EditText) view.findViewById(R.id.passwordEditText);
         controlPasswordEdit = (EditText) view.findViewById(R.id.controlPasswordEditText);
         registerError = (TextView) view.findViewById(R.id.registerError);
 
-        // get special sumbit button
+        // Get special sumbit button
         registerNewUserButton = (ActionProcessButton) view.findViewById(R.id.registerNewUserButton);
         registerNewUserButton.setMode(ActionProcessButton.Mode.ENDLESS);
         registerNewUserButton.setOnClickListener(new View.OnClickListener() {
@@ -81,20 +88,24 @@ public class RegisterFragment extends Fragment{
             }
         });
 
-        // get current state
-        mAuth = FirebaseAuth.getInstance();
-        if(mAuth.getCurrentUser() != null){
+        // Get current state
+        auth = FirebaseAuth.getInstance();
+        if(auth.getCurrentUser() != null){
             Toast.makeText(context, "Already logged in", Toast.LENGTH_SHORT).show();
         }
         return view;
     }
 
+    /**
+     * Create a new account.
+     */
     public void createAccount() {
         // check if correct form
         if (!validateForm()) {
             return;
         }
 
+        // Let users now we are busy
         registerNewUserButton.setProgress(SENDING);
 
         final String email = emailEdit.getText().toString();
@@ -102,7 +113,7 @@ public class RegisterFragment extends Fragment{
         final String password = passwordEdit.getText().toString();
 
         // Create user
-        mAuth.createUserWithEmailAndPassword(email, password)
+        auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -132,6 +143,9 @@ public class RegisterFragment extends Fragment{
                 });
     }
 
+    /**
+     * Validate given input.
+     */
     private boolean validateForm() {
         boolean valid = true;
 

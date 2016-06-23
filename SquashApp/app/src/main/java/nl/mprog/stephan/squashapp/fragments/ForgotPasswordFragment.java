@@ -20,47 +20,52 @@ import com.google.firebase.auth.FirebaseUser;
 import nl.mprog.stephan.squashapp.activities.R;
 
 /**
- * Created by Stephan on 14-6-2016.
+ * Fragment for when users have forgotten their password.
  */
 public class ForgotPasswordFragment extends Fragment {
 
-    private final int SENDING = 1;
-    private final int FINISHED = 100;
-    private final int ERROR = -1;
+    private final int SENDING = 1;      // Button sending code
+    private final int FINISHED = 100;   // Button finished code
+    private final int ERROR = -1;       // Button error code
 
     private EditText emailEditText;
     private TextView errorField;
     private ActionProcessButton forgotPasswordButton;
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-    // newInstance constructor for creating fragment with arguments
+    /**
+     * newInstance constructor for creating fragment with arguments.
+      */
     public static ForgotPasswordFragment newInstance() {
         return new ForgotPasswordFragment();
     }
 
-    // Store instance variables based on arguments passed
+    /**
+     *  Store instance variables based on arguments passed
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
-    // Inflate the view for the fragment based on layout XML
+    /**
+     * Inflate the view for the fragment based on layout XML
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_forgot_password, container, false);
 
+        // Get view
         emailEditText = (EditText) view.findViewById(R.id.forgotPasswordMail);
-
-        // Buttons
         forgotPasswordButton = (ActionProcessButton) view.findViewById(R.id.forgotPasswordButton);
         errorField = (TextView) view.findViewById(R.id.errorField);
 
-        // set special mode
+        // Set special mode
         forgotPasswordButton.setMode(ActionProcessButton.Mode.ENDLESS);
 
-        // Set onClick listener.
+        // Set onClick listener
         forgotPasswordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,7 +93,7 @@ public class ForgotPasswordFragment extends Fragment {
         forgotPasswordButton.setProgress(SENDING);
         String emailAddress = emailEditText.getText().toString();
 
-        mAuth.sendPasswordResetEmail(emailAddress)
+        auth.sendPasswordResetEmail(emailAddress)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {

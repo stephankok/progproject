@@ -191,7 +191,12 @@ public class AdminActivity extends AppCompatActivity implements FirebaseConnecto
         builder1.setTitle("Add training")
                 .setCancelable(true)
                 .setView(layout)
-                .setPositiveButton("Add",null);
+                .setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // After dialog is shown
+                    }
+                });
 
         builder1.setNegativeButton(
                 "Cancel",
@@ -200,9 +205,10 @@ public class AdminActivity extends AppCompatActivity implements FirebaseConnecto
                         dialog.cancel();
                     }
                 });
-
         final AlertDialog alert11 = builder1.create();
         alert11.show();
+
+        // Set an onclick listener that will only remove dialog on success
         alert11.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -347,29 +353,7 @@ public class AdminActivity extends AppCompatActivity implements FirebaseConnecto
                                 "Update",
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
-
-                                        if(falseInput(editInfo, editTrainer,
-                                                editMax, subjectOfTraining)){
-                                            return;
-                                        }
-
-                                        // Update training.
-                                        item.changeShortInfo(editInfo.getText().toString());
-                                        item.changeTrainer(editTrainer.getText().toString());
-                                        item.changeMaxPlayers(
-                                                Long.parseLong(editMax.getText().toString()));
-                                        item.changeDate(tempTraining.getDate());
-                                        item.changeEnd(tempTraining.getEnd());
-                                        item.changeSubjectOfTraining(
-                                                subjectOfTraining.getText().toString());
-
-                                        // Update firebase
-                                        firebase.updateAllTrainings(myAdapter.getAll(),
-                                                errorGetTrainingsAdmin);
-
-                                        myAdapter.notifyDataSetChanged();
-                                        dialog.cancel();
-
+                                        // After dialog is shown
                                     }
                                 });
 
@@ -381,8 +365,38 @@ public class AdminActivity extends AppCompatActivity implements FirebaseConnecto
                             }
                         });
 
-                AlertDialog alert11 = builder1.create();
+                final AlertDialog alert11 = builder1.create();
                 alert11.show();
+
+                // Set an onclick listener that will only remove dialog on success
+                alert11.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if(falseInput(editInfo, editTrainer,
+                                        editMax, subjectOfTraining)){
+                                    return;
+                                }
+
+                                // Update training.
+                                item.changeShortInfo(editInfo.getText().toString());
+                                item.changeTrainer(editTrainer.getText().toString());
+                                item.changeMaxPlayers(
+                                        Long.parseLong(editMax.getText().toString()));
+                                item.changeDate(tempTraining.getDate());
+                                item.changeEnd(tempTraining.getEnd());
+                                item.changeSubjectOfTraining(
+                                        subjectOfTraining.getText().toString());
+
+                                // Update firebase
+                                firebase.updateAllTrainings(myAdapter.getAll(),
+                                        errorGetTrainingsAdmin);
+
+                                myAdapter.notifyDataSetChanged();
+                                alert11.cancel();
+                            }
+                        }
+                );
 
                 return true;
             }

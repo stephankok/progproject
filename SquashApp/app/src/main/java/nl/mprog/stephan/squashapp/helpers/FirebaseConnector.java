@@ -24,8 +24,9 @@ import java.util.Comparator;
 import nl.mprog.stephan.squashapp.models.Training;
 
 /**
- * Created by Stephan on 6-6-2016.
- *
+ * Connect with Firebase.
+ * Get all trainings, update registered players, update all trainings, sort trainings list
+ * (On start time and date), rename user, delete user.
  */
 public class FirebaseConnector {
 
@@ -35,7 +36,7 @@ public class FirebaseConnector {
     private AsyncResponse delegate = null;       // initialize to null;
 
     /**
-     * Function in the activity to give the information.
+     * Function in the activity to give the information
      * ! So these functions must be present!
      */
     public interface AsyncResponse{
@@ -70,6 +71,9 @@ public class FirebaseConnector {
                 });
     }
 
+    /**
+     * Update training.
+     */
     public void updateRegisteredPlayers(Training training, int pos){
         rootRef.child("trainingen").child(String.valueOf(pos)).child("currentPlayers")
                 .setValue(training.getCurrentPlayers());
@@ -79,9 +83,10 @@ public class FirebaseConnector {
 
     }
 
+    /**
+     * Update all trainings.
+     */
     public void updateAllTrainings(ArrayList<Training> trainingList, final TextView showError){
-        Log.d("update", "begin" + trainingList.toString());
-
         sortList(trainingList);
         rootRef.child("trainingen").setValue(trainingList).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -95,6 +100,9 @@ public class FirebaseConnector {
         Log.d("update", "end" +  trainingList.toString());
     }
 
+    /**
+     * Sort trainings list.
+     */
     private void sortList(ArrayList<Training> trainingArrayList){
         Collections.sort(trainingArrayList, new Comparator<Training>() {
             @Override
@@ -104,6 +112,13 @@ public class FirebaseConnector {
         });
     }
 
+    /**
+     * Rename user.
+     * @param user: Current user
+     * @param newUserName: New name
+     * @param currentUser: TextView where name is displayed
+     * @param context: Show success, fail
+     */
     public void renameUser(final FirebaseUser user, final String newUserName,
                            final TextView currentUser, final Context context){
         // Get data.

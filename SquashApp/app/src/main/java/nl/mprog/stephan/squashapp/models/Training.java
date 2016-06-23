@@ -8,7 +8,7 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
- * Training item
+ * Training item.
  */
 public class Training {
 
@@ -22,9 +22,12 @@ public class Training {
     private Map<String,Object> registeredPlayers;
 
     public void Training(){
-        // empty for firebase
+        // empty for Firebase
     }
 
+    /**
+     * Initialize new training.
+     */
     public void newTraining(String trainer, Long date, String shortInfo, Long end,
                          Long maxPlayers, String subjectOfTraining){
         this.trainer = trainer;

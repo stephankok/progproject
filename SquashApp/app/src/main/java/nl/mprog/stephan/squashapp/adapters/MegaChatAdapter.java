@@ -19,8 +19,7 @@ import nl.mprog.stephan.squashapp.models.MegaChatMessage;
 ;
 
 /**
- * Created by Stephan on 1-6-2016.
- *
+ * Adapter for Mega chat with all users.
  */
 
 public class MegaChatAdapter extends ArrayAdapter<MegaChatMessage> {
@@ -38,6 +37,9 @@ public class MegaChatAdapter extends ArrayAdapter<MegaChatMessage> {
         this.messages = messages;
     }
 
+    /**
+     * Push message on top, rather then bottum.
+     */
     public void push(MegaChatMessage message){
         this.messages.add(0,message);
         notifyDataSetChanged();
@@ -67,10 +69,6 @@ public class MegaChatAdapter extends ArrayAdapter<MegaChatMessage> {
         messageShow.setText(message.getMessage());
         userOfMessage.setText(messageInfo);
 
-
         return view;
     }
-
 }
-
-// ContextMenu?

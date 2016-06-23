@@ -10,24 +10,27 @@ import nl.mprog.stephan.squashapp.fragments.RegisterFragment;
 
 
 /**
- * Created by Stephan on 13-6-2016.
- *
+ * Manage the fragments of the LoginActivity.
  */
 public class FragmentInlogAdapter extends FragmentPagerAdapter {
 
-    private static int NUM_FRAGMENTS = 3;
+    private static int NUM_FRAGMENTS = 3;   // Number of pages.
 
     public FragmentInlogAdapter(FragmentManager fragmentManager) {
         super(fragmentManager);
     }
 
-    // Returns total number of pages
+    /**
+     * Number of pages.
+     */
     @Override
     public int getCount() {
         return NUM_FRAGMENTS;
     }
 
-    // Returns the fragment to display for that page
+    /**
+     * Return the Fragment to display.
+     */
     @Override
     public Fragment getItem(int position) {
         switch (position) {
@@ -42,7 +45,9 @@ public class FragmentInlogAdapter extends FragmentPagerAdapter {
         }
     }
 
-    // Returns the page title for the top indicator
+    /**
+     * Return the title corresponding with the Fragment.
+     */
     @Override
     public CharSequence getPageTitle(int position) {
         switch (position){

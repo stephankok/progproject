@@ -171,7 +171,7 @@ public class UserAccountActivity extends AppCompatActivity implements View.OnCli
                 .setPositiveButton("Change mail", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // after dialog is shown
+                        // After dialog is shown
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

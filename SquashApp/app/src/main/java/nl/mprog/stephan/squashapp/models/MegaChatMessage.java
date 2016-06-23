@@ -1,17 +1,21 @@
 package nl.mprog.stephan.squashapp.models;
 
 /**
- * Created by Stephan on 15-6-2016.
+ * A message for the mega chat.
  */
 public class MegaChatMessage {
 
-    String userName;
-    String message;
-    Long timeStamp;
+    String userName;       // Poster of message
+    String message;        // Message
+    Long timeStamp;        // Time message is posted
 
     public MegaChatMessage(){
+        // Empty for Firebase
     }
 
+    /**
+     * Initialize message.
+     */
     public void setValues(String userName, String message, Long timeStamp){
         this.userName = userName;
         this.message = message;

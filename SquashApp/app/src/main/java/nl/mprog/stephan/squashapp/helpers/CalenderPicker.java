@@ -14,15 +14,14 @@ import java.util.Locale;
 import nl.mprog.stephan.squashapp.models.Training;
 
 /**
- * Created by Stephan on 8-6-2016.
- *
+ * Create Date/Time Picker Dialog/
  */
 public class CalenderPicker {
 
     // Context of activity.
     private Context context;
     private Calendar calendar;
-    private AsyncResponse delegate = null;       // initialize to null;
+    private AsyncResponse delegate = null;       // initialize to null
 
     // Date pickers.
     private DatePickerDialog.OnDateSetListener dateListener;

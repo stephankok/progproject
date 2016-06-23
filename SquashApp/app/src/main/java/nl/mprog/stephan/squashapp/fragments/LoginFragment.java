@@ -24,9 +24,9 @@ import nl.mprog.stephan.squashapp.activities.R;
  */
 public class LoginFragment extends Fragment {
 
-    private final int SENDING = 1;
-    private final int FINISHED = 100;
-    private final int ERROR = -1;
+    private final int SENDING = 1;      // Button sending code
+    private final int FINISHED = 100;   // Button finished code
+    private final int ERROR = -1;       // Button error code
 
     private EditText mEmailField;
     private EditText mPasswordField;
@@ -34,7 +34,9 @@ public class LoginFragment extends Fragment {
     private ActionProcessButton signInButton;
     private FirebaseAuth mAuth;
 
-    // newInstance constructor for creating fragment with arguments
+    /**
+     *  newInstance constructor for creating fragment with arguments.
+     */
     public static LoginFragment newInstance() {
         return new LoginFragment();
     }
@@ -43,16 +45,18 @@ public class LoginFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Get root to the connection with firebase.
+        // Get root to the connection with Firebase
         mAuth = FirebaseAuth.getInstance();
 
-        // Check if already logged on.
+        // Check if already logged on
         if(mAuth.getCurrentUser() != null){
             getActivity().finish();
         }
     }
 
-    // Create view.
+    /**
+     * Create view.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {

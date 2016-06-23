@@ -19,12 +19,11 @@ import nl.mprog.stephan.squashapp.models.Training;
 
 public class UserTrainingAdapter extends ArrayAdapter<Training> {
 
-    ArrayList<Training> trainingList;  // the items.
-    Context context;
-    int offset;
-
+    ArrayList<Training> trainingList;  // Trainings
+    Context context;                   // Show information
+    int offset;                        // Amount of hidden Trainings
     /**
-     * Initialize adapter
+     * Initialize adapter.
      */
     public UserTrainingAdapter(Context context, ArrayList<Training> trainingList) {
         super(context, R.layout.single_training, trainingList);
@@ -33,20 +32,24 @@ public class UserTrainingAdapter extends ArrayAdapter<Training> {
     }
 
     /**
-     * Overwrite trainingslist
+     * Overwrite trainings list.
      */
     public void setTrainingList(ArrayList<Training> trainingList){
         this.trainingList.clear();
         this.offset = 0;
-        for(Training training: trainingList) {
-            // if the end of the training + 1/2 a day has passed, dont show to users.
-            if( (training.getDate() + 43200000L) > Calendar.getInstance().getTimeInMillis()){
+
+        for (Training training: trainingList) {
+            // If the end of the training + 1/2 a day has passed, dont show to users
+            if ((training.getDate() + 43200000L) > Calendar.getInstance().getTimeInMillis()){
                 this.trainingList.add(training);
             }
             else{
+                // Hidden Training
                 this.offset += 1;
             }
         }
+
+        // Done update adapter
         notifyDataSetChanged();
     }
 
@@ -73,16 +76,16 @@ public class UserTrainingAdapter extends ArrayAdapter<Training> {
         final TextView maxPlayers = (TextView) view.findViewById(R.id.maxPlayers);
         final TextView subjectOfTraining = (TextView) view.findViewById(R.id.subjectOfTraining);
 
-        // get Training
+        // Get Training
         Training item = trainingList.get(position);
 
-        // get information
+        // Get information
         String timeText =  item.getFormattedStart() + " until " + item.getFormattedEnd();
         String currentPlayerText = "Participants: " + item.getCurrentPlayers();
         String maxPlayersText = "Max participants: " + item.getMaxPlayers();
         String trainerText = "By " + item.getTrainer();
 
-        // Set text.
+        // Set text
         date.setText(item.getFormattedDate());
         info.setText(item.getShortInfo());
         time.setText(timeText);
