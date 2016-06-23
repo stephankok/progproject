@@ -11,6 +11,10 @@ Clearly describe the technical design: how is the functionality implemented in y
 
 <img src="https://github.com/stephankok/progproject/blob/master/doc/final%20images/flow_chart.png" align="left" >
 
+There are three main Activities. Main activity where trainings are shown and users can registrate, Admin activity where admins can edit trainings and Inlog activity where users can login.
+
+I created a class FirebaseConnector to get, update or change information on the database. Since the root of firebase is already a singleton, this class doesn't have to be a singleton. A refference to an TextView is given to display errors. Firebase will validate all the input given by the users. Since conencecting to firebase takes time, some validation is done on the app.
+
 #### Activities
 - Main
 - Inlog
@@ -33,7 +37,7 @@ Clearly describe the technical design: how is the functionality implemented in y
 
 #### Helpers
 - Calendar Picker
-- Firebase
+- FirebaseConnector
 
 #### Modules
 - Training
