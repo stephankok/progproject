@@ -2,15 +2,15 @@
 *By Stephan Kok from the University of Amsterdam.*
 
 <img src="https://github.com/stephankok/progproject/blob/master/doc/final%20images/main.png" align="right" height="326" width="183" >
-The squash club 'S.C.H.I.E.T. Squash' wants to show all available trainings to their members. The best way to do this is with an app. Therefore is now available the S.C.H.I.E.T. Squash App!
+The squash club 'S.C.H.I.E.T. Squash' wants to show all available trainings to their members. The best way to do this is with an app. Therefore, is now available the S.C.H.I.E.T. Squash App!
 
-The mainscreen of the app shows all available trainings. These are always visable, so even when you are not signed in. But when you want to register you will have to login first. If you dont have an account don't worry because you can create one in the app. If you suddenly can't make it to the training or you just pressed a wrong training, you can easily cancel your registration.
+The mainscreen of the app shows all available trainings. These are always visible, so even when you are not signed in. But when you want to register you will have to login first. If you don't have an account don't worry because you can create one in the app. If you suddenly can't make it to the training or you just pressed a wrong training, you can easily cancel your registration.
 
-Logged in or not, you will always have premission to go the the contact page. Here you can find some contact information about the club.
+Logged in or not, you will always have permission to go the the contact page. Here you can find some contact information about the club.
 
-When users are logged in they will recieve acces to the MegaChat. Here all registered user of the app can speak with each other on one big messageboard. The app is also very dynamic. If you want to change your email adress, password, username you can easaly do this at the user account page.
+When users are logged in they will receive access to the MegaChat. Here all registered user of the app can speak with each other on one big message board. The app is also very dynamic. If you want to change your email address, password, user name you can easily do this at the user account page.
 
-For the trainers there is a special page, the admin page. Here they can add new trainings, change them or even delete them. In the admin page all the previous (not deleted) trainings will remain visable.
+For the trainers there is a special page, the admin page. Here they can add new trainings, change them or even delete them. In the admin page all the previous (not deleted) trainings will remain visible.
 
 <img src="https://github.com/stephankok/progproject/blob/master/doc/final%20images/admin.png" align="left" height="326" width="183" >
 <img src="https://github.com/stephankok/progproject/blob/master/doc/final%20images/contact.png"align="left" height="326" width="183" >
