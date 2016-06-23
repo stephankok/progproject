@@ -1,11 +1,18 @@
 # S.C.H.I.E.T. Squash App
+<img src="https://github.com/stephankok/progproject/blob/master/doc/final%20images/main.png" align="right" height="326" width="183" >
 
-De squash club 'S.C.H.I.E.T. Squash' wilt graag een app waar ze trainingen kunnen aanbieden aan hun leden. Hiervoor is deze app gemaakt.
-Het hoofdscherm zijn de trainingen. Deze zijn altijd zichtbaar, ook als je niet ingelogd bent. Mocht je je willen registreren voor de training moet je echter wel eerst inloggen. Als je ingelogd bent kun je ook nog bij de Mega Chat wat één groot gesprek is voor alle geregistreerde van de app. Mocht je foutief hebben ingeschreven hebben of kun je tog niet? Geen probleem want je kunt je gewoon uitschrijven.
-Voor de trainers van de club is er een Admin page gemaakt. Hier kunnen ze trainingen toevoegen, wijzigen en verwijderen. De trainingen uit het verleden (die niet meer zichbaar zijn voor leden) zijn ook hier terug te vinden.
-Mocht je andere informatie nodig hebben is er een contact pagina waar je informatie kunt vinden over de locatie van de club en de contact gegevens.
+The squash club 'S.C.H.I.E.T. Squash' wants to show all available trainings to their members. The best way to do this is with an app. Therefore is now available the S.C.H.I.E.T. Squash App!
+
+The mainscreen of the app shows all available trainings. These are always visable, so even when you are not signed in. But when you want to register you will have to login first. If you dont have an account don't worry because you can create one in the app. If you suddenly can't make it to the training or you just pressed a wrong training, you can easily cancel your registration.
+
+Logged in or not, you will always have premission to go the the contact page. Here you can find some contact information about the club.
+
+When users are logged in they will recieve acces to the MegaChat. Here all registered user of the app can speak with each other on one big messageboard. The app is also very dynamic. If you want to change your email adress, password, username you can easaly do this at the user account page.
+
+For the trainers there is a special page, the admin page. Here they can add new trainings, change them or even delete them. In the admin page all the previous (not deleted) trainings will remain visable.
 
 ### Design
+
 <img src="https://github.com/stephankok/progproject/blob/master/doc/final%20images/flow_chart.png" align="left" >
 
 There are three main Activities. Main activity where trainings are shown and users can registrate, Admin activity where admins can edit trainings and Inlog activity where users can login.
@@ -22,7 +29,7 @@ I created a class FirebaseConnector to get, update or change information on the 
 - MegaChatActivity
 
 #### Adapters
-- ChatAdapter
+- MegaChatAdapter
 - UserTrainingAdapter
 - EditTrainingAdapter
 - FragmentInlogAdapter
