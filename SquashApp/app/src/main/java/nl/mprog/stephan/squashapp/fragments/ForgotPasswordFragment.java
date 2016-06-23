@@ -24,6 +24,10 @@ import nl.mprog.stephan.squashapp.activities.R;
  */
 public class ForgotPasswordFragment extends Fragment {
 
+    private final int SENDING = 1;
+    private final int FINISHED = 100;
+    private final int ERROR = -1;
+
     private EditText emailEditText;
     private TextView errorField;
     private ActionProcessButton forgotPasswordButton;
@@ -72,13 +76,16 @@ public class ForgotPasswordFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Send password mail.
+     */
     private void forgotPassword() {
 
         if (!validateForm()) {
             return;
         }
 
-        forgotPasswordButton.setProgress(1);
+        forgotPasswordButton.setProgress(SENDING);
         String emailAddress = emailEditText.getText().toString();
 
         mAuth.sendPasswordResetEmail(emailAddress)
@@ -89,9 +96,9 @@ public class ForgotPasswordFragment extends Fragment {
                             Toast.makeText(getContext(), "Email send" +
                                             "\nIt may take a moment until it arrives",
                                     Toast.LENGTH_SHORT).show();
-                            forgotPasswordButton.setProgress(100);
+                            forgotPasswordButton.setProgress(FINISHED);
                         } else {
-                            forgotPasswordButton.setProgress(-1);
+                            forgotPasswordButton.setProgress(ERROR);
                             errorField.setText(task.getException().getMessage());
                         }
                     }

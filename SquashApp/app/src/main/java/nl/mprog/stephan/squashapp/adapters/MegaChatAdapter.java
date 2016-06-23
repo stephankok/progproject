@@ -23,7 +23,7 @@ import nl.mprog.stephan.squashapp.models.MegaChatMessage;
  *
  */
 
-public class ChatAdapter extends ArrayAdapter<MegaChatMessage> {
+public class MegaChatAdapter extends ArrayAdapter<MegaChatMessage> {
 
     ArrayList<MegaChatMessage> messages;  // the items.
     Context context;
@@ -31,7 +31,7 @@ public class ChatAdapter extends ArrayAdapter<MegaChatMessage> {
     /**
      * Initialize adapter
      */
-    public ChatAdapter(Context context, ArrayList<MegaChatMessage> messages) {
+    public MegaChatAdapter(Context context, ArrayList<MegaChatMessage> messages) {
         super(context, R.layout.single_message, messages);
 
         this.context = context;
@@ -56,14 +56,14 @@ public class ChatAdapter extends ArrayAdapter<MegaChatMessage> {
         TextView messageShow = (TextView) view.findViewById(R.id.messageShow);
         TextView userOfMessage = (TextView) view.findViewById(R.id.userOfMessage);
 
+        // Get message
         MegaChatMessage message = messages.get(position);
 
-        // Time
+        // Set time and message
         Date time = Calendar.getInstance().getTime();
         time.setTime(message.getTimeStamp());
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.US);
         String messageInfo = message.getUserName() + "\n" + format.format(time);
-
         messageShow.setText(message.getMessage());
         userOfMessage.setText(messageInfo);
 

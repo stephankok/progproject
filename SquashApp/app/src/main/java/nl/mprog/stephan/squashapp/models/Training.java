@@ -8,7 +8,7 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
- * Created by Stephan on 1-6-2016.
+ * Training item
  */
 public class Training {
 

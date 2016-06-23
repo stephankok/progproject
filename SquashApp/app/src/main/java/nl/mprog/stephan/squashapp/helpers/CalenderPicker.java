@@ -49,6 +49,11 @@ public class CalenderPicker {
         void newTrainingDateSelected(final Calendar date, final Calendar end);
     }
 
+    /**
+     * Change date of the training.
+     * @param training: current date
+     * @param datePicked: TextView to show datepicked or error.
+     */
     public void changeDate(final Training training, final TextView datePicked){
         date.setTimeInMillis(training.getDate());
 
@@ -68,6 +73,12 @@ public class CalenderPicker {
         datePickerDialog.show();
     }
 
+    /**
+     * Change start time of the training.
+     *
+     * @param training: current date
+     * @param startPicked: TextView to show startPicked or error.
+     */
     public void changeStart(final Training training, final TextView startPicked){
         date.setTimeInMillis(training.getDate());
 
@@ -89,6 +100,12 @@ public class CalenderPicker {
         startTimePickerDialog.show();
     }
 
+    /**
+     * Change end time of the training.
+     *
+     * @param training: current date
+     * @param endPicked: TextView to show endPicked or error.
+     */
     public void changeEnd(final Training training, final TextView endPicked){
         end.setTimeInMillis(training.getEnd());
 
@@ -110,6 +127,11 @@ public class CalenderPicker {
         startTimePickerDialog.show();
     }
 
+    /**
+     * Create a new training.
+     *
+     * @param delegate: Give selected date, start and end to this context.
+     */
     public void newTraining(final AsyncResponse delegate){
         // Set response
         this.delegate = delegate;

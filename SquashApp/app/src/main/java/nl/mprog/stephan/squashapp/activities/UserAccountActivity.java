@@ -27,11 +27,6 @@ import nl.mprog.stephan.squashapp.helpers.FirebaseConnector;
 
 public class UserAccountActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private Button emailButton;
-    private Button usernameButton;
-    private Button passwordButton;
-    private Button deleteAccountButton;
-    private Button signOutButton;
     private TextView currentUser;
     private TextView currentEmail;
     private TextView accountErrorShow;
@@ -55,27 +50,34 @@ public class UserAccountActivity extends AppCompatActivity implements View.OnCli
                 }
             }
         });
+
         // Check if really logged in
         if(user == null){
             finish();
         }
 
-        // Get views.
-        emailButton = (Button) findViewById(R.id.changeEmailButton);
-        usernameButton = (Button) findViewById(R.id.changeUsernameButton);
-        passwordButton = (Button) findViewById(R.id.changePasswordButton);
-        deleteAccountButton = (Button) findViewById(R.id.deleteAccountButton);
-        signOutButton = (Button) findViewById(R.id.signOutButton);
+        // Get views
+        Button emailButton = (Button) findViewById(R.id.changeEmailButton);
+        Button usernameButton = (Button) findViewById(R.id.changeUsernameButton);
+        Button passwordButton = (Button) findViewById(R.id.changePasswordButton);
+        Button deleteAccountButton = (Button) findViewById(R.id.deleteAccountButton);
+        Button signOutButton = (Button) findViewById(R.id.signOutButton);
         currentUser = (TextView) findViewById(R.id.currentUserName);
         currentEmail = (TextView) findViewById(R.id.currentEmail);
         accountErrorShow = (TextView) findViewById(R.id.accountErrorShow);
 
         // set onClickListener
-        emailButton.setOnClickListener(this);
-        usernameButton.setOnClickListener(this);
-        passwordButton.setOnClickListener(this);
-        deleteAccountButton.setOnClickListener(this);
-        signOutButton.setOnClickListener(this);
+        try{
+            emailButton.setOnClickListener(this);
+            usernameButton.setOnClickListener(this);
+            passwordButton.setOnClickListener(this);
+            deleteAccountButton.setOnClickListener(this);
+            signOutButton.setOnClickListener(this);
+        }
+        catch (NullPointerException e){
+            Toast.makeText(UserAccountActivity.this, "Please restart app", Toast.LENGTH_SHORT).show();
+        }
+
 
         // set details
         currentUser.setText(user.getDisplayName());
@@ -88,12 +90,11 @@ public class UserAccountActivity extends AppCompatActivity implements View.OnCli
     }
 
     /**
-     * Set back button
+     * Set back button.
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
-
         // check witch item is pressed.
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -104,6 +105,9 @@ public class UserAccountActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
+    /**
+     * On click listener.
+     */
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -118,11 +122,9 @@ public class UserAccountActivity extends AppCompatActivity implements View.OnCli
                 break;
             case R.id.deleteAccountButton:
                 deleteAccount();
-                // make sure to cancel all subscibsions.
                 break;
             case R.id.signOutButton:
                 signOut();
-                finish();
                 break;
         }
     }
@@ -131,14 +133,17 @@ public class UserAccountActivity extends AppCompatActivity implements View.OnCli
      * Sign out.
      */
     private void signOut(){
+        // Create dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this)
                 .setTitle("Log out")
                 .setMessage("Are you sure you want to log out?")
                 .setPositiveButton("yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        // Sign out
                         auth.signOut();
                         Toast.makeText(UserAccountActivity.this, "Signed out", Toast.LENGTH_SHORT).show();
+                        finish();
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -151,40 +156,37 @@ public class UserAccountActivity extends AppCompatActivity implements View.OnCli
     }
 
     /**
-     * Change email adress
+     * Change email address.
      */
     private void changeMail(){
-
+        // Create dialog
         LayoutInflater li = LayoutInflater.from(this);
         final View layout = li.inflate(R.layout.alertdialog_auth_change_setting, null);
-
         final EditText password = (EditText) layout.findViewById(R.id.reAutenticate);
         final EditText settingToChange = (EditText) layout.findViewById(R.id.settingToChange);
         settingToChange.setHint(user.getEmail());
-
         AlertDialog.Builder builder = new AlertDialog.Builder(this)
                 .setTitle("Change email adress")
                 .setView(layout)
                 .setPositiveButton("Change mail", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        // after dialog is shown
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
-                        return;
                     }
                 });
-
         final AlertDialog dialog = builder.create();
         dialog.show();
+
+        // Set an onclick listener that will only remove dialog on success
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 AuthCredential credential = EmailAuthProvider
                         .getCredential(user.getEmail(), password.getText().toString());
 
@@ -196,6 +198,7 @@ public class UserAccountActivity extends AppCompatActivity implements View.OnCli
                                 if (task.isSuccessful()) {
                                     final String email = settingToChange.getText().toString();
 
+                                    // Check input
                                     if (TextUtils.isEmpty(email)) {
                                         settingToChange.setError("Required.");
                                         return;
@@ -206,16 +209,20 @@ public class UserAccountActivity extends AppCompatActivity implements View.OnCli
                                         settingToChange.setError(null);
                                     }
 
+                                    // Change mail
                                     user.updateEmail(email)
                                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                 @Override
                                                 public void onComplete(@NonNull Task<Void> task) {
                                                     if (task.isSuccessful()) {
-                                                        Toast.makeText(UserAccountActivity.this, "Succesfully changed email", Toast.LENGTH_SHORT).show();
+                                                        Toast.makeText(UserAccountActivity.this,
+                                                                "Succesfully changed email",
+                                                                Toast.LENGTH_SHORT).show();
                                                         currentEmail.setText(email);
                                                         dialog.cancel();
                                                     } else {
-                                                        settingToChange.setError(task.getException().getMessage());
+                                                        settingToChange.setError(
+                                                                task.getException().getMessage());
                                                     }
                                                 }
                                             });
@@ -229,11 +236,14 @@ public class UserAccountActivity extends AppCompatActivity implements View.OnCli
         });
     }
 
+    /**
+     * Change username.
+     */
     private void changeUserName(){
+        // Create dialog
         final EditText userNameText = new EditText(this);
         userNameText.setHint(user.getDisplayName());
         userNameText.setGravity(Gravity.CENTER);
-
         AlertDialog.Builder builder = new AlertDialog.Builder(this)
                 .setTitle("Change username")
                 .setView(userNameText)
@@ -250,15 +260,15 @@ public class UserAccountActivity extends AppCompatActivity implements View.OnCli
                         return;
                     }
                 });
-
         final AlertDialog dialog = builder.create();
         dialog.show();
+
+        // Set an onclick listener that will only remove dialog on success
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                // Validate
                 final String userName = userNameText.getText().toString();
-
                 if(TextUtils.isEmpty(userName)){
                     userNameText.setError("Required.");
                     return;
@@ -268,17 +278,20 @@ public class UserAccountActivity extends AppCompatActivity implements View.OnCli
                     return;
                 }
 
+                // Change username
                 firebaseConnector.renameUser(user, userName, currentUser, UserAccountActivity.this);
-
                 dialog.cancel();
             }
         });
     }
 
+    /**
+     * Change password.
+     */
     private void changePassword(){
+        // Create dialog
         LayoutInflater li = LayoutInflater.from(this);
         final View layout = li.inflate(R.layout.alertdialog_auth_change_setting, null);
-
         final EditText Oldpassword = (EditText) layout.findViewById(R.id.reAutenticate);
         final EditText settingToChange = (EditText) layout.findViewById(R.id.settingToChange);
         final EditText secondSetting = (EditText) layout.findViewById(R.id.secondSettingToChange);
@@ -287,14 +300,13 @@ public class UserAccountActivity extends AppCompatActivity implements View.OnCli
         secondSetting.setHint("Confirm password");
         secondSetting.setVisibility(View.VISIBLE);
         secondSetting.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-
         AlertDialog.Builder builder = new AlertDialog.Builder(this)
                 .setTitle("Change password")
                 .setView(layout)
                 .setPositiveButton("Change password", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        // Will be created after show
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -307,6 +319,8 @@ public class UserAccountActivity extends AppCompatActivity implements View.OnCli
 
         final AlertDialog dialog = builder.create();
         dialog.show();
+
+        // Set an onclick listener that will only remove dialog on success
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -323,6 +337,7 @@ public class UserAccountActivity extends AppCompatActivity implements View.OnCli
                                     final String password = settingToChange.getText().toString();
                                     final String confirm = secondSetting.getText().toString();
 
+                                    // Validate
                                     if (TextUtils.isEmpty(password)) {
                                         settingToChange.setError("Required.");
                                         return;
@@ -343,15 +358,19 @@ public class UserAccountActivity extends AppCompatActivity implements View.OnCli
                                         secondSetting.setError(null);
                                     }
 
+                                    // Change password
                                     user.updatePassword(password)
                                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                 @Override
                                                 public void onComplete(@NonNull Task<Void> task) {
                                                     if (task.isSuccessful()) {
-                                                        Toast.makeText(UserAccountActivity.this, "Succesfully changed password", Toast.LENGTH_SHORT).show();
+                                                        Toast.makeText(UserAccountActivity.this,
+                                                                "Succesfully changed password",
+                                                                Toast.LENGTH_SHORT).show();
                                                         dialog.cancel();
                                                     } else {
-                                                        settingToChange.setError(task.getException().getMessage());
+                                                        settingToChange.setError(
+                                                                task.getException().getMessage());
                                                     }
                                                 }
                                             });
@@ -365,8 +384,11 @@ public class UserAccountActivity extends AppCompatActivity implements View.OnCli
         });
     }
 
+    /**
+     * Delete account.
+     */
     private void deleteAccount(){
-        // Ask te user to reauthenticate.
+        // Create dialog
         final EditText oldPassword = new EditText(this);
         oldPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         oldPassword.setHint("Password");
@@ -376,21 +398,23 @@ public class UserAccountActivity extends AppCompatActivity implements View.OnCli
                 .setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // empty will come.
+                        // Will be created after show
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
-                        return;
                     }
                 });
         final AlertDialog dialog = builder.create();
         dialog.show();
+
+        // Set an onclick listener that will only remove dialog on success
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Validate input
                 String password = oldPassword.getText().toString();
                 if(password.isEmpty()){
                     oldPassword.setError("Required");
@@ -404,13 +428,13 @@ public class UserAccountActivity extends AppCompatActivity implements View.OnCli
                 AuthCredential credential = EmailAuthProvider
                         .getCredential(user.getEmail(), password);
 
-                // Reauthenicate the user.
+                // Reauthenicate the user
                 user.reauthenticate(credential)
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
-                                    // On succes remove registrations and delete account.
+                                    // On success remove registrations and delete account
                                     firebaseConnector.deleteUser(
                                             FirebaseAuth.getInstance().getCurrentUser(),
                                             accountErrorShow);

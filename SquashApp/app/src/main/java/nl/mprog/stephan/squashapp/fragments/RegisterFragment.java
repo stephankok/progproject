@@ -24,8 +24,14 @@ import nl.mprog.stephan.squashapp.activities.R;
 
 /**
  * Created by Stephan on 13-6-2016.
+ *
  */
 public class RegisterFragment extends Fragment{
+
+    private final int SENDING = 1;
+    private final int FINISHED = 100;
+    private final int ERROR = -1;
+    private final int NEUTRAL = 0;
 
     private EditText emailEdit;
     private EditText usernameEdit;
@@ -69,7 +75,7 @@ public class RegisterFragment extends Fragment{
         registerNewUserButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                registerNewUserButton.setProgress(0);
+                registerNewUserButton.setProgress(NEUTRAL);
                 registerError.setVisibility(View.GONE);
                 createAccount();
             }
@@ -89,7 +95,7 @@ public class RegisterFragment extends Fragment{
             return;
         }
 
-        registerNewUserButton.setProgress(1);
+        registerNewUserButton.setProgress(SENDING);
 
         final String email = emailEdit.getText().toString();
         final String userName = usernameEdit.getText().toString();
@@ -113,14 +119,14 @@ public class RegisterFragment extends Fragment{
                                         public void onComplete(@NonNull Task<Void> task) {
                                             Toast.makeText(getContext(), "Welcome " +
                                                     user.getDisplayName(), Toast.LENGTH_SHORT).show();
-                                            registerNewUserButton.setProgress(100);
+                                            registerNewUserButton.setProgress(FINISHED);
                                             getActivity().finish();
                                         }
                                     });
                         } else {
                             registerError.setText(task.getException().getMessage());
                             registerError.setVisibility(View.VISIBLE);
-                            registerNewUserButton.setProgress(-1);
+                            registerNewUserButton.setProgress(ERROR);
                         }
                     }
                 });

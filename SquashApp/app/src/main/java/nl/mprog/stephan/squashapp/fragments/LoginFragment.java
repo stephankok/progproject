@@ -24,6 +24,10 @@ import nl.mprog.stephan.squashapp.activities.R;
  */
 public class LoginFragment extends Fragment {
 
+    private final int SENDING = 1;
+    private final int FINISHED = 100;
+    private final int ERROR = -1;
+
     private EditText mEmailField;
     private EditText mPasswordField;
     private TextView loginError;
@@ -78,34 +82,34 @@ public class LoginFragment extends Fragment {
     }
 
     /**
-     *
-     * @param email
-     * @param password
+     * Sign in.
+     * @param email: Email of user
+     * @param password: Password of user
      */
     private void signIn(String email, String password) {
-        // Check if for basic correct format.
+        // Check if for basic correct format
         if (!validateForm()) {
             return;
         }
 
-        // Update button.
-        signInButton.setProgress(1);
+        // Update button
+        signInButton.setProgress(SENDING);
 
-        // Sign in.
+        // Sign in
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        // Check if finished successfully or not.
+                        // Check if finished successfully or not
                         if (!task.isSuccessful()) {
-                            // Failed, set message.
+                            // Failed, set message
                             loginError.setText(task.getException().getMessage());
                             loginError.setVisibility(View.VISIBLE);
-                            signInButton.setProgress(-1);
+                            signInButton.setProgress(ERROR);
                         }
                         else{
-                            // Success, end activity.
-                            signInButton.setProgress(100);
+                            // Success, end activity
+                            signInButton.setProgress(FINISHED);
                             getActivity().finish();
                         }
                     }

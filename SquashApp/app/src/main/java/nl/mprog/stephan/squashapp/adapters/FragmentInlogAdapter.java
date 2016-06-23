@@ -13,11 +13,11 @@ import nl.mprog.stephan.squashapp.fragments.RegisterFragment;
  * Created by Stephan on 13-6-2016.
  *
  */
-public class pageAdapter extends FragmentPagerAdapter {
+public class FragmentInlogAdapter extends FragmentPagerAdapter {
 
     private static int NUM_FRAGMENTS = 3;
 
-    public pageAdapter(FragmentManager fragmentManager) {
+    public FragmentInlogAdapter(FragmentManager fragmentManager) {
         super(fragmentManager);
     }
 

@@ -21,14 +21,16 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import nl.mprog.stephan.squashapp.adapters.ChatAdapter;
+import nl.mprog.stephan.squashapp.adapters.MegaChatAdapter;
 import nl.mprog.stephan.squashapp.models.MegaChatMessage;
 
+/**
+ *
+ */
 public class MegaChatActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private Button sendMessageButton;
     private EditText messageEditText;
-    private ChatAdapter adapter;
+    private MegaChatAdapter adapter;
     private SwipeRefreshLayout refreshContainerChat;
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference()
@@ -39,30 +41,40 @@ public class MegaChatActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mega_chat);
 
+        // Check if really logged in
         if(user == null){
             Toast.makeText(MegaChatActivity.this, "You must be logged in", Toast.LENGTH_SHORT).show();
             finish();
         }
 
+        // Get view
         messageEditText = (EditText) findViewById(R.id.messageEditText);
-        sendMessageButton = (Button) findViewById(R.id.sendMessageButton);
-
+        Button sendMessageButton = (Button) findViewById(R.id.sendMessageButton);
         ListView megaChatListView = (ListView) findViewById(R.id.megaChatListView);
-        adapter = new ChatAdapter(this, new ArrayList<MegaChatMessage>());
-        megaChatListView.setAdapter(adapter);
 
-        sendMessageButton.setOnClickListener(this);
+        // Set adapter
+        adapter = new MegaChatAdapter(this, new ArrayList<MegaChatMessage>());
+
+        // Set adapter and OnClickListener
+        try{
+            megaChatListView.setAdapter(adapter);
+            sendMessageButton.setOnClickListener(this);
+        }
+        catch (NullPointerException e){
+            Toast.makeText(MegaChatActivity.this, "Please restart app", Toast.LENGTH_SHORT).show();
+        }
 
         // add back button
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
+        // Set an on new message added listener that will update the adapter
         setNewMessageListener();
     }
 
     /**
-     * Set back button
+     * Set back button.
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -78,22 +90,30 @@ public class MegaChatActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
+    /**
+     * Add new message.
+     */
     private void addMessage(){
         if(messageEditText.getText().toString().isEmpty()){
             messageEditText.setError("Required");
             return;
         }
 
+        // Create new message
         MegaChatMessage message = new MegaChatMessage();
 
+        // Add message and time
         Long timeStamp = Calendar.getInstance().getTimeInMillis();
         message.setValues(user.getDisplayName(), messageEditText.getText().toString(), timeStamp);
 
+        // Add message
         addMessage(message);
-
         messageEditText.setText("");
     }
 
+    /**
+     * Set on click listener.
+     */
     @Override
     public void onClick(View view){
         switch (view.getId()){
@@ -105,10 +125,16 @@ public class MegaChatActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
+    /**
+     * Add message to firebase.
+     */
     private void addMessage(MegaChatMessage message){
         rootRef.push().setValue(message);
     }
 
+    /**
+     * When a message is added on database, show to user.
+     */
     private void setNewMessageListener(){
         // Show 100 last messages
         rootRef.limitToLast(100).addChildEventListener(new ChildEventListener() {
