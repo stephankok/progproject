@@ -18,7 +18,7 @@ Below you can see a clearly described flow of the app.
 
 Activities
 - MainActivity: Showing trainings to user, registration, deregistration
-- LoginActivity: Loggin on user, Registration of new users, send forgot password mail
+- LoginActivity: Logging on user, Registration of new users, send forgot password mail
 - AdminActivity: Editing trainings, delete trainings, add new trainings
 - ContactActivity: Show contact information about S.C.H.I.E.T. Squash
 - UserAccountActivity: Change user details, log out
@@ -27,7 +27,7 @@ Activities
 
 Adapters
 - MegaChatAdapter: Show messages
-- UserTrainingAdapter: Show upcomming trainings to users
+- UserTrainingAdapter: Show upcoming trainings to users
 - EditTrainingAdapter: Show all trainings to admins
 - FragmentInlogAdapter: Display Fragments on UI
 
@@ -38,7 +38,7 @@ Fragments
 
 Helpers
 - CalendarPicker: 'Create a new training with start date, start time and end time', Change date, change start time, change end time
-- FirebaseConnector: Get all trainings, update registered players, update all trainings, sort trainingslist (On start time and date), rename user, delete user 
+- FirebaseConnector: Get all trainings, update registered players, update all trainings, sort trainings list (On start time and date), rename user, delete user 
 
 Modules
 - Training:
@@ -54,7 +54,7 @@ Modules
 - MegaChatMessage
   - userName: Name of user that send message
   - message: Message of user
-  - timeStamp: Time that message is send in milliseconds
+  - timeStamp: Time that message is sent in milliseconds
 
 Api
 - https://firebase.google.com/
