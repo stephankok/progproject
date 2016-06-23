@@ -53,7 +53,7 @@ I created a class FirebaseConnector to get, update or change information on the 
 
 Firebase only supports a few amounts of dataformats. Namely: Strings, Longs, List<Object>, Map<Object,Object>, so these dataformats are the only types i used within my models.
 
-Because each players has to be able to subscribe to trainingen, i have implemented an login and registration option. Since everyplayer has its own phone they will stay logged on when they will close the app, unless they log out first.
+Because each players has to be able to subscribe to trainings, i have implemented an login and registration option. Since everyplayer has its own phone they will stay logged on when they will close the app, unless they log out first.
 
 ### challenges
 The club has its own server. I wanted to create my own api, so my own communication between the app and the server. Unfortinatly this didn't work and would take to much time to fix. So instead i used Firebase. Firebase works fine, but it had its own troubles. Firebase is recently taken over by google, they changed the sintax of how you must implement firebase. Because of this the code you find only mostly dont match with the current version of firebase. I have been stuck with it for some time, but i got it to work.
