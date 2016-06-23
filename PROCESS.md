@@ -71,4 +71,19 @@ Log file
 - Sortering op datum
 
 **20 06 2016**
-- vandaag
+- Contact page
+- Some background logic
+
+**21 06 2016**
+- Date now in miliseconds
+- Layout voor landscape gechecked en gemaakt
+- Sorteer op date
+
+**22 06 2016**
+- sorteer op de date
+- filter oude data
+- Subject of training toegevoegd
+
+**23 06 2016**
+- Laatste fixes
+- Laatste comments
