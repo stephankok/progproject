@@ -36,6 +36,37 @@
           "status": 2
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:664303654475:android:3b598723b41c83bc",
+        "android_client_info": {
+          "package_name": "nl.mprog.stephan.squashapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "664303654475-un9qaki2cet6vdejn78n31m2b56khg2p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAO8JYmjmZb0JudofAFWcHErhs78xAru_k"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
     }
   ],
   "configuration_version": "1"
