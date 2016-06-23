@@ -11,17 +11,12 @@ When users are logged in they will recieve acces to the MegaChat. Here all regis
 
 For the trainers there is a special page, the admin page. Here they can add new trainings, change them or even delete them. In the admin page all the previous (not deleted) trainings will remain visable.
 
-Design
---------------
+### Design
+Below you can see a clearly described flow of the app.
+
 <img src="https://github.com/stephankok/progproject/blob/master/doc/final%20images/flow_chart.png" align="left" >
-A clearly described flow of the app.
 
-#### Why i have created the app as it is
-There are three main Activities. Main activity where trainings are shown and users can registrate, Admin activity where admins can edit trainings and Inlog activity where users can login.
-
-I created a class FirebaseConnector to get, update or change information on the database. Since the root of firebase is already a singleton, this class doesn't have to be a singleton. A refference to an TextView is given to display errors. Firebase will validate all the input given by the users. Since conencecting to firebase takes time, some validation is done on the app.
-
-#### Activities
+Activities
 - MainActivity
 - LoginActivity
 - AdminActivity
@@ -30,24 +25,30 @@ I created a class FirebaseConnector to get, update or change information on the 
 - SplashActivity
 - MegaChatActivity
 
-#### Adapters
+Adapters
 - MegaChatAdapter
 - UserTrainingAdapter
 - EditTrainingAdapter
 - FragmentInlogAdapter
 
-#### Fragments
+Fragments
 - ForgotPasswordFragment
 - LoginFragment
 - RegisterFragment
 
-#### Helpers
+Helpers
 - CalendarPicker
 - FirebaseConnector
 
-#### Modules
+Modules
 - Training
 - MegaChatMessage
+
+#### Why i have created the app as it is
+There are three main Activities. Main activity where trainings are shown and users can registrate, Admin activity where admins can edit trainings and Inlog activity where users can login.
+
+I created a class FirebaseConnector to get, update or change information on the database. Since the root of firebase is already a singleton, this class doesn't have to be a singleton. A refference to an TextView is given to display errors. Firebase will validate all the input given by the users. Since conencecting to firebase takes time, some validation is done on the app.
+
 
 ### challenges
 De club heeft zijn eigen server, ik wou een eigen api maken om te communiceren tussen de server en de app. Dit is helaas niet gelukt omdat dit te veel tijd zou kosten. In plaats hiervan heb ik firebase gebruikt. Firebase had ook zijn eigen valkuilen, zo bleek het net overgenomen te zijn door google. Dit zorgde ervoor dat heel veel sintax veranderd was en niet meer klopte met wat online te vinden was.
