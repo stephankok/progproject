@@ -23,5 +23,7 @@ Your GitHub repository should contain a complete README.md file that states the 
 
 In order to write my code i used the documentation of firebase on https://firebase.google.com/docs/ & https://www.firebase.com/docs/ when i got stuck i reffered myself to stackoverflow. This and some feedback from the staff of the minor Programming of the University of Amsterdam got me through this project.
 
+This project is under the Apache License.
+
 
 Copyright (c) 2016 Stephan Kok
